@@ -1,0 +1,204 @@
+//React
+import React from "react";
+//Nextjs
+import Image from "next/image";
+//MV
+import img from "./../../public/images/Logo-6.png";
+
+const Footer = () => {
+  return (
+    <footer
+      className="
+                flex
+                w-screen
+                items-center
+                justify-center
+                bg-[#10161f]
+                py-28"
+    >
+      <div
+        className="flex
+                  max-w-[320px]
+                  flex-col
+                  items-center
+                  lg:max-w-[1200px]
+                  lg:flex-row
+                  lg:justify-center"
+      >
+        <div className="flex flex-col items-center lg:items-start">
+          <Image src={img} alt="logo" className="mb-16 max-w-[107px]"></Image>
+          <p
+            className=" 
+                      hidden
+                      font-sans
+                      text-sm
+                      font-thin
+                      text-[#8a93a1]
+                      lg:block
+                      "
+          >
+            © 2022 MoonVector. All rights reserved.
+          </p>
+        </div>
+        <nav
+          className="flex
+                    flex-col
+                    items-center
+                    lg:mx-[159px]
+                    lg:items-start"
+        >
+          <a
+            className="
+                      flex
+                      cursor-pointer  
+                      items-center 
+                      justify-start
+                      border-[#2192dd]
+                      font-sans
+                      text-base
+                      font-thin
+                      leading-[3.38rem]
+                      text-white"
+          >
+            Home
+          </a>
+          <a
+            className="
+           flex
+           cursor-pointer  
+           items-center 
+           justify-start
+           border-[#2192dd]
+           font-sans
+           text-base
+           font-thin
+           leading-[3.38rem]
+           text-white"
+          >
+            About
+          </a>
+          <a
+            className="
+            flex
+            cursor-pointer  
+            items-center 
+            justify-start
+            border-[#2192dd]
+            font-sans
+            text-base
+            font-thin
+            leading-[3.38rem]
+            text-white"
+          >
+            Dock
+          </a>
+          <a
+            className="
+            flex
+            cursor-pointer  
+            items-center 
+            justify-start
+            border-[#2192dd]
+            font-sans
+            text-base
+            font-thin
+            leading-[3.38rem]
+            text-white"
+          >
+            Explore Projects
+          </a>
+        </nav>
+        <nav
+          className="mb-[69px]
+                    flex
+                    flex-col
+                    items-center
+                    lg:mr-[159px]
+                    lg:items-start"
+        >
+          <a
+            className="
+           flex
+           cursor-pointer  
+           items-center 
+           justify-start
+           border-[#2192dd]
+           font-sans
+           text-base
+           font-thin
+           leading-[3.38rem]
+           text-white"
+          >
+            Whats included
+          </a>
+          <a
+            className="
+           flex
+           cursor-pointer  
+           items-center 
+           justify-start
+           border-[#2192dd]
+           font-sans
+           text-base
+           font-thin
+           leading-[3.38rem]
+           text-white"
+          >
+            How it works
+          </a>
+          <a
+            className="
+           flex
+           cursor-pointer  
+           items-center 
+           justify-start
+           border-[#2192dd]
+           font-sans
+           text-base
+           font-thin
+           leading-[3.38rem]
+           text-white"
+          >
+            Where do the Funds go
+          </a>
+        </nav>
+        <button
+          className="
+            hover:border-2/30
+                      mb-[52px]
+                      flex
+                      h-[52px]
+                      items-center
+                      justify-center
+                      rounded-md 
+                      bg-white
+                      px-[21px]
+                      py-[19px]
+                      font-sans
+                      text-base
+                      font-thin
+                      transition
+                      duration-500
+                      ease-in-out
+                      hover:bg-[#2192dd]
+"
+        >
+          Get Started
+        </button>
+        <p
+          className=" 
+                      font-sans
+                      text-sm
+                      font-thin
+                      text-[#8a93a1]
+                      lg:hidden
+                      "
+        >
+          © 2022 MoonVector. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
