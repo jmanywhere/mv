@@ -9,56 +9,56 @@
 }
 
 @font-face {
-  font-family: 'Lexen';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-Regular.ttf');
    src: url('./../fonts/Lexend-Regular.ttf') format('truetype');
    font-weight: 400;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenBlack';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-Black.ttf');
    src: url('./../fonts/Lexend-Black.ttf') format('truetype');
-   font-weight: 400;
+   font-weight: 900;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenBold';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-Bold.ttf');
    src: url('./../fonts/Lexend-Bold.ttf') format('truetype');
    font-weight: 700;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenExtraBold';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-ExtraBold.ttf');
    src: url('./../fonts/Lexend-ExtraBold.ttf') format('truetype');
    font-weight: 800;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenExtraLight';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-ExtraLight.ttf');
    src: url('./../fonts/Lexend-ExtraLight.ttf') format('truetype');
    font-weight: 200;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenLight';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-Light.ttf');
    src: url('./../fonts/Lexend-Light.ttf') format('truetype');
    font-weight: 300;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenSemiBold';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-SemiBold.ttf');
    src: url('./../fonts/Lexend-SemiBold.ttf') format('truetype');
    font-weight: 600;
    font-style: normal;
 }
 @font-face {
-  font-family: 'LexenThin';
+  font-family: 'Lexend';
   src: url('./../fonts/Lexend-Thin.ttf');
    src: url('./../fonts/Lexend-Thin.ttf') format('truetype');
    font-weight: 100;

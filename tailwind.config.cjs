@@ -11,7 +11,7 @@ module.exports = {
         primary: "#2192dd"
       },
       fontFamily:{
-        sans:['"Lexen"', ...defaultTheme.fontFamily.sans]
+        sans:['"Lexend"', ...defaultTheme.fontFamily.sans]
       },
     },
   },
