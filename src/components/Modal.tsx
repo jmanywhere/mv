@@ -46,7 +46,7 @@ const Modal = (props: ModalProps) => {
         >
           {[...anchorsArray].map(({ label, href }, i) => (
             <button
-              key="i"
+              key={i}
               className="
                   py-2"
             >
