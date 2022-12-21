@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base{
+  html{
+    @apply bg-bg_dark_m;
+  }
+}
+
 @font-face {
   font-family: 'Lexen';
   src: url('./../fonts/Lexend-Regular.ttf');
