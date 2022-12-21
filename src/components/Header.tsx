@@ -1,4 +1,5 @@
 //React
+import Link from "next/link";
 import { useState } from "react";
 //React-icons
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
@@ -32,12 +33,11 @@ const Header = (props: HeaderProps) => {
             justify-center
             bg-[#10161f]
             py-6
-            px-4
+            px-10
             "
     >
       <div
         className=" flex
-                    max-w-[1200px]
                     grow
                     flex-row"
       >
@@ -49,22 +49,18 @@ const Header = (props: HeaderProps) => {
                   items-center
                   justify-between"
         >
-          <button
-            className="
-                      hover:border-2/30
-                      ml-2.5
+          <Link
+            href="/"
+            className=" hover:border-2/30
                       inline-block
-                      max-w-[100px]
+                      w-[140px]
                       transition 
                       duration-500
                       ease-in-out
-                      hover:rounded-md
-                      hover:bg-[#2192dd]
-                      lg:m-0
-                      lg:max-w-[180px]"
+                      "
           >
             <Image src={img} alt="logo"></Image>
-          </button>
+          </Link>
           <HiOutlineMenuAlt2
             onClick={() => setShowNav(!showNav)}
             className="
@@ -80,57 +76,42 @@ const Header = (props: HeaderProps) => {
         <nav
           className={
             (showNav ? "right-0" : "-right-full") +
-            " botom-0 transition-left fixed top-[88px] flex w-full flex-col items-center border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-x-2 lg:bg-transparent lg:px-9"
+            " transition-left fixed bottom-0 top-[88px] flex w-full flex-col items-center border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-x-2 lg:bg-transparent lg:px-9"
           }
         >
-          <button
+          <Link
+            href="/about"
             className="
             hover:border-2/30
-                      flex
-                      h-10
-                      w-[300px]
-                      items-center
-                      justify-center
-                      rounded-md
-                      px-5 
-                      py-[35px]
-                      font-sans
-                      text-base
-                      font-thin
-                      text-white
-                      transition
-                      duration-500
-                      ease-in-out
-                      hover:rounded-md
-                    hover:bg-[#2192dd]
-                      lg:w-[100px]
+            items-center
+            justify-center
+            rounded-md
+            px-5
+            py-2
+            text-white
+            transition
+            duration-500
+            ease-in-out
+            hover:rounded-md
+          hover:bg-[#2192dd]
                       "
           >
             About
-          </button>
+          </Link>
           <button
             className="
             hover:border-2/30
-            flex
-            h-10 
-            w-[300px]
-                      items-center
-                      justify-center
-                      rounded-md
-                      
-                      px-5
-                      py-[35px]
-                      font-sans
-                      text-base 
-                      font-thin
-                      
-                      text-white
-                      transition
-                      duration-500
-                      ease-in-out
-                      hover:rounded-md
-                    hover:bg-[#2192dd]
-                      lg:w-[100px]
+            items-center
+            justify-center
+            rounded-md
+            px-5
+            py-2
+            text-white
+            transition
+            duration-500
+            ease-in-out
+            hover:rounded-md
+          hover:bg-[#2192dd]
                       "
           >
             Dock
@@ -141,15 +122,12 @@ const Header = (props: HeaderProps) => {
             flex
             h-10 
             w-[300px]
-                      items-center
-                      justify-center
-                      rounded-md
-                      
-                      px-5
+            flex-nowrap
+            items-center
+            justify-center
+            rounded-md
+            px-5
                       py-[35px]
-                      font-sans
-                      text-base 
-                      font-thin
                       
                       text-white
                       
@@ -215,31 +193,23 @@ const Header = (props: HeaderProps) => {
                   items-center
                   justify-end
                   lg:flex
-                  
                   "
         >
-          <div className="botom-0 transition-left fixed top-[60px] mx-10 flex flex-col border-r-2 border-[#2B313A] px-9 lg:static lg:flex-row lg:items-center lg:bg-transparent">
+          <div className="transition-left mx-10 flex flex-row border-r-2 border-[#2B313A] px-9  ">
             <button
               className="
-              hover:border-2/30
-              flex
-              h-10 
-                      
-                        items-center
+                 items-center
                         justify-center
+                        whitespace-nowrap
                         rounded-md
-                       
                         px-5
-                        py-[35px]
-                        
+                        py-2
                         font-sans
-                        
-                        text-base
                         text-white
                         transition
-                        duration-500
-                        ease-in-out
-                      hover:rounded-md
+                        duration-200
+                      ease-in-out
+                        hover:rounded-md
                         hover:bg-[#2192dd]
                         "
             >
@@ -247,26 +217,17 @@ const Header = (props: HeaderProps) => {
             </button>
             <button
               className="
-              hover:border-2/30
-              flex
-              h-10 
-                      items-center
-                        justify-center
-                        rounded-md
-                       
-                        px-5
-                        py-[35px]
-                        
-                        font-sans 
-                        
-                        text-base
-                        text-white
-                        transition
-                        duration-500
-                        ease-in-out
-                        hover:rounded-md
-                      hover:bg-[#2192dd]
-                      
+                hover:border-2/30
+                flex
+                whitespace-nowrap
+                rounded-md
+                px-5
+                py-2
+                text-white
+                transition
+                duration-200
+                ease-in-out
+              hover:bg-[#2192dd]
                         "
             >
               Get Started
@@ -275,26 +236,14 @@ const Header = (props: HeaderProps) => {
           <button
             className="
             hover:border-2/30
-            flex
-            h-10 
-                      w-[300px]
-                      items-center
-                      justify-center
                       rounded-md
-                      
                       px-5
-                      py-[35px]
-                      font-sans 
-                      text-base
-                      font-thin
-                      
+                      py-2
                       text-white
                       transition
-                      duration-500
+                      duration-200
                       ease-in-out
-                      hover:rounded-md
                     hover:bg-[#2192dd]
-                      lg:w-[100px]
                       "
             onClick={() => setShowModal(true)}
           >
