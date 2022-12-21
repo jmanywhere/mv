@@ -1,4 +1,3 @@
-import React from "react";
 //Nextjs
 import Image from "next/image";
 

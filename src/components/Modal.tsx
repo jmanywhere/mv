@@ -1,12 +1,10 @@
-import React from "react";
-
 type ModalProps = {
   modalAnchors: {
     label: string;
     href: string;
   }[];
   visible: boolean;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
+  onClose: () => void;
 };
 
 const Modal = (props: ModalProps) => {
@@ -17,13 +15,17 @@ const Modal = (props: ModalProps) => {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm"
+      onClick={onClose}
+    >
       <div
         className="flex
                      flex-col
                      rounded-xl
                      bg-[#10161f]
                      "
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
@@ -43,13 +45,13 @@ const Modal = (props: ModalProps) => {
         "
         >
           {[...anchorsArray].map(({ label, href }, i) => (
-            <a
-              href={href}
+            <button
+              key="i"
               className="
                   py-2"
             >
               {label}
-            </a>
+            </button>
           ))}
         </div>
       </div>

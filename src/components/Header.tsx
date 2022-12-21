@@ -26,13 +26,14 @@ const Header = (props: HeaderProps) => {
             top-0
             z-20
             flex
-            w-screen
             w-full
-            grow
+          grow
             flex-row
             justify-center
             bg-[#10161f]
-            py-6"
+            py-6
+            px-4
+            "
     >
       <div
         className=" flex

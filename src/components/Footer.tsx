@@ -1,6 +1,5 @@
-//React
-import React from "react";
 //Nextjs
+import Link from "next/link";
 import Image from "next/image";
 //MV
 import img from "./../../public/images/Logo-6.png";
@@ -8,22 +7,21 @@ import img from "./../../public/images/Logo-6.png";
 const Footer = () => {
   return (
     <footer
-      className="
-                flex
+      className=" flex
                 w-screen
                 items-center
                 justify-center
-                bg-[#10161f]
-                py-28"
+                bg-bg_f_light
+                py-28
+                px-10"
     >
       <div
         className="flex
-                  max-w-[320px]
+                  w-full
                   flex-col
-                  items-center
+                  justify-between
                   lg:max-w-[1200px]
-                  lg:flex-row
-                  lg:justify-center"
+                 lg:flex-row"
       >
         <div className="flex flex-col items-center lg:items-start">
           <Image src={img} alt="logo" className="mb-16 max-w-[107px]"></Image>
@@ -37,14 +35,13 @@ const Footer = () => {
                       lg:block
                       "
           >
-            © 2022 MoonVector. All rights reserved.
+            © 2023 MoonVector. All rights reserved.
           </p>
         </div>
         <nav
           className="flex
                     flex-col
                     items-center
-                    lg:mx-[159px]
                     lg:items-start"
         >
           <a
@@ -53,7 +50,7 @@ const Footer = () => {
                       cursor-pointer  
                       items-center 
                       justify-start
-                      border-[#2192dd]
+                      border-primary
                       font-sans
                       text-base
                       font-thin
@@ -68,7 +65,7 @@ const Footer = () => {
            cursor-pointer  
            items-center 
            justify-start
-           border-[#2192dd]
+           border-primary
            font-sans
            text-base
            font-thin
@@ -83,7 +80,7 @@ const Footer = () => {
             cursor-pointer  
             items-center 
             justify-start
-            border-[#2192dd]
+            border-primary
             font-sans
             text-base
             font-thin
@@ -98,7 +95,7 @@ const Footer = () => {
             cursor-pointer  
             items-center 
             justify-start
-            border-[#2192dd]
+            border-primary
             font-sans
             text-base
             font-thin
@@ -109,35 +106,32 @@ const Footer = () => {
           </a>
         </nav>
         <nav
-          className="mb-[69px]
+          className="
                     flex
                     flex-col
                     items-center
-                    lg:mr-[159px]
                     lg:items-start"
         >
-          <a
+          <Link
             className="
-           flex
-           cursor-pointer  
            items-center 
            justify-start
-           border-[#2192dd]
+           border-primary
            font-sans
            text-base
            font-thin
-           leading-[3.38rem]
            text-white"
+            href="/" //TODO
           >
             Whats included
-          </a>
+          </Link>
           <a
             className="
            flex
            cursor-pointer  
            items-center 
            justify-start
-           border-[#2192dd]
+           border-primary
            font-sans
            text-base
            font-thin
@@ -152,7 +146,7 @@ const Footer = () => {
            cursor-pointer  
            items-center 
            justify-start
-           border-[#2192dd]
+           border-primary
            font-sans
            text-base
            font-thin
@@ -180,7 +174,7 @@ const Footer = () => {
                       transition
                       duration-500
                       ease-in-out
-                      hover:bg-[#2192dd]
+                      hover:bg-primary
 "
         >
           Get Started
