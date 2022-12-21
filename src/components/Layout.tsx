@@ -17,7 +17,7 @@ const Layout = (props: { children: ReactNode; title: string }) => {
       <main className="m-auto flex max-w-[1200px] flex-col items-center bg-[#10161f]">
         {children}
       </main>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };
