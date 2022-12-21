@@ -79,7 +79,7 @@ const Header = (props: HeaderProps) => {
         <nav
           className={
             (showNav ? "right-0" : "-right-full") +
-            " botom-0 transition-left fixed top-[60px] flex flex-col items-center border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-x-2 lg:bg-transparent lg:px-9"
+            " botom-0 transition-left fixed top-[88px] flex w-full flex-col items-center border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-x-2 lg:bg-transparent lg:px-9"
           }
         >
           <button
