@@ -14,7 +14,7 @@ const Layout = (props: { children: ReactNode; title: string }) => {
         <title>{title}</title>
       </Head>
       <Header price={100000000} />
-      <main className="m-auto flex max-w-[1200px] flex-col items-center bg-[#10161f]">
+      <main className="m-auto flex flex-col items-center bg-[#10161f]">
         {children}
       </main>
       <Footer />
