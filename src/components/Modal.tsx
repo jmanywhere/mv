@@ -31,7 +31,7 @@ const Modal = (props: ModalProps) => {
           onClick={onClose}
           className=" self-end
           p-[10px]
-                      text-white"
+          text-[#2192dd]"
         >
           X
         </button>
