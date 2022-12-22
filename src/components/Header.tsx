@@ -37,7 +37,7 @@ const Header = (props: HeaderProps) => {
       <nav
         className={
           (showNav ? "right-0" : "-right-full") +
-          " transition-left fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
+          " fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] duration-300 ease-in-out lg:static lg:mx-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
         }
       >
         <Link
