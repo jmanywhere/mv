@@ -6,6 +6,9 @@ import Head from "next/head";
 import Header from "./Header";
 import Footer from "./Footer";
 
+/// @TODO add props to select a simple Footer
+/// @TODO add props for whitelabel
+
 const Layout = (props: { children: ReactNode; title: string }) => {
   const { title, children } = props;
   return (
