@@ -21,7 +21,7 @@ const Header = (props: HeaderProps) => {
   const handleOnClose = () => setShowModal(false);
 
   return (
-    <header className="md:block-inline sticky top-0 z-20 flex w-full grow flex-row justify-center bg-bg_dark_m py-6 px-10">
+    <header className="sticky top-0 z-20 flex w-full grow flex-row items-center justify-center bg-bg_dark_m py-6 px-10 lg:relative">
       <div className="flex grow items-center justify-between">
         <Link
           href="/"
@@ -31,40 +31,40 @@ const Header = (props: HeaderProps) => {
         </Link>
         <HiOutlineMenuAlt2
           onClick={() => setShowNav(!showNav)}
-          className="block h-10 w-10 cursor-pointer p-2 text-[#2192dd] lg:hidden"
+          className="block h-10 w-10 cursor-pointer p-2 text-primary lg:hidden"
         />
       </div>
       <nav
         className={
           (showNav ? "right-0" : "-right-full") +
-          " transition-left fixed bottom-0 top-[88px] flex w-full flex-col items-center border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-x-2 lg:bg-transparent lg:px-9"
+          "transition-left fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
         }
       >
         <Link
           href="/about"
-          className="hover:border-2/30 items-center justify-center rounded-md px-5 py-2 text-white transition duration-500 ease-in-out hover:rounded-md hover:bg-[#2192dd]"
+          className="hover:border-2/30 w-full items-center justify-center rounded-md px-5 py-4 text-center text-white transition duration-500 ease-in-out hover:rounded-md hover:bg-primary lg:w-auto lg:py-2"
         >
           About
         </Link>
-        <button className="hover:border-2/30 items-center justify-center rounded-md px-5 py-2 text-white transition duration-500 ease-in-out hover:rounded-md hover:bg-[#2192dd]">
+        <button className="hover:border-2/30 w-full items-center justify-center rounded-md px-5 py-4 text-white transition duration-500 ease-in-out hover:rounded-md hover:bg-primary lg:w-auto lg:py-2">
           Dock
         </button>
-        <button className="hover:border-2/30 flex h-10  w-[300px] flex-nowrap items-center justify-center rounded-md px-5 py-[35px] text-white lg:hidden">
+        <button className="hover:border-2/30 flex w-full items-center justify-center whitespace-nowrap rounded-md px-5 py-4 text-white lg:hidden">
           Explore Project
         </button>
-        <button className=" hover:border-2/30 rounded-m flex  h-10 w-[300px] items-center justify-center px-5 py-[35px] text-white transition duration-500 ease-in-out lg:hidden">
+        <button className=" hover:border-2/30 rounded-m w-full items-center justify-center px-5 py-4 text-center text-white transition duration-500 ease-in-out lg:hidden">
           Connect
         </button>
-        <button className="hover:border-2/30 lg: idden mb-[34px] flex h-10 max-w-[131px] items-center justify-center rounded-md  bg-[#2192dd] px-5 font-sans text-base font-thin text-white">
+        <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 text-white lg:hidden">
           Get Started
         </button>
       </nav>
       <nav className=" hidden grow items-center justify-end lg:flex">
-        <div className="transition-left mx-10 flex flex-row border-r-2 border-[#2B313A] px-9  ">
-          <button className="items-center justify-center whitespace-nowrap rounded-md px-5 py-2 font-sans text-white transition duration-200 ease-in-out hover:rounded-md hover:bg-[#2192dd]">
+        <div className="transition-left mx-10 flex h-[40px] flex-row items-center gap-x-2 border-r-2 border-l-2 border-[#2B313A] px-9">
+          <button className="items-center justify-center whitespace-nowrap rounded-md px-5 py-2 font-sans text-white transition duration-200 ease-in-out hover:rounded-md hover:bg-primary">
             Explore Projects
           </button>
-          <button className="hover:border-2/30 flex whitespace-nowrap rounded-md px-5 py-2 text-white transition duration-200 ease-in-out hover:bg-[#2192dd]">
+          <button className="hover:border-2/30 whitespace-nowrap rounded-md bg-primary px-5 py-2 text-white transition duration-200 ease-in-out hover:bg-primary/50">
             Get Started
           </button>
         </div>
