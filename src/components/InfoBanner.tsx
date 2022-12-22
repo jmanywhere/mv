@@ -17,8 +17,6 @@ const InfoBanner = () => {
                 pb-[76px]
                 lg:flex-row
                 lg:items-start
-                lg:pt-[166px]
-                lg:pb-[80pxpx]
                 "
     >
       <div
