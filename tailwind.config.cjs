@@ -6,8 +6,9 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        bg_f_light: "#171d28",
-        bg_dark_m: "#0c161e",
+        bg_f_light: "#151d29",
+        bg_dark_m: "#10161f",
+        bg_darkest: "#0c111a",
         primary: "#2192dd"
       },
       fontFamily:{
