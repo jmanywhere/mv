@@ -8,7 +8,7 @@ import InfoBanner from "../components/InfoBanner";
 const Home: NextPage = () => {
   return (
     <>
-      <Layout title="LandingPage">
+      <Layout title="Moon Vector - Crowdfunding made easy">
         <Banner />
         <InfoBanner />
       </Layout>
