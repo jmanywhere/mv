@@ -12,8 +12,9 @@ const Footer = () => {
                 items-center
                 justify-center
                 bg-bg_f_light
-                py-28
-                px-10"
+                px-10
+                pb-16
+                pt-28"
     >
       <div
         className="flex
@@ -30,7 +31,6 @@ const Footer = () => {
                       hidden
                       font-sans
                       text-sm
-                      font-thin
                       text-[#8a93a1]
                       lg:block
                       "
@@ -44,66 +44,18 @@ const Footer = () => {
                     items-center
                     lg:items-start"
         >
-          <a
-            className="
-                      flex
-                      cursor-pointer  
-                      items-center 
-                      justify-start
-                      border-primary
-                      font-sans
-                      text-base
-                      font-thin
-                      leading-[3.38rem]
-                      text-white"
-          >
+          <Link href="/" className="pb-6 text-white">
             Home
-          </a>
-          <a
-            className="
-           flex
-           cursor-pointer  
-           items-center 
-           justify-start
-           border-primary
-           font-sans
-           text-base
-           font-thin
-           leading-[3.38rem]
-           text-white"
-          >
+          </Link>
+          <Link href="/" className="pb-6 text-white">
             About
-          </a>
-          <a
-            className="
-            flex
-            cursor-pointer  
-            items-center 
-            justify-start
-            border-primary
-            font-sans
-            text-base
-            font-thin
-            leading-[3.38rem]
-            text-white"
-          >
+          </Link>
+          <Link href="/" className="pb-6 text-white">
             Dock
-          </a>
-          <a
-            className="
-            flex
-            cursor-pointer  
-            items-center 
-            justify-start
-            border-primary
-            font-sans
-            text-base
-            font-thin
-            leading-[3.38rem]
-            text-white"
-          >
+          </Link>
+          <Link href="/" className="pb-6 text-white">
             Explore Projects
-          </a>
+          </Link>
         </nav>
         <nav
           className="
@@ -112,75 +64,37 @@ const Footer = () => {
                     items-center
                     lg:items-start"
         >
-          <Link
-            className="
-           items-center 
-           justify-start
-           border-primary
-           font-sans
-           text-base
-           font-thin
-           text-white"
-            href="/" //TODO
-          >
-            Whats included
+          <Link href="/" className="pb-6 text-white">
+            What&apos;s included
           </Link>
-          <a
-            className="
-           flex
-           cursor-pointer  
-           items-center 
-           justify-start
-           border-primary
-           font-sans
-           text-base
-           font-thin
-           leading-[3.38rem]
-           text-white"
-          >
+          <Link href="/" className="pb-6 text-white">
             How it works
-          </a>
-          <a
-            className="
-           flex
-           cursor-pointer  
-           items-center 
-           justify-start
-           border-primary
-           font-sans
-           text-base
-           font-thin
-           leading-[3.38rem]
-           text-white"
-          >
-            Where do the Funds go
-          </a>
+          </Link>
+          <Link href="/" className="pb-6 text-white">
+            Where do the funds go
+          </Link>
         </nav>
         <button
           className="
-            hover:border-2/30
-                      mb-[52px]
-                      flex
                       h-[52px]
-                      items-center
-                      justify-center
                       rounded-md 
-                      bg-white
-                      px-[21px]
-                      py-[19px]
-                      font-sans
-                      text-base
-                      font-thin
+                      bg-primary
+                      px-3
+                      py-2
+                      text-white
                       transition
-                      duration-500
+                      duration-200
                       ease-in-out
-                      hover:bg-primary
+                      hover:bg-white
+                      hover:text-black
 "
         >
           Get Started
         </button>
         <p
           className=" 
+                      pt-6
+                      text-center
                       font-sans
                       text-sm
                       font-thin
@@ -188,7 +102,7 @@ const Footer = () => {
                       lg:hidden
                       "
         >
-          © 2022 MoonVector. All rights reserved.
+          © 2023 MoonVector. All rights reserved.
         </p>
       </div>
     </footer>
