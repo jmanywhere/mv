@@ -37,7 +37,7 @@ const Header = (props: HeaderProps) => {
       <nav
         className={
           (showNav ? "right-0" : "-right-full") +
-          "transition-left fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
+          " transition-left fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] lg:static lg:mx-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
         }
       >
         <Link
@@ -55,7 +55,7 @@ const Header = (props: HeaderProps) => {
         <button className=" hover:border-2/30 rounded-m w-full items-center justify-center px-5 py-4 text-center text-white transition duration-500 ease-in-out lg:hidden">
           Connect
         </button>
-        <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 text-white lg:hidden">
+        <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 py-2 text-white lg:hidden">
           Get Started
         </button>
       </nav>
