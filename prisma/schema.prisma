@@ -11,16 +11,22 @@ datasource db {
 }
 
 model Fund {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  chain     String
-  contract  String
-  raised    BigInt
-  goal      BigInt
-  showcase  Boolean
-  Feature   Feature[]
-  Writeup   Writeup[]
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  chain       String
+  contract    String
+  raised      BigInt
+  goal        BigInt
+  showcase    Boolean
+  owner       String
+  description String
+  logo_icon   String
+  banner      String
+  name        String
+  features    Feature[]
+  writeups    Writeup[]
+  socials     SocialsOnFunds[]
 }
 
 model Feature {
@@ -48,3 +54,29 @@ model User {
   otherDetail String
   Writeup     Writeup[]
 }
+
+// Necessary Model to fulfill the Many-Many relations
+model SocialsOnFunds {
+  fund     Fund   @relation(fields: [fundId], references: [id])
+  social   Social @relation(fields: [socialId], references: [id])
+  fundId   String
+  socialId Int
+
+  @@id([fundId, socialId])
+}
+
+// TODO we should get a form of validation for socials. In the meantime this is going to have to be a manual process
+model Social {
+  id    Int              @id @unique @default(autoincrement())
+  type  String
+  url   String           @unique
+  funds SocialsOnFunds[]
+}
+
+// enum SocialTypes{
+//   TWITTER
+//   FB
+//   DISCORD
+//   TELEGRAM
+
+// }
