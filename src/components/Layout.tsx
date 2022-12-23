@@ -12,12 +12,12 @@ import Footer from "./Footer";
 const Layout = (props: { children: ReactNode; title: string }) => {
   const { title, children } = props;
   return (
-    <div className=" max-w- w-screen bg-[#10161f]">
+    <div className=" max-w- w-screen bg-bg_dark_m">
       <Head>
         <title>{title}</title>
       </Head>
       <Header price={100000000} />
-      <main className=" bg-[#10161f]">{children}</main>
+      <main className=" bg-bg_dark_m">{children}</main>
       <Footer />
     </div>
   );
