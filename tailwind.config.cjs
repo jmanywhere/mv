@@ -9,7 +9,8 @@ module.exports = {
         bg_f_light: "#151d29",
         bg_dark_m: "#10161f",
         bg_darkest: "#0c111a",
-        primary: "#2192dd"
+        primary: "#2192dd",
+        dividers: "#2B313A",
       },
       fontFamily:{
         sans:['"Lexend"', ...defaultTheme.fontFamily.sans]
