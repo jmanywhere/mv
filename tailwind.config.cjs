@@ -11,6 +11,8 @@ module.exports = {
         bg_darkest: "#0c111a",
         primary: "#2192dd",
         dividers: "#2B313A",
+        t_dark: "#8a93a1",
+        green_accent: "#56e19a",
       },
       fontFamily:{
         sans:['"Lexend"', ...defaultTheme.fontFamily.sans]

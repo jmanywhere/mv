@@ -8,6 +8,18 @@
   }
 }
 
+@layer components{
+  ::-webkit-progress-value{
+    @apply bg-green_accent rounded-full h-3;
+  }
+  ::-webkit-progress-bar{
+    @apply bg-bg_darkest rounded-full h-3;
+  }
+  .raise-progress{
+    @apply h-3;
+  }
+}
+
 @font-face {
   font-family: 'Lexend';
   src: url('./../fonts/Lexend-Regular.ttf');
