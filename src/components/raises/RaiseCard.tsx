@@ -39,15 +39,56 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="text-2xl font-bold">{title}</div>
           <div className="text-base font-semibold">{subtitle}</div>
         </div>
-        <button className="rounded-xl bg-slate-500 px-7 py-5 hover:bg-primary">
+        <button className="rounded-xl bg-t_dark px-7 py-5 hover:bg-primary">
           Connect Wallet
         </button>
       </div>
-      <div className="border-t-2 border-b-2 border-dividers py-6">
-        Raise Status
+      <div className="flex flex-col gap-4 border-t-2 border-b-2 border-dividers py-6 md:flex-row">
+        <div className="w-full font-semibold md:w-[35%]">
+          <div className="flex flex-row justify-between">
+            <span className="flex-grow text-t_dark md:w-32 md:flex-none">
+              Sale Status
+            </span>
+            <span className="flex-none text-left uppercase md:flex-grow">
+              Started
+            </span>
+          </div>
+          <div className="mt-4 flex flex-row justify-between">
+            <span className="flex-grow text-t_dark md:w-32 md:flex-none">
+              Raised
+            </span>
+            <span className="flex-none text-left md:flex-grow">XXX Tokens</span>
+          </div>
+        </div>
+        <div className="flex-1">
+          <div className="font-semibold text-t_dark">
+            Total Raised / SoftCap|HardCap
+          </div>
+          <progress
+            value={60}
+            max={100}
+            className="raise-progress mt-6 w-full"
+          />
+        </div>
       </div>
-      <div>Raise Actions</div>
-      <div>Raise Reward</div>
+      {/* INPUT AND ACTION */}
+      <div className="flex flex-row items-end">
+        {/* INPUT AND TOKENS IN WALLET */}
+        {/* LABEL AND INPUT */}
+        <div className="flex flex-grow flex-col">
+          <label id="pledge-id" htmlFor="pledge">
+            Pledge {`{token}`}
+          </label>
+          <div className="flex flex-row items-center">
+            <input name="pledge" />
+            <span>TOKENS IN WALLET</span>
+          </div>
+        </div>
+        <div>
+          <button className="bg-primary">approve/pledge</button>
+        </div>
+      </div>
+      <div>Raise Rewards</div>
     </div>
   );
 };
@@ -57,5 +98,5 @@ export default RaiseCard;
 type RaiseCardProps = {
   title: string;
   subtitle: string;
-  iconLogo: string;
+  iconLogo?: string;
 };
