@@ -1,4 +1,7 @@
+import { useWeb3React } from "@web3-react/core";
+import classNames from "classnames";
 import { connectModal } from "data/atoms";
+import { useAuth } from "hooks/useAuth";
 import { useSetAtom } from "jotai";
 import Image from "next/image";
 
@@ -10,6 +13,8 @@ const RaiseCard = (props: RaiseCardProps) => {
   } = props;
 
   const setOpenConnectModal = useSetAtom(connectModal);
+  const { account } = useWeb3React();
+  const { logout } = useAuth();
 
   // TODOs
   // connect wallet stuff
@@ -48,10 +53,19 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="text-base font-semibold">{subtitle}</div>
         </div>
         <button
-          className="rounded-xl bg-t_dark px-7 py-5 hover:bg-primary"
-          onClick={() => setOpenConnectModal(true)}
+          className={classNames(
+            "rounded-xl bg-t_dark px-7 py-5",
+            account
+              ? "bg-t_dark hover:bg-primary"
+              : "bg-primary hover:bg-t_dark"
+          )}
+          onClick={() => (account ? logout() : setOpenConnectModal(true))}
         >
-          Connect Wallet
+          {account
+            ? account.slice(0, 4) +
+              "..." +
+              account.slice(account.length - 4, account.length)
+            : "Connect Wallet"}
         </button>
       </div>
       <div className="flex flex-col gap-4 border-t-2 border-b-2 border-dividers py-6 md:flex-row">

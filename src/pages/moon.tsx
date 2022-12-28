@@ -6,6 +6,7 @@ import Logo from "../../public/logo/logo_icon_primary.svg";
 import { AiFillTwitterCircle } from "react-icons/ai/";
 import { BsTelegram, BsYoutube, BsDiscord } from "react-icons/bs/";
 import RaiseCard from "components/raises/RaiseCard";
+import { useEagerConnect } from "hooks/useAuth";
 
 /*
   props for Sale pages
@@ -18,6 +19,7 @@ import RaiseCard from "components/raises/RaiseCard";
 */
 
 const MoonPage: NextPage = () => {
+  useEagerConnect();
   return (
     <Layout title="Moon Vector - Investment">
       <Head>

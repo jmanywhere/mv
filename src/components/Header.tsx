@@ -11,6 +11,7 @@ import img from "./../../public/images/Logo-2.png";
 import Modal from "./Modal";
 import { useAtom, useAtomValue } from "jotai";
 import { connectModal, raiseBasic } from "data/atoms";
+import { ConnectorNames } from "hooks/useAuth";
 
 type HeaderProps = {
   price: number;
@@ -107,17 +108,19 @@ const Header = (props: HeaderProps) => {
         visible={showModal}
         modalAnchors={[
           {
-            label: "Meatlink",
-            href: "",
+            label: "Metamask",
+            connector: ConnectorNames.INJECTED,
+            icon: "https://f004.backblazeb2.com/file/w3-assets/metamask.png",
           },
           {
-            label: "Meatlink",
-            href: "",
+            label: "WalletConnect",
+            connector: ConnectorNames.WALLET_CONNECT,
+            icon: "https://f004.backblazeb2.com/file/w3-assets/walletconnect.png",
           },
-          {
-            label: "Meatlink",
-            href: "",
-          },
+          // {
+          //   label: "Meatlink",
+          //   connector: "",
+          // },
         ]}
       />
     </>

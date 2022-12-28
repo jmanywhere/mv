@@ -1,7 +1,11 @@
+import { useAuth, ConnectorNames } from "hooks/useAuth";
+import Image from "next/image";
+
 type ModalProps = {
   modalAnchors: {
     label: string;
-    href: string;
+    connector: ConnectorNames;
+    icon?: string;
   }[];
   visible: boolean;
   onClose: () => void;
@@ -11,6 +15,7 @@ const Modal = (props: ModalProps) => {
   const { modalAnchors, visible, onClose } = props;
 
   const anchorsArray = [...modalAnchors];
+  const { login } = useAuth();
 
   if (!visible) return null;
 
@@ -20,36 +25,27 @@ const Modal = (props: ModalProps) => {
       onClick={onClose}
     >
       <div
-        className="flex
-                     flex-col
-                     rounded-xl
-                     bg-[#10161f]
-                     "
+        className=" rounded-xl border-2 border-slate-300 bg-bg_dark_m py-5"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          className=" self-end
-          p-[10px]
-          text-[#2192dd]"
-        >
-          X
-        </button>
-        <div
-          className=" flex
-                      flex-col
-                      px-6
-                      pb-6
-                      text-white
-                      
-        "
-        >
-          {[...anchorsArray].map(({ label, href }, i) => (
+        <div className=" flex flex-col pb-3 text-white">
+          {[...anchorsArray].map(({ label, connector, icon }, i) => (
             <button
               key={i}
-              className="
-                  py-2"
+              className="flex flex-row items-center gap-4 py-2 px-6 hover:bg-slate-400"
+              onClick={() => login(connector)}
+              disabled={!connector}
             >
+              <div>
+                {icon && (
+                  <Image
+                    src={icon}
+                    width={40}
+                    height={40}
+                    alt={label + "-icon"}
+                  />
+                )}
+              </div>
               {label}
             </button>
           ))}
