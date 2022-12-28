@@ -9,8 +9,8 @@ import Image from "next/image";
 //MV
 import img from "./../../public/images/Logo-2.png";
 import Modal from "./Modal";
-import { useAtomValue } from "jotai";
-import { raiseBasic } from "data/atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { connectModal, raiseBasic } from "data/atoms";
 
 type HeaderProps = {
   price: number;
@@ -21,9 +21,9 @@ const Header = (props: HeaderProps) => {
   const { price, hideHeader } = props;
 
   const raiseInfo = useAtomValue(raiseBasic);
+  const [showModal, setShowModal] = useAtom(connectModal);
 
   const [showNav, setShowNav] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const handleOnClose = () => setShowModal(false);
 
   return (

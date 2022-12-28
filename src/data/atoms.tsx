@@ -15,3 +15,5 @@ export const raiseBasic = atom<{
   text: "white",
   contract: "",
 });
+
+export const connectModal = atom(false);

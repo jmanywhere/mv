@@ -1,3 +1,5 @@
+import { connectModal } from "data/atoms";
+import { useSetAtom } from "jotai";
 import Image from "next/image";
 
 const RaiseCard = (props: RaiseCardProps) => {
@@ -6,6 +8,8 @@ const RaiseCard = (props: RaiseCardProps) => {
     subtitle = "Crowdfunding",
     iconLogo = "/logo/logo_icon_primary.svg",
   } = props;
+
+  const setOpenConnectModal = useSetAtom(connectModal);
 
   // TODOs
   // connect wallet stuff
@@ -43,7 +47,10 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="text-2xl font-bold">{title}</div>
           <div className="text-base font-semibold">{subtitle}</div>
         </div>
-        <button className="rounded-xl bg-t_dark px-7 py-5 hover:bg-primary">
+        <button
+          className="rounded-xl bg-t_dark px-7 py-5 hover:bg-primary"
+          onClick={() => setOpenConnectModal(true)}
+        >
           Connect Wallet
         </button>
       </div>
