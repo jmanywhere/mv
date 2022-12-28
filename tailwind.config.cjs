@@ -12,6 +12,7 @@ module.exports = {
         primary: "#2192dd",
         dividers: "#2B313A",
         t_dark: "#8a93a1",
+        b_dark: "#202b3b",
         green_accent: "#56e19a",
       },
       fontFamily:{
