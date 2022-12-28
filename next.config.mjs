@@ -9,6 +9,9 @@
 const config = {
   reactStrictMode: true,
   swcMinify: true,
+  images:{
+    domains: ["f004.backblazeb2.com"]
+  },
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
