@@ -26,7 +26,7 @@ const SpartaFinanceRaise: NextPage<
     });
   }, [setRaiseBasics]);
   return (
-    <Layout title="Sparta Finance Private Sale">
+    <Layout title="Sparta Finance Private Sale" hideHeader>
       <Head>
         <meta
           name="description"
@@ -89,7 +89,7 @@ export async function getStaticProps() {
       bannerImage:
         "bg-[url('https://f004.backblazeb2.com/file/w3-assets/mv/sp_fin/sparta_bg.jpg')] bg-cover",
       socials: {
-        tg: "https://t.me/StakeProtocol",
+        tg: "https://t.me/SpartaFinanceMainChat",
       },
     }, // will be passed to the page component as props
   };
