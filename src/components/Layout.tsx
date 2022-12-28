@@ -12,21 +12,26 @@ import classNames from "classnames";
 /// @TODO add props to select a simple Footer
 /// @TODO add props for whitelabel
 
-const Layout = (props: { children: ReactNode; title: string }) => {
-  const { title, children } = props;
+const Layout = (props: {
+  children: ReactNode;
+  title: string;
+  hideHeader?: boolean;
+}) => {
+  const { title, children, hideHeader } = props;
   const raiseStyles = useAtomValue(raiseBasic);
   return (
     <div
       className={classNames(
         "max-w- w-screen",
         raiseStyles.bg_dark,
-        raiseStyles.text
+        raiseStyles.text,
+        hideHeader ? "pt-10" : "pt-0"
       )}
     >
       <Head>
         <title>{title}</title>
       </Head>
-      <Header price={100000000} />
+      <Header price={100000000} hideHeader={hideHeader} />
       <main className={raiseStyles.bg_dark}>{children}</main>
       <Footer />
     </div>
