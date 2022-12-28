@@ -9,9 +9,9 @@ import { useEffect } from "react";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { BsTelegram, BsYoutube, BsDiscord } from "react-icons/bs";
 
-const SpartaFinanceRaise: NextPage = (
-  props: InferGetStaticPropsType<typeof getStaticProps>
-) => {
+const SpartaFinanceRaise: NextPage<
+  InferGetStaticPropsType<typeof getStaticProps>
+> = (props) => {
   const { bannerImage, socials } = props;
   const setRaiseBasics = useSetAtom(raiseBasic);
   useEffect(() => {
