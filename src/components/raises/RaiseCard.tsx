@@ -24,6 +24,10 @@ const RaiseCard = (props: RaiseCardProps) => {
   // Reward area Data
   // Let's standardize contract call value so that both MoonVector and Regular raise data can be shown.
 
+  // const whitelisted = useMemo( () => {
+  //    return true if sale_status = whiteslist and user is whitelisted OR sale_status = started ELSE false
+  // },[])
+
   return (
     <div className="rounded-3xl bg-bg_f_light px-9 py-8">
       <div className="flex flex-col items-center justify-center gap-y-6 gap-x-6 pb-6 md:flex-row">
@@ -72,23 +76,64 @@ const RaiseCard = (props: RaiseCardProps) => {
         </div>
       </div>
       {/* INPUT AND ACTION */}
-      <div className="flex flex-row items-end">
+      <div className="flex flex-col items-center py-6 md:flex-row md:items-end md:justify-start">
         {/* INPUT AND TOKENS IN WALLET */}
         {/* LABEL AND INPUT */}
         <div className="flex flex-grow flex-col">
-          <label id="pledge-id" htmlFor="pledge">
+          <label
+            id="pledge-id"
+            htmlFor="pledge"
+            className="pl-2 pb-3 font-semibold"
+          >
             Pledge {`{token}`}
           </label>
-          <div className="flex flex-row items-center">
-            <input name="pledge" />
-            <span>TOKENS IN WALLET</span>
+          <div className="flex flex-col gap-1">
+            <input
+              name="pledge"
+              className="w-72 rounded-xl border-2 border-b_dark bg-bg_darkest px-3 pt-2"
+            />
+            <span className=" ml-3 text-sm font-normal text-t_dark">
+              Wallet: XXXXXX
+            </span>
           </div>
         </div>
-        <div>
-          <button className="bg-primary">approve/pledge</button>
+        <div className="mt-6 md:mt-0">
+          <button
+            className=" mb-[20px] w-32 rounded-xl bg-primary py-[10px]"
+            // disabled={!whitelisted}
+          >
+            {"Pledge"}
+            {/* {whitelisted ? (approved ? "Pledge" : "Approve") : "Whitelist"} */}
+          </button>
         </div>
       </div>
-      <div>Raise Rewards</div>
+      <div className="flex flex-col items-center py-9 md:flex-row md:justify-between">
+        <div className="w-full flex-grow font-semibold">
+          <div className="mt-4 flex flex-row justify-between">
+            <span className="flex-grow text-t_dark md:w-60 md:flex-none">
+              Pledged
+            </span>
+            <span className="flex-none text-left md:flex-grow">XXX Tokens</span>
+          </div>
+          <div className="mt-4 flex flex-col justify-between md:flex-row">
+            <span className="flex-grow text-xl text-t_dark md:w-60 md:flex-none">
+              Rewarded Amount
+            </span>
+            <span className="mt-1 flex-none text-right text-xl md:mt-0 md:flex-grow md:text-left">
+              XXX reward Token
+            </span>
+          </div>
+        </div>
+        <div className="mt-6 md:mt-0">
+          {/* Conditionally render depending if rewards are available */}
+          <button
+            className=" w-32 rounded-xl bg-primary py-[10px] disabled:bg-t_dark"
+            disabled
+          >
+            {"Claim"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
