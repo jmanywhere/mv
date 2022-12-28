@@ -5,19 +5,29 @@ import Head from "next/head";
 //MV
 import Header from "./Header";
 import Footer from "./Footer";
+import { useAtomValue } from "jotai";
+import { raiseBasic } from "data/atoms";
+import classNames from "classnames";
 
 /// @TODO add props to select a simple Footer
 /// @TODO add props for whitelabel
 
 const Layout = (props: { children: ReactNode; title: string }) => {
   const { title, children } = props;
+  const raiseStyles = useAtomValue(raiseBasic);
   return (
-    <div className=" max-w- w-screen bg-bg_dark_m">
+    <div
+      className={classNames(
+        "max-w- w-screen",
+        raiseStyles.bg_dark,
+        raiseStyles.text
+      )}
+    >
       <Head>
         <title>{title}</title>
       </Head>
       <Header price={100000000} />
-      <main className=" bg-bg_dark_m">{children}</main>
+      <main className={raiseStyles.bg_dark}>{children}</main>
       <Footer />
     </div>
   );
