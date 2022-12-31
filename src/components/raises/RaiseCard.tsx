@@ -111,7 +111,7 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="flex flex-col gap-1">
             <input
               name="pledge"
-              className="w-72 rounded-xl border-2 border-b_dark bg-bg_darkest px-3 pt-2"
+              className="w-72 rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1"
             />
             <span className=" ml-3 text-sm font-normal text-t_dark">
               Wallet: XXXXXX
