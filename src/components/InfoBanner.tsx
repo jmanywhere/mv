@@ -2,7 +2,7 @@ import React from "react";
 //Nextjs
 import Image from "next/image";
 //mv
-import img from "./../../public/images/aboutMoon.png"; //Cambiar la imagen por la real
+import img from "./../../public/images/Big Moon.png"; //Cambiar la imagen por la real
 
 const InfoBanner = () => {
   return (
@@ -45,16 +45,13 @@ const InfoBanner = () => {
         >
           About Moon Vector
         </h2>
-        <Image
-          src={img}
-          alt="moon image"
-          className="
-                    w-full
-                    max-w-[343px]
-                    rounded-tr-[100px]
-                    lg:max-w-[674px]
-                    "
-        ></Image>
+        <div className="max-h-[200px] w-full overflow-hidden">
+          <Image
+            src={img}
+            alt="moon image"
+            className="w-full max-w-[343px] rounded-tr-[100px] lg:max-w-[674px] "
+          />
+        </div>
       </div>
       <div>
         <p
