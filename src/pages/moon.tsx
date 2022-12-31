@@ -31,7 +31,7 @@ const MoonPage: NextPage = () => {
       <div className="flex justify-center text-white">
         <div className="mt-24 w-screen px-4 md:max-w-[830px]">
           {/* TODO ADD BACKGROUND OF SPACEMAN THIS WILL BE THE FIRST BANNER TO SHOW UP */}
-          <div className=" relative h-[338px] w-full rounded-3xl rounded-tr-sm bg-black">
+          <div className=" relative h-[338px] w-full rounded-3xl rounded-tr-sm bg-[url('/images/bg/astro_banner.png')] bg-cover">
             <div className=" w-42 absolute left-[calc(50%-86px)] -top-[86px] rounded-full border-4 border-bg_f_light bg-bg_dark_m p-8">
               <Image src={Logo} alt="Logo main" height={100} width={100} />
             </div>
