@@ -8,7 +8,6 @@ const Footer = () => {
   return (
     <footer
       className=" flex
-                w-screen
                 items-center
                 justify-center
                 bg-bg_f_light
