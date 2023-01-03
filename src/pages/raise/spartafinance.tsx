@@ -1,18 +1,21 @@
 import Layout from "components/Layout";
 import RaiseBanner from "components/raises/RaiseBanner";
-import RaiseCard from "components/raises/RaiseCard";
+import RaiseCard from "components/raises/SimpleETHRaise";
 import { raiseBasic } from "data/atoms";
+import { useEagerConnect } from "hooks/useAuth";
 import { useSetAtom } from "jotai";
 import type { InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import { useEffect } from "react";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { BsTelegram, BsYoutube, BsDiscord } from "react-icons/bs";
+import { SiGitbook } from "react-icons/si/";
 
 const SpartaFinanceRaise: NextPage<
   InferGetStaticPropsType<typeof getStaticProps>
 > = (props) => {
   const { bannerImage, socials } = props;
+  useEagerConnect();
   const setRaiseBasics = useSetAtom(raiseBasic);
   useEffect(() => {
     setRaiseBasics({
@@ -43,15 +46,25 @@ const SpartaFinanceRaise: NextPage<
             </h1>
             {/* Only show the socials that we'll be using */}
             <div className="flex flex-row items-center gap-x-4 pt-8 md:pt-0">
-              {/* <AiFillTwitterCircle
-                size="32px"
-                className="rounded-full bg-white text-primary"
-              /> */}
+              <a href={socials.tw} target="_blank" rel="noreferrer">
+                <AiFillTwitterCircle
+                  size="32px"
+                  className="rounded-full bg-white text-primary"
+                />
+              </a>
               <a href={socials.tg} target="_blank" rel="noreferrer">
                 <BsTelegram
                   size="28px"
                   className="rounded-full bg-white text-primary hover:text-blue-600"
                 />
+              </a>
+              <a
+                href={socials.gb}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full p-1 hover:bg-white"
+              >
+                <SiGitbook size="30px" className="text-[rgb(169,194,255)] " />
               </a>
               {/* <BsYoutube size="32px" className=" text-red-500" /> */}
               {/* <BsDiscord size="30px" className=" text-purple-500" /> */}
@@ -62,12 +75,15 @@ const SpartaFinanceRaise: NextPage<
             survive a bear market and thrive on the bull! Our insane commitment
             to launch this project during the economic crisis speaks volumes to
             our belief that this project will go above and beyond your
-            expectations! It begins with a simple pledge from the user in BUSD,
-            which provides you a stake into the contract (your position
-            determined as a percentage of the total supply) while using an
-            innovative and multitude of ways to sustainability! We begin by
-            providing you an LP (Sparta Tokens-BUSD) which provides you with a
-            consistent, compoundable, and sustainable daily (Φ) 1.618% return.
+            expectations!
+            <br />
+            <br />
+            It begins with a simple pledge from the user in BUSD, which provides
+            you a stake in the contract (your position is determined as a
+            percentage of the total supply) while using an innovative multitude
+            of ways to sustainability! We begin by providing you with an LP
+            (Sparta Tokens-BUSD) which provides you with a consistent,
+            compoundable, and sustainable daily (Φ) 1.618% return.
           </p>
           <RaiseCard
             title="Sparta Finance"
@@ -90,6 +106,8 @@ export async function getStaticProps() {
         "bg-[url('https://f004.backblazeb2.com/file/w3-assets/mv/sp_fin/sparta_bg.jpg')] bg-cover",
       socials: {
         tg: "https://t.me/SpartaFinanceMainChat",
+        gb: "https://sparta-finance.gitbook.io/sparta-finance/",
+        tw: "https://twitter.com/finance_sparta",
       },
     }, // will be passed to the page component as props
   };
