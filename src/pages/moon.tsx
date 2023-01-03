@@ -3,9 +3,13 @@ import Layout from "components/Layout";
 import Head from "next/head";
 import Image from "next/image";
 import Logo from "../../public/logo/logo_icon_primary.svg";
-import { AiFillTwitterCircle } from "react-icons/ai/";
-import { BsTelegram, BsYoutube, BsDiscord } from "react-icons/bs/";
+// SM Icons
+import { AiFillTwitterCircle, AiFillMediumCircle } from "react-icons/ai/";
+import { BsTelegram, BsYoutube, BsDiscord, BsReddit } from "react-icons/bs/";
+import { SiGitbook } from "react-icons/si/";
+// Component
 import RaiseCard from "components/raises/RaiseCard";
+// Hooks
 import { useEagerConnect } from "hooks/useAuth";
 
 /*
@@ -32,7 +36,7 @@ const MoonPage: NextPage = () => {
         <div className="mt-24 w-screen px-4 md:max-w-[830px]">
           {/* TODO ADD BACKGROUND OF SPACEMAN THIS WILL BE THE FIRST BANNER TO SHOW UP */}
           <div className=" relative h-[338px] w-full rounded-3xl rounded-tr-sm bg-[url('/images/bg/astro_banner.png')] bg-cover">
-            <div className=" w-42 absolute left-[calc(50%-86px)] -top-[86px] rounded-full border-4 border-bg_f_light bg-bg_dark_m p-8">
+            <div className="absolute left-[calc(50%-64px)] -top-[64px] flex w-32 items-center justify-center rounded-full border-4 border-bg_f_light bg-bg_dark_m p-6 md:-top-[86px] md:left-[calc(50%-86px)] md:w-40 md:p-8">
               <Image src={Logo} alt="Logo main" height={100} width={100} />
             </div>
           </div>
@@ -51,8 +55,17 @@ const MoonPage: NextPage = () => {
                 size="28px"
                 className="rounded-full bg-white text-primary"
               />
+              <AiFillMediumCircle
+                size="32px"
+                className="rounded-full bg-white text-black"
+              />
               <BsYoutube size="32px" className=" text-red-500" />
               <BsDiscord size="30px" className=" text-purple-500" />
+              <BsReddit
+                size="30px"
+                className=" rounded-full bg-white text-[rgb(255,53,0)]"
+              />
+              <SiGitbook size="30px" className=" text-[rgb(169,194,255)]" />
             </div>
           </div>
           {/* This def needs some love */}
