@@ -32,7 +32,7 @@ const RaiseCard = (props: RaiseCardProps) => {
   const pledgeRef = useRef<HTMLInputElement>(null);
 
   const { reader, writer, baseLib } = useContract(
-    "0xD43254Ab0b534349B5C0273FeE5bE20490b62285",
+    "0x3f7bc3404C8608B8a04ba2321613fcA9063048a1",
     56,
     "SimpleETH"
   );
