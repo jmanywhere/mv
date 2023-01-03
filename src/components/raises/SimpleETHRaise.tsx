@@ -15,6 +15,7 @@ import { prettyBN } from "utils/bn";
 import useContract from "hooks/useContracts";
 import { formatEther, parseEther } from "ethers/lib/utils";
 import { useRef } from "react";
+import Countdown from "react-countdown";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
@@ -183,9 +184,48 @@ const RaiseCard = (props: RaiseCardProps) => {
           </div>
         </div>
         <div className="flex-1">
-          <div className="font-semibold text-t_dark">
-            {prettyBN(saleData.currentRaise, 2)} /{" HC: "}
-            {prettyBN(saleData.hardcap, 2)}
+          <div className="flex justify-between font-semibold text-t_dark">
+            <span>
+              {prettyBN(saleData.currentRaise, 2)} /{" HC: "}
+              {prettyBN(saleData.hardcap, 2)}
+            </span>
+            <span>
+              <Countdown
+                date={new Date(1673240400000)}
+                renderer={({ days, hours, minutes, seconds, completed }) => {
+                  if (completed) return "Sale Over";
+                  else
+                    return (
+                      <>
+                        {days && (
+                          <>
+                            {days}
+                            <sub>d</sub>&nbsp;
+                          </>
+                        )}
+                        {(hours || days) && (
+                          <>
+                            {hours < 10 ? `0${hours}` : hours}
+                            <sub>h</sub>&nbsp;
+                          </>
+                        )}
+                        {(hours || days || minutes) && (
+                          <>
+                            {minutes < 10 ? `0${minutes}` : minutes}
+                            <sub>m</sub>&nbsp;
+                          </>
+                        )}
+                        {(seconds || hours || days || seconds) && (
+                          <>
+                            {seconds < 10 ? `0${seconds}` : seconds}
+                            <sub>s</sub>&nbsp;
+                          </>
+                        )}
+                      </>
+                    );
+                }}
+              />
+            </span>
           </div>
           <progress
             value={saleData.currentRaise
