@@ -17,7 +17,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <Provider>
       <Web3ReactProvider getLibrary={getLibrary}>
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
       </Web3ReactProvider>
     </Provider>
   );
