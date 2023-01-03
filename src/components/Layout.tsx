@@ -5,6 +5,7 @@ import Head from "next/head";
 //MV
 import Header from "./Header";
 import Footer from "./Footer";
+import SimpleFooter from "./SimpleFooter";
 import { useAtomValue } from "jotai";
 import { raiseBasic } from "data/atoms";
 import classNames from "classnames";
@@ -16,13 +17,13 @@ const Layout = (props: {
   children: ReactNode;
   title: string;
   hideHeader?: boolean;
+  simpleFooter?: boolean;
 }) => {
-  const { title, children, hideHeader } = props;
+  const { title, children, hideHeader, simpleFooter } = props;
   const raiseStyles = useAtomValue(raiseBasic);
   return (
     <div
       className={classNames(
-        "max-w- w-screen",
         raiseStyles.bg_dark,
         raiseStyles.text,
         hideHeader ? "pt-10" : "pt-0"
@@ -32,8 +33,8 @@ const Layout = (props: {
         <title>{title}</title>
       </Head>
       <Header price={100000000} hideHeader={hideHeader} />
-      <main className={raiseStyles.bg_dark}>{children}</main>
-      <Footer />
+      <main>{children}</main>
+      {simpleFooter ? <SimpleFooter /> : <Footer />}
     </div>
   );
 };
