@@ -31,9 +31,26 @@ const SpartaFinanceRaise: NextPage<
   return (
     <Layout title="Sparta Finance Private Sale" hideHeader simpleFooter>
       <Head>
+        <meta property="og:title" content="Sparta Finance Private Sale" />
+        <meta
+          property="og:description"
+          content="Sparta Finance Private sale, join the project designed out of passion but built to
+          survive a bear market and thrive on the bull! Our insane commitment
+          to launch this project during the economic crisis speaks volumes to
+          our belief that this project will go above and beyond your
+          expectations!"
+        />
         <meta
           name="description"
-          content="Sparta Finance Private sale investing"
+          content="Sparta Finance Private sale, join the project designed out of passion but built to
+          survive a bear market and thrive on the bull! Our insane commitment
+          to launch this project during the economic crisis speaks volumes to
+          our belief that this project will go above and beyond your
+          expectations!"
+        />
+        <meta
+          property="og:image"
+          content="https://f004.backblazeb2.com/file/w3-assets/mv/sp_fin/sparta_finance_logo.png"
         />
       </Head>
       <div className="flex justify-center text-white">
