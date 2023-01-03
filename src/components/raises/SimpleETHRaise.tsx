@@ -282,6 +282,14 @@ const RaiseCard = (props: RaiseCardProps) => {
           </div>
         )}
       </div>
+      <div className="mt-4">
+        <span className="flex-grow text-sm text-t_dark md:w-60 md:flex-none">
+          No refunds will be allowed once committed.
+          <br />
+          If the hardcap is not reached we will send your BNB back to your
+          wallet.
+        </span>
+      </div>
     </div>
   );
 };
