@@ -46,13 +46,25 @@ const Footer = () => {
           <Link href="/" className="pb-6 text-white">
             Home
           </Link>
-          <Link href="/" className="pb-6 text-white">
+          <Link
+            href="/"
+            className="pb-6 text-slate-400"
+            onClick={(e) => e.preventDefault()}
+          >
             About
           </Link>
-          <Link href="/" className="pb-6 text-white">
+          <Link
+            href="/"
+            className="pb-6 text-slate-400"
+            onClick={(e) => e.preventDefault()}
+          >
             Dock
           </Link>
-          <Link href="/" className="pb-6 text-white">
+          <Link
+            href="/"
+            className="pb-6 text-slate-400"
+            onClick={(e) => e.preventDefault()}
+          >
             Explore Projects
           </Link>
         </nav>
@@ -63,44 +75,35 @@ const Footer = () => {
                     items-center
                     lg:items-start"
         >
-          <Link href="/" className="pb-6 text-white">
+          <Link
+            href="/"
+            className="pb-6 text-slate-400"
+            onClick={(e) => e.preventDefault()}
+          >
             What&apos;s included
           </Link>
-          <Link href="/" className="pb-6 text-white">
+          <Link
+            href="/"
+            className="pb-6 text-slate-400"
+            onClick={(e) => e.preventDefault()}
+          >
             How it works
           </Link>
-          <Link href="/" className="pb-6 text-white">
+          <Link
+            href="/"
+            className="pb-6 text-slate-400"
+            onClick={(e) => e.preventDefault()}
+          >
             Where do the funds go
           </Link>
         </nav>
         <button
-          className="
-                      h-[52px]
-                      rounded-md 
-                      bg-primary
-                      px-3
-                      py-2
-                      text-white
-                      transition
-                      duration-200
-                      ease-in-out
-                      hover:bg-white
-                      hover:text-black
-"
+          className="h-[52px] rounded-md  bg-primary px-3 py-2 text-white transition duration-200 ease-in-out hover:bg-white hover:text-black disabled:bg-gray-500 disabled:text-black"
+          disabled
         >
           Get Started
         </button>
-        <p
-          className=" 
-                      pt-6
-                      text-center
-                      font-sans
-                      text-sm
-                      font-thin
-                      text-[#8a93a1]
-                      lg:hidden
-                      "
-        >
+        <p className="pt-6 text-center font-sans text-sm font-thin text-[#8a93a1] lg:hidden ">
           © 2023 MoonVector. All rights reserved.
         </p>
       </div>

@@ -66,8 +66,7 @@ const InfoBanner = () => {
                   lg:font-bold
                 "
         >
-          Nullam feugiat vel felis et tincidunt. Nam semper nec lectus posuere
-          commodo. Curabitur lacinia sed est et condimentum.
+          Under Construction
         </p>
         <p
           className=" 
@@ -80,8 +79,7 @@ const InfoBanner = () => {
                 lg:text-left
                 "
         >
-          Cras quis nisi eget elit feugiat consectetur in condimentum leo.
-          Pellentesque luctus, ligula eu vehicula commodo, nunc nibh.
+          Please come back soon
         </p>
         <div
           className="
@@ -108,7 +106,6 @@ const InfoBanner = () => {
             Read More
           </button>
           <a
-            href=""
             className=" 
                 text-center
                 text-base
