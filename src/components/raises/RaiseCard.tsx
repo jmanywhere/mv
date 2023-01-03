@@ -1,9 +1,15 @@
-import { useWeb3React } from "@web3-react/core";
-import classNames from "classnames";
-import { connectModal } from "data/atoms";
-import { useAuth } from "hooks/useAuth";
-import { useSetAtom } from "jotai";
+import { useState } from "react";
+// Next
 import Image from "next/image";
+// Data stuff
+import { useSetAtom } from "jotai";
+import { connectModal } from "data/atoms";
+// Web3 stuff
+import { useWeb3React } from "@web3-react/core";
+// hooks
+import { useAuth } from "hooks/useAuth";
+// utils
+import classNames from "classnames";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
@@ -15,6 +21,8 @@ const RaiseCard = (props: RaiseCardProps) => {
   const setOpenConnectModal = useSetAtom(connectModal);
   const { account } = useWeb3React();
   const { logout } = useAuth();
+
+  const [saleData, setSaleData] = useState({});
 
   // TODOs
   // connect wallet stuff
