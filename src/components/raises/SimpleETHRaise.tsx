@@ -88,14 +88,23 @@ const RaiseCard = (props: RaiseCardProps) => {
     if (!pledgeRef.current || isNaN(parseFloat(pledgeRef.current.value)))
       return false;
 
-    return (
-      pledgeAmount < 0.2 ||
-      saleData.userBalance.lt(parseEther(pledgeAmount.toString())) ||
-      saleData.userPledge
-        .add(parseEther(pledgeAmount.toString()))
-        .gt(saleData.max) ||
-      pledgeAmount > 2
-    );
+    if (saleData.userPledge.isZero())
+      return (
+        pledgeAmount < 0.2 ||
+        saleData.userBalance.lt(parseEther(pledgeAmount.toString())) ||
+        saleData.userPledge
+          .add(parseEther(pledgeAmount.toString()))
+          .gt(saleData.max) ||
+        pledgeAmount > 2
+      );
+    else
+      return (
+        saleData.userBalance.lt(parseEther(pledgeAmount.toString())) ||
+        saleData.userPledge
+          .add(parseEther(pledgeAmount.toString()))
+          .gt(saleData.max) ||
+        pledgeAmount > 2
+      );
   }, [pledgeRef, saleData, pledgeAmount]);
 
   const pledge = useCallback(async () => {
