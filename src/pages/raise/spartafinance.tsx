@@ -29,7 +29,7 @@ const SpartaFinanceRaise: NextPage<
     });
   }, [setRaiseBasics]);
   return (
-    <Layout title="Sparta Finance Private Sale" hideHeader>
+    <Layout title="Sparta Finance Private Sale" hideHeader simpleFooter>
       <Head>
         <meta
           name="description"
