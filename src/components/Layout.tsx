@@ -9,6 +9,7 @@ import SimpleFooter from "./SimpleFooter";
 import { useAtomValue } from "jotai";
 import { raiseBasic } from "data/atoms";
 import classNames from "classnames";
+import TxContainer from "./TxContainer";
 
 /// @TODO add props to select a simple Footer
 /// @TODO add props for whitelabel
@@ -33,7 +34,10 @@ const Layout = (props: {
         <title>{title}</title>
       </Head>
       <Header price={100000000} hideHeader={hideHeader} />
-      <main>{children}</main>
+      <main>
+        <TxContainer />
+        {children}
+      </main>
       {simpleFooter ? <SimpleFooter /> : <Footer />}
     </div>
   );
