@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 // Data stuff
 import { useSetAtom } from "jotai";
-import { connectModal } from "data/atoms";
+import { connectModal, txQueue } from "data/atoms";
 // Web3 stuff
 import { useWeb3React } from "@web3-react/core";
 // hooks
@@ -25,7 +25,8 @@ const RaiseCard = (props: RaiseCardProps) => {
   } = props;
 
   const setOpenConnectModal = useSetAtom(connectModal);
-  const { account, library } = useWeb3React();
+  const setTxQueue = useSetAtom(txQueue);
+  const { account, chainId } = useWeb3React();
   const { logout } = useAuth();
 
   const [pLoad, setPLoad] = useState(false);
@@ -109,24 +110,45 @@ const RaiseCard = (props: RaiseCardProps) => {
   }, [pledgeRef, saleData, pledgeAmount]);
 
   const pledge = useCallback(async () => {
-    if (pledgeAmount <= 0 || !writer) return;
+    if (pledgeAmount <= 0 || !writer || !chainId) return;
     if (errorAmount) {
       alert("Error in pledge amount");
       return;
     }
     setPLoad(true);
-    try {
-      const tx = await writer.pledge({
+    const tx = await writer
+      .pledge({
         value: parseEther(pledgeAmount.toString()),
+      })
+      .catch((e: { code: string }) => {
+        setTxQueue((draft) => {
+          draft["at1"] = {
+            description: e.code,
+            chainId,
+            status: "error",
+            customTimeout: 5000,
+          };
+        });
+        return null;
+      });
+    if (tx) {
+      setTxQueue((draft) => {
+        draft[tx.hash] = {
+          description: "Pledge BNB",
+          chainId,
+          status: "pending",
+        };
       });
       const rc = await tx.wait();
-      if (rc.status == 1) alert("Successfully pledged!");
-      else alert("Check tx hash");
-    } catch (e) {
-      alert("Something went wrong, did you cancel the tx?");
+      setTxQueue((draft) => {
+        const txnData = draft[tx.hash];
+        if (!txnData) return;
+        txnData.status = rc.status == 1 ? "complete" : "error";
+        draft[tx.hash] = txnData;
+      });
     }
     setPLoad(false);
-  }, [pledgeAmount, errorAmount, writer]);
+  }, [pledgeAmount, errorAmount, writer, chainId, setTxQueue]);
 
   // TODOs
   // connect wallet stuff
@@ -189,7 +211,7 @@ const RaiseCard = (props: RaiseCardProps) => {
               {prettyBN(saleData.currentRaise, 2)} /{" HC: "}
               {prettyBN(saleData.hardcap, 2)}
             </span>
-            <span>
+            <span suppressHydrationWarning>
               <Countdown
                 date={new Date(1673240400000)}
                 renderer={({ days, hours, minutes, seconds, completed }) => {
@@ -335,7 +357,7 @@ const RaiseCard = (props: RaiseCardProps) => {
         <span className="flex-grow text-sm text-t_dark md:w-60 md:flex-none">
           No refunds will be allowed once committed.
           <br />
-          If the hardcap is not reached we will send your BNB back to your
+          If the hardcap is not reached you can claim your BNB back to your
           wallet.
         </span>
       </div>
