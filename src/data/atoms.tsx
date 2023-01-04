@@ -23,6 +23,7 @@ export type TxData = {
   description: string; // Short description of what needs to happen
   chainId: number; // This will let the UI know which block explorer to use
   status: "complete" | "pending" | "error" | "done";
+  customTimeout?: number; // milliseconds. If zero or undefined, uses standard timeout
 };
 export const txQueue = atomWithImmer<{ [hash: string]: TxData }>({});
 
