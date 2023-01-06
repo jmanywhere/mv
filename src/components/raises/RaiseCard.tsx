@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useImmer } from "use-immer";
 // Next
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -30,7 +31,21 @@ const RaiseCard = (props: RaiseCardProps) => {
 
   const router = useRouter();
   const [saleData, setSaleData] = useState({});
-  const [showRef, setShowRef] = useState(false);
+  const [tempFlags, setTempFlags] = useImmer({
+    showRef: false,
+    copySuccess: false,
+  });
+
+  useEffect(() => {
+    if (tempFlags.copySuccess)
+      setTimeout(
+        () =>
+          setTempFlags((draft) => {
+            draft.copySuccess = false;
+          }),
+        1000
+      );
+  }, [tempFlags.copySuccess]);
 
   /* Editable STATE NEEDED
       Pledge Amount
@@ -63,6 +78,17 @@ const RaiseCard = (props: RaiseCardProps) => {
     if (!account) return "";
     return `https://moonvector.io${router.asPath}?ref=${account}`;
   }, [router, account]);
+
+  const copyReferral = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(referralCode);
+      setTempFlags((draft) => {
+        draft.copySuccess = true;
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }, [referralCode, setTempFlags]);
 
   return (
     <div className="rounded-3xl bg-bg_f_light px-9 py-8">
@@ -139,6 +165,7 @@ const RaiseCard = (props: RaiseCardProps) => {
               <span className="">Your link :</span>
               <div className="relative">
                 <button
+                  onClick={copyReferral}
                   name="copy-ref-link"
                   className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
                 >
@@ -147,21 +174,26 @@ const RaiseCard = (props: RaiseCardProps) => {
                 <label
                   htmlFor="copy-ref-link"
                   className={classNames(
-                    "center absolute -left-[62px] -top-11 whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
+                    "center absolute -left-[62px] -top-11 w-[158px] whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
                     "aft-top-tooltip",
-                    "opacity-0 transition-opacity ease-in peer-hover:opacity-100"
+                    "text-center transition-opacity ease-in peer-hover:opacity-100",
+                    tempFlags.copySuccess ? "opacity-100" : "opacity-0"
                   )}
                 >
-                  Copy Referral Link
+                  {tempFlags.copySuccess ? "Copied!" : "Copy Referral Link"}
                 </label>
               </div>
               <div className="relative">
                 <button
                   name="referral-show-btn"
                   className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
-                  onClick={() => setShowRef((p) => !p)}
+                  onClick={() =>
+                    setTempFlags((draft) => {
+                      draft.showRef = !draft.showRef;
+                    })
+                  }
                 >
-                  {showRef ? (
+                  {tempFlags.showRef ? (
                     <AiOutlineEye className="text-lg" />
                   ) : (
                     <AiOutlineEyeInvisible className="text-lg" />
@@ -173,10 +205,10 @@ const RaiseCard = (props: RaiseCardProps) => {
                     "absolute -top-11 whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
                     "aft-top-tooltip",
                     "opacity-0 transition-opacity ease-in peer-hover:opacity-100",
-                    showRef ? "-left-[31px]" : "-left-[33px]"
+                    tempFlags.showRef ? "-left-[31px]" : "-left-[33px]"
                   )}
                 >
-                  {showRef ? "Hide" : "Show"} Link
+                  {tempFlags.showRef ? "Hide" : "Show"} Link
                 </label>
               </div>
             </div>
@@ -189,7 +221,7 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div
             className={classNames(
               "select-text whitespace-normal break-words pt-2 text-sm font-light md:whitespace-nowrap",
-              showRef ? "block" : "hidden"
+              tempFlags.showRef ? "block" : "hidden"
             )}
           >
             {referralCode}
