@@ -16,6 +16,8 @@ const RaiseCard = (props: RaiseCardProps) => {
     title = "MoonVector",
     subtitle = "Crowdfunding",
     iconLogo = "/logo/logo_icon_primary.svg",
+    contract = "",
+    chain = 56,
   } = props;
 
   const setOpenConnectModal = useSetAtom(connectModal);
@@ -23,6 +25,12 @@ const RaiseCard = (props: RaiseCardProps) => {
   const { logout } = useAuth();
 
   const [saleData, setSaleData] = useState({});
+
+  /* Editable STATE NEEDED
+      Pledge Amount
+      pledge load
+      referral address <- only necessary if project takes in referrals (this data should come from the contract, but let's get it on the static)
+  */
 
   // TODOs
   // connect wallet stuff
@@ -105,10 +113,29 @@ const RaiseCard = (props: RaiseCardProps) => {
         </div>
       </div>
       {/* INPUT AND ACTION */}
-      <div className="flex flex-col items-center py-6 md:flex-row md:items-end md:justify-start">
-        {/* INPUT AND TOKENS IN WALLET */}
+      <div className="grid grid-cols-1 grid-rows-2 items-center pt-6 pb-0 md:grid-cols-3 md:flex-row md:items-end md:justify-start">
+        {/* ReferralInput */}
+        <div className="order-3 col-span-2 flex flex-grow flex-col md:order-1 md:pb-3">
+          <label
+            id="referral-id"
+            htmlFor="referral_input"
+            className="pl-2 pb-3 font-semibold"
+          >
+            Referral
+          </label>
+          <div className="flex flex-col gap-1">
+            <input
+              name="referral_input"
+              className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 text-left md:w-[420px]"
+              onFocus={(e) => e.target.select()}
+            />
+          </div>
+        </div>
+        <div className="order-4 col-span-1 flex items-center md:order-2 md:pb-3">
+          Referral code
+        </div>
         {/* LABEL AND INPUT */}
-        <div className="flex flex-grow flex-col">
+        <div className="order-1 col-span-1 flex flex-grow flex-col md:order-3 md:col-span-2">
           <label
             id="pledge-id"
             htmlFor="pledge"
@@ -119,14 +146,15 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="flex flex-col gap-1">
             <input
               name="pledge"
-              className="w-72 rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1"
+              className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 md:w-72"
             />
             <span className=" ml-3 text-sm font-normal text-t_dark">
               Wallet: XXXXXX
             </span>
           </div>
         </div>
-        <div className="mt-6 md:mt-0">
+        {/* Pledge Action */}
+        <div className="order-4 mt-6 flex justify-center md:mt-0 md:justify-end">
           <button
             className=" mb-[20px] w-32 rounded-xl bg-primary py-[10px]"
             // disabled={!whitelisted}
@@ -136,6 +164,7 @@ const RaiseCard = (props: RaiseCardProps) => {
           </button>
         </div>
       </div>
+
       <div className="flex flex-col items-center py-9 md:flex-row md:justify-between">
         <div className="w-full flex-grow font-semibold">
           <div className="mt-4 flex flex-row justify-between">
@@ -173,4 +202,6 @@ type RaiseCardProps = {
   title: string;
   subtitle: string;
   iconLogo?: string;
+  contract: string;
+  chain: number;
 };
