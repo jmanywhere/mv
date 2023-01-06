@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 // Next
 import Image from "next/image";
+import { useRouter } from "next/router";
 // Data stuff
 import { useSetAtom } from "jotai";
 import { connectModal } from "data/atoms";
@@ -10,6 +11,9 @@ import { useWeb3React } from "@web3-react/core";
 import { useAuth } from "hooks/useAuth";
 // utils
 import classNames from "classnames";
+// Icons
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { BiCopyAlt } from "react-icons/bi";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
@@ -24,7 +28,9 @@ const RaiseCard = (props: RaiseCardProps) => {
   const { account } = useWeb3React();
   const { logout } = useAuth();
 
+  const router = useRouter();
   const [saleData, setSaleData] = useState({});
+  const [showRef, setShowRef] = useState(false);
 
   /* Editable STATE NEEDED
       Pledge Amount
@@ -52,6 +58,11 @@ const RaiseCard = (props: RaiseCardProps) => {
   // const whitelisted = useMemo( () => {
   //    return true if sale_status = whiteslist and user is whitelisted OR sale_status = started ELSE false
   // },[])
+
+  const referralCode = useMemo(() => {
+    if (!account) return "";
+    return `https://moonvector.io${router.asPath}?ref=${account}`;
+  }, [router, account]);
 
   return (
     <div className="rounded-3xl bg-bg_f_light px-9 py-8">
@@ -113,26 +124,76 @@ const RaiseCard = (props: RaiseCardProps) => {
         </div>
       </div>
       {/* INPUT AND ACTION */}
-      <div className="grid grid-cols-1 grid-rows-2 items-center pt-6 pb-0 md:grid-cols-3 md:flex-row md:items-end md:justify-start">
+      <div className="grid auto-rows-auto grid-cols-1 items-center pt-6 pb-0 md:grid-cols-3 md:flex-row md:items-end md:justify-start">
         {/* ReferralInput */}
         <div className="order-3 col-span-2 flex flex-grow flex-col md:order-1 md:pb-3">
-          <label
-            id="referral-id"
-            htmlFor="referral_input"
-            className="pl-2 pb-3 font-semibold"
-          >
-            Referral
-          </label>
-          <div className="flex flex-col gap-1">
-            <input
-              name="referral_input"
-              className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 text-left md:w-[420px]"
-              onFocus={(e) => e.target.select()}
-            />
+          <div className="flex w-full flex-row items-center justify-between gap-2 pb-1 md:w-[420px]">
+            <label
+              id="referral-id"
+              htmlFor="referral_input"
+              className="pl-2 font-semibold"
+            >
+              Referral
+            </label>
+            <div className="flex flex-row items-center gap-x-2">
+              <span className="">Your link :</span>
+              <div className="relative">
+                <button
+                  name="copy-ref-link"
+                  className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
+                >
+                  <BiCopyAlt className="text-lg" />
+                </button>
+                <label
+                  htmlFor="copy-ref-link"
+                  className={classNames(
+                    "center absolute -left-[62px] -top-11 whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
+                    "aft-top-tooltip",
+                    "opacity-0 transition-opacity ease-in peer-hover:opacity-100"
+                  )}
+                >
+                  Copy Referral Link
+                </label>
+              </div>
+              <div className="relative">
+                <button
+                  name="referral-show-btn"
+                  className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
+                  onClick={() => setShowRef((p) => !p)}
+                >
+                  {showRef ? (
+                    <AiOutlineEye className="text-lg" />
+                  ) : (
+                    <AiOutlineEyeInvisible className="text-lg" />
+                  )}
+                </button>
+                <label
+                  htmlFor="referral-show-btn"
+                  className={classNames(
+                    "absolute -top-11 whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
+                    "aft-top-tooltip",
+                    "opacity-0 transition-opacity ease-in peer-hover:opacity-100",
+                    showRef ? "-left-[31px]" : "-left-[33px]"
+                  )}
+                >
+                  {showRef ? "Hide" : "Show"} Link
+                </label>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="order-4 col-span-1 flex items-center md:order-2 md:pb-3">
-          Referral code
+          <input
+            name="referral_input"
+            className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 text-left md:w-[420px]"
+            onFocus={(e) => e.target.select()}
+          />
+          <div
+            className={classNames(
+              "select-text whitespace-normal break-words pt-2 text-sm font-light md:whitespace-nowrap",
+              showRef ? "block" : "hidden"
+            )}
+          >
+            {referralCode}
+          </div>
         </div>
         {/* LABEL AND INPUT */}
         <div className="order-1 col-span-1 flex flex-grow flex-col md:order-3 md:col-span-2">
@@ -164,7 +225,6 @@ const RaiseCard = (props: RaiseCardProps) => {
           </button>
         </div>
       </div>
-
       <div className="flex flex-col items-center py-9 md:flex-row md:justify-between">
         <div className="w-full flex-grow font-semibold">
           <div className="mt-4 flex flex-row justify-between">
