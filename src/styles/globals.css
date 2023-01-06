@@ -18,6 +18,17 @@
   .raise-progress{
     @apply h-3;
   }
+
+  .aft-top-tooltip::after{
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(51 65 85) transparent transparent transparent;
+  }
 }
 
 @font-face {
