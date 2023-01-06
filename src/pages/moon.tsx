@@ -70,16 +70,29 @@ const MoonPage: NextPage = () => {
           </div>
           {/* This def needs some love */}
           <p className=" whitespace-pre-line pb-12">
-            Some super awesome text here about what this investment pool is all
-            about. There are tiers, compounding, shares, rewards. Hell the sky
-            is the limit. This needs to be as concise as needs to not miss a
-            beat on what the project is about. Let&apos;s take our time figuring
-            out what goes here and improve upon it.{"\n\n"}Approve BUSD, send
-            BUSD, get Shares, get BUSD perpetually!
+            Moon Vector is a new decentralized fund-raising, and CrowdFunding
+            platform that allows projects to seamlessly raise funds utilizing
+            both tokenized and non-tokenized business models.
+            <br />
+            Striving to be the most frictionless and easy to launch fund-raising
+            option in Web3, we&apos;re empowering projects to skip the hype
+            train model in DeFi by introducing a royalty sharing crowd fund
+            option that allows projects to focus on the business, and not the
+            token price.
+            <br />
+            With a roadmap that includes cross-chain royalty pools, tokenized
+            and non-tokenized raises, project aggregation, P2P payments,
+            education tools, OTC share swaps and more, Moon Vector is a forward
+            facing game changer that has been battle tested with real projects
+            for nearly a year before officially coming to market.
+            <br />
+            <br />
+            You don&apos;t want to miss this one!
           </p>
           <RaiseCard
             title="Moon Vector"
             subtitle="Investor Raise for Royalties"
+            chain={56}
           />
           <div>OWNER CARD</div>
         </div>
