@@ -15,7 +15,10 @@ import classNames from "classnames";
 // Icons
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { BiCopyAlt } from "react-icons/bi";
-import { isAddress } from "ethers/lib/utils";
+import { isAddress, parseEther } from "ethers/lib/utils";
+import { BigNumber } from "ethers";
+import { prettyBN } from "utils/bn";
+import Tooltip from "components/generic/Tooltip";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
@@ -31,34 +34,35 @@ const RaiseCard = (props: RaiseCardProps) => {
   const { logout } = useAuth();
 
   const router = useRouter();
-  const [saleData, setSaleData] = useState({});
+  // We'll use static for one Time only Fetches
+  const [staticSaleData, setStaticSaleData] = useState({
+    pledgeTokenAddress: "",
+    pledgeTokenName: "BUSD",
+    rewardTokenAddress: "",
+    rewardTokenName: "BUSD",
+    softcap: BigNumber.from("0"),
+    hardcap: BigNumber.from("0"),
+  });
+  const [currentSaleData, setCurrentSaleData] = useState({
+    userPledged: BigNumber.from("0"),
+    totalPledged: parseEther("0"),
+    referrals: 0,
+    tokensPerETH: BigNumber.from("0"),
+    userWalletBalance: BigNumber.from("0"),
+    referredBy: "",
+  });
   const [tempFlags, setTempFlags] = useImmer({
     showRef: false,
     copySuccess: false,
   });
   const [referral, setReferral] = useState("");
   const validReferral = referral.length > 0 ? isAddress(referral) : true;
-
-  useEffect(() => {
-    if (!tempFlags.copySuccess) return;
-    const timeOut = setTimeout(
-      () =>
-        setTempFlags((draft) => {
-          draft.copySuccess = false;
-        }),
-      1000
-    );
-    return () => clearTimeout(timeOut);
-  }, [tempFlags.copySuccess, setTempFlags]);
-
-  /* Editable STATE NEEDED
-      Pledge Amount
-      pledge load
-      referral address <- only necessary if project takes in referrals (this data should come from the contract, but let's get it on the static)
-  */
+  const showRefLink = useMemo(
+    () => currentSaleData.userPledged.gt(0),
+    [currentSaleData.userPledged]
+  );
 
   // TODOs
-  // connect wallet stuff
   // After wallet is connected show the wallet and balance of fund types it has.
   // Probably will need to change the button for two textfields, address button will disconnect user
 
@@ -94,6 +98,12 @@ const RaiseCard = (props: RaiseCardProps) => {
     }
   }, [referralCode, setTempFlags]);
 
+  const rewardAmount = useMemo(() => {
+    return currentSaleData.tokensPerETH
+      .mul(currentSaleData.userPledged)
+      .div(parseEther("1"));
+  }, [currentSaleData]);
+
   return (
     <div className="rounded-3xl bg-bg_f_light px-9 py-8">
       <div className="flex flex-col items-center justify-center gap-y-6 gap-x-6 pb-6 md:flex-row">
@@ -109,26 +119,28 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="text-2xl font-bold">{title}</div>
           <div className="text-base font-semibold">{subtitle}</div>
         </div>
-        <button
-          className={classNames(
-            "rounded-xl bg-t_dark px-7 py-5",
-            account
-              ? "bg-t_dark hover:bg-primary"
-              : "bg-primary hover:bg-t_dark"
-          )}
-          onClick={() => (account ? logout() : setOpenConnectModal(true))}
-        >
-          {account
-            ? account.slice(0, 4) +
-              "..." +
-              account.slice(account.length - 4, account.length)
-            : "Connect Wallet"}
-        </button>
+        <Tooltip text={account ? "Disconnect" : "Connect"} position="bottom">
+          <button
+            className={classNames(
+              "rounded-xl bg-t_dark px-7 py-5",
+              account
+                ? "bg-t_dark hover:bg-primary"
+                : "bg-primary hover:bg-t_dark"
+            )}
+            onClick={() => (account ? logout() : setOpenConnectModal(true))}
+          >
+            {account
+              ? account.slice(0, 4) +
+                "..." +
+                account.slice(account.length - 4, account.length)
+              : "Connect Wallet"}
+          </button>
+        </Tooltip>
       </div>
       <div className="flex flex-col gap-4 border-t-2 border-b-2 border-dividers py-6 md:flex-row">
         <div className="w-full font-semibold md:w-[35%]">
           <div className="flex flex-row justify-between">
-            <span className="flex-grow text-t_dark md:w-32 md:flex-none">
+            <span className="flex-grow text-t_dark md:w-28 md:flex-none">
               Sale Status
             </span>
             <span className="flex-none text-left uppercase md:flex-grow">
@@ -136,10 +148,18 @@ const RaiseCard = (props: RaiseCardProps) => {
             </span>
           </div>
           <div className="mt-4 flex flex-row justify-between">
-            <span className="flex-grow text-t_dark md:w-32 md:flex-none">
+            <span className="flex-grow text-t_dark md:w-28 md:flex-none">
               Raised
             </span>
-            <span className="flex-none text-left md:flex-grow">XXX Tokens</span>
+            <span className="flex-none text-left md:flex-grow">
+              <Tooltip
+                position="bottom"
+                text={prettyBN(currentSaleData.totalPledged)}
+              >
+                {prettyBN(currentSaleData.totalPledged, 2)}{" "}
+                {staticSaleData.pledgeTokenName}
+              </Tooltip>
+            </span>
           </div>
         </div>
         <div className="flex-1">
@@ -165,62 +185,56 @@ const RaiseCard = (props: RaiseCardProps) => {
             >
               Referral
             </label>
-            <div className="flex flex-row items-center gap-x-2">
-              <span className="">Your link :</span>
-              <div className="relative">
-                <button
-                  onClick={copyReferral}
-                  name="copy-ref-link"
-                  className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
-                >
-                  <BiCopyAlt className="text-lg" />
-                </button>
-                <label
-                  htmlFor="copy-ref-link"
-                  className={classNames(
-                    "center absolute -left-[62px] -top-11 w-[158px] whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
-                    "aft-top-tooltip",
-                    "text-center transition-opacity ease-in peer-hover:opacity-100",
-                    tempFlags.copySuccess ? "opacity-100" : "opacity-0"
-                  )}
-                >
-                  {tempFlags.copySuccess ? "Copied!" : "Copy Referral Link"}
-                </label>
-              </div>
-              <div className="relative">
-                <button
-                  name="referral-show-btn"
-                  className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
-                  onClick={() =>
-                    setTempFlags((draft) => {
-                      draft.showRef = !draft.showRef;
-                    })
+            {true && (
+              <div className="flex flex-row items-center gap-x-2">
+                <span className="">Your link :</span>
+                <Tooltip
+                  text={
+                    tempFlags.copySuccess ? "Copied!" : "Copy Referral Link"
                   }
                 >
-                  {tempFlags.showRef ? (
-                    <AiOutlineEye className="text-lg" />
-                  ) : (
-                    <AiOutlineEyeInvisible className="text-lg" />
-                  )}
-                </button>
-                <label
-                  htmlFor="referral-show-btn"
-                  className={classNames(
-                    "absolute -top-11 whitespace-nowrap rounded-3xl bg-slate-700 px-4 py-2 text-sm",
-                    "aft-top-tooltip",
-                    "opacity-0 transition-opacity ease-in peer-hover:opacity-100",
-                    tempFlags.showRef ? "-left-[31px]" : "-left-[33px]"
-                  )}
-                >
-                  {tempFlags.showRef ? "Hide" : "Show"} Link
-                </label>
+                  <button
+                    onClick={copyReferral}
+                    name="copy-ref-link"
+                    className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
+                    onMouseLeave={() =>
+                      tempFlags.copySuccess &&
+                      setTimeout(
+                        () =>
+                          setTempFlags((draft) => {
+                            draft.copySuccess = false;
+                          }),
+                        200
+                      )
+                    }
+                  >
+                    <BiCopyAlt className="text-lg" />
+                  </button>
+                </Tooltip>
+                <Tooltip text={tempFlags.showRef ? "Hide Link" : "Show Link"}>
+                  <button
+                    name="referral-show-btn"
+                    className="peer rounded-full bg-primary/30 p-2 text-xs font-light text-white hover:bg-primary/80"
+                    onClick={() =>
+                      setTempFlags((draft) => {
+                        draft.showRef = !draft.showRef;
+                      })
+                    }
+                  >
+                    {tempFlags.showRef ? (
+                      <AiOutlineEye className="text-lg" />
+                    ) : (
+                      <AiOutlineEyeInvisible className="text-lg" />
+                    )}
+                  </button>
+                </Tooltip>
               </div>
-            </div>
+            )}
           </div>
           <input
             name="referral_input"
             className={classNames(
-              "w-full rounded-xl border-2 bg-bg_darkest px-3 py-1 text-left md:w-[420px]",
+              "w-full rounded-xl border-2 bg-bg_darkest px-3 py-1 text-right md:w-[420px]",
               validReferral
                 ? "border-b_dark"
                 : "border-red-400 focus:outline-red-500"
@@ -244,15 +258,15 @@ const RaiseCard = (props: RaiseCardProps) => {
             htmlFor="pledge"
             className="pl-2 pb-3 font-semibold"
           >
-            Pledge {`{token}`}
+            Pledge {staticSaleData.pledgeTokenName}
           </label>
           <div className="flex flex-col gap-1">
             <input
               name="pledge"
-              className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 md:w-72"
+              className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 text-right md:w-[420px]"
             />
-            <span className=" ml-3 text-sm font-normal text-t_dark">
-              Wallet: XXXXXX
+            <span className="w-full pr-2 text-right text-sm font-normal text-t_dark md:w-[400px]">
+              {prettyBN(currentSaleData.userWalletBalance, 4)} in Wallet
             </span>
           </div>
         </div>
@@ -267,20 +281,31 @@ const RaiseCard = (props: RaiseCardProps) => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col items-center py-9 md:flex-row md:justify-between">
+      <div className="flex flex-col items-end py-9 md:flex-row md:justify-between">
         <div className="w-full flex-grow font-semibold">
           <div className="mt-4 flex flex-row justify-between">
             <span className="flex-grow text-t_dark md:w-60 md:flex-none">
               Pledged
             </span>
-            <span className="flex-none text-left md:flex-grow">XXX Tokens</span>
+            <span className="flex-none text-left md:flex-grow">
+              {prettyBN(currentSaleData.userPledged, 4)}{" "}
+              {staticSaleData.pledgeTokenName}
+            </span>
+          </div>
+          <div className="mt-4 flex flex-row justify-between">
+            <span className="flex-grow text-t_dark md:w-60 md:flex-none">
+              Referrals
+            </span>
+            <span className="flex-none text-left md:flex-grow">
+              {currentSaleData.referrals}
+            </span>
           </div>
           <div className="mt-4 flex flex-col justify-between md:flex-row">
             <span className="flex-grow text-xl text-t_dark md:w-60 md:flex-none">
               Rewarded Amount
             </span>
             <span className="mt-1 flex-none text-right text-xl md:mt-0 md:flex-grow md:text-left">
-              XXX reward Token
+              {prettyBN(rewardAmount, 4)} {staticSaleData.rewardTokenName}
             </span>
           </div>
         </div>
