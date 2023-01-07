@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -14,7 +14,7 @@ model Fund {
   id          String           @id @default(cuid())
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
-  chain       String
+  chain       Chain            @relation(fields: [chainId], references: [id])
   contract    String
   raised      BigInt
   goal        BigInt
@@ -24,6 +24,7 @@ model Fund {
   logo_icon   String
   banner      String
   name        String
+  chainId     Int
   features    Feature[]
   writeups    Writeup[]
   socials     SocialsOnFunds[]
@@ -73,10 +74,18 @@ model Social {
   funds SocialsOnFunds[]
 }
 
-// enum SocialTypes{
-//   TWITTER
-//   FB
-//   DISCORD
-//   TELEGRAM
+model Chain {
+  id   Int      @id @unique // This is ChainId
+  name String
+  rpcs String[] // Free(if not well keep costs in mind) RPC URLs
+  Fund Fund[]
+}
 
-// }
+enum SocialTypes {
+  TWITTER
+  FB
+  DISCORD
+  TELEGRAM
+  MEDIUM
+  REDDIT
+}
