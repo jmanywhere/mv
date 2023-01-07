@@ -15,6 +15,7 @@ import classNames from "classnames";
 // Icons
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { BiCopyAlt } from "react-icons/bi";
+import { isAddress } from "ethers/lib/utils";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
@@ -35,17 +36,20 @@ const RaiseCard = (props: RaiseCardProps) => {
     showRef: false,
     copySuccess: false,
   });
+  const [referral, setReferral] = useState("");
+  const validReferral = referral.length > 0 ? isAddress(referral) : true;
 
   useEffect(() => {
-    if (tempFlags.copySuccess)
-      setTimeout(
-        () =>
-          setTempFlags((draft) => {
-            draft.copySuccess = false;
-          }),
-        1000
-      );
-  }, [tempFlags.copySuccess]);
+    if (!tempFlags.copySuccess) return;
+    const timeOut = setTimeout(
+      () =>
+        setTempFlags((draft) => {
+          draft.copySuccess = false;
+        }),
+      1000
+    );
+    return () => clearTimeout(timeOut);
+  }, [tempFlags.copySuccess, setTempFlags]);
 
   /* Editable STATE NEEDED
       Pledge Amount
@@ -153,7 +157,7 @@ const RaiseCard = (props: RaiseCardProps) => {
       <div className="grid auto-rows-auto grid-cols-1 items-center pt-6 pb-0 md:grid-cols-3 md:flex-row md:items-end md:justify-start">
         {/* ReferralInput */}
         <div className="order-3 col-span-2 flex flex-grow flex-col md:order-1 md:pb-3">
-          <div className="flex w-full flex-row items-center justify-between gap-2 pb-1 md:w-[420px]">
+          <div className="flex w-full flex-row items-center justify-between gap-2 pb-2 md:w-[420px]">
             <label
               id="referral-id"
               htmlFor="referral_input"
@@ -215,8 +219,14 @@ const RaiseCard = (props: RaiseCardProps) => {
           </div>
           <input
             name="referral_input"
-            className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 text-left md:w-[420px]"
+            className={classNames(
+              "w-full rounded-xl border-2 bg-bg_darkest px-3 py-1 text-left md:w-[420px]",
+              validReferral
+                ? "border-b_dark"
+                : "border-red-400 focus:outline-red-500"
+            )}
             onFocus={(e) => e.target.select()}
+            onChange={(e) => setReferral(e.target.value)}
           />
           <div
             className={classNames(
