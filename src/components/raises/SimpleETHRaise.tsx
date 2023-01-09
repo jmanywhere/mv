@@ -30,6 +30,7 @@ const RaiseCard = (props: RaiseCardProps) => {
   const { logout } = useAuth();
 
   const [pLoad, setPLoad] = useState(false);
+  const [cLoad, setCLoad] = useState(false);
   const [pledgeAmount, setPledgeAmount] = useState(0);
   const pledgeRef = useRef<HTMLInputElement>(null);
 
@@ -149,6 +150,47 @@ const RaiseCard = (props: RaiseCardProps) => {
     }
     setPLoad(false);
   }, [pledgeAmount, errorAmount, writer, chainId, setTxQueue]);
+
+  const refund = useCallback(async () => {
+    if (!writer || !chainId) return;
+    setCLoad(true);
+    const tx = await writer
+      .getRefund()
+      .catch((e: { code: string; reason: string }) => {
+        setTxQueue((draft) => {
+          console.log(e);
+          draft["at1"] = {
+            description: e.reason || e.code,
+            chainId,
+            status: "error",
+            customTimeout: 5000,
+          };
+        });
+        return null;
+      });
+    if (tx) {
+      setTxQueue((draft) => {
+        draft[tx.hash] = {
+          description: "Get BNB Refund",
+          chainId,
+          status: "pending",
+        };
+      });
+      const rc = await tx.wait();
+      setTxQueue((draft) => {
+        const txnData = draft[tx.hash];
+        if (!txnData) return;
+        txnData.status = rc.status == 1 ? "complete" : "error";
+        draft[tx.hash] = txnData;
+      });
+    }
+    setCLoad(false);
+  }, [writer, setTxQueue, chainId]);
+
+  const requireRefund = useMemo(
+    () => !saleData.success && saleData.endSale,
+    [saleData]
+  );
 
   // TODOs
   // connect wallet stuff
@@ -299,10 +341,10 @@ const RaiseCard = (props: RaiseCardProps) => {
         <div className="mt-6 md:mt-0">
           <button
             className={classNames(
-              "mb-[20px] w-32 rounded-xl py-[10px]",
+              "mb-[20px] w-32 rounded-xl py-[10px] disabled:bg-slate-800 disabled:text-t_dark",
               pLoad ? "bg-slate-600" : "bg-primary"
             )}
-            disabled={errorAmount}
+            disabled={requireRefund || errorAmount}
             onClick={pledge}
           >
             {pLoad ? (
@@ -330,6 +372,16 @@ const RaiseCard = (props: RaiseCardProps) => {
               {prettyBN(saleData.userPledge)} {"BNB"}
             </span>
           </div>
+          {requireRefund && (
+            <div className="mt-4 flex flex-row justify-between">
+              <span className="flex-grow text-t_dark md:w-60 md:flex-none">
+                Refund Status
+              </span>
+              <span className="flex-none text-left md:flex-grow">
+                {saleData.userClaimed ? "Refunded" : "Ready to refund"}
+              </span>
+            </div>
+          )}
           {saleData.tokensPerETH.isZero() ? null : (
             <div className="mt-4 flex flex-col justify-between md:flex-row">
               <span className="flex-grow text-xl text-t_dark md:w-60 md:flex-none">
@@ -345,10 +397,29 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="mt-6 md:mt-0">
             {/* Conditionally render depending if rewards are available */}
             <button
-              className=" w-32 rounded-xl bg-primary py-[10px] disabled:bg-t_dark"
-              disabled
+              className=" w-32 rounded-xl bg-primary py-[10px] disabled:bg-slate-800 disabled:text-t_dark"
+              disabled={!saleData.endSale || saleData.userClaimed}
+              onClick={
+                saleData.success && saleData.endSale
+                  ? () => console.log("claim")
+                  : refund
+              }
             >
-              {saleData.success ? "Claim" : "Refund"}
+              {cLoad ? (
+                <Image
+                  src="/ring_loader.svg"
+                  width={24}
+                  height={24}
+                  className="mx-auto w-6"
+                  alt="loader"
+                />
+              ) : saleData.success ? (
+                "Claim"
+              ) : saleData.userClaimed ? (
+                "Claimed"
+              ) : (
+                "Refund"
+              )}
             </button>
           </div>
         )}
