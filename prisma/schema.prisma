@@ -6,15 +6,15 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
-model Fund {
+model Raise {
   id          String           @id @default(cuid())
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
-  chain       String
+  chain       Chain            @relation(fields: [chainId], references: [id])
   contract    String
   raised      BigInt
   goal        BigInt
@@ -24,23 +24,25 @@ model Fund {
   logo_icon   String
   banner      String
   name        String
+  chainId     Int
   features    Feature[]
   writeups    Writeup[]
   socials     SocialsOnFunds[]
+  TagsOnRaise TagsOnRaise[]
 }
 
 model Feature {
   id       String @id @default(cuid())
   duration BigInt
-  fund     Fund   @relation(fields: [fundId], references: [id])
-  fundId   String
+  raise    Raise  @relation(fields: [raiseId], references: [id])
+  raiseId  String
 }
 
 model Writeup {
   id       String @id @default(cuid())
-  fund     Fund   @relation(fields: [fundId], references: [id])
+  raise    Raise  @relation(fields: [raiseId], references: [id])
   user     User   @relation(fields: [authorId], references: [id])
-  fundId   String // uuid
+  raiseId  String // uuid
   text     String
   authorId String // wallet Address
 }
@@ -57,12 +59,12 @@ model User {
 
 // Necessary Model to fulfill the Many-Many relations
 model SocialsOnFunds {
-  fund     Fund   @relation(fields: [fundId], references: [id])
+  raise    Raise  @relation(fields: [raiseId], references: [id])
   social   Social @relation(fields: [socialId], references: [id])
-  fundId   String
+  raiseId  String
   socialId Int
 
-  @@id([fundId, socialId])
+  @@id([raiseId, socialId])
 }
 
 // TODO we should get a form of validation for socials. In the meantime this is going to have to be a manual process
@@ -73,10 +75,33 @@ model Social {
   funds SocialsOnFunds[]
 }
 
-// enum SocialTypes{
-//   TWITTER
-//   FB
-//   DISCORD
-//   TELEGRAM
+model Chain {
+  id    Int      @id @unique // This is ChainId
+  name  String
+  rpcs  String[] // Free(if not well keep costs in mind) RPC URLs
+  Raise Raise[]
+}
 
-// }
+model Tag {
+  id          Int           @id @unique @default(autoincrement())
+  name        String        @unique
+  TagsOnRaise TagsOnRaise[]
+}
+
+model TagsOnRaise {
+  raise   Raise  @relation(fields: [raiseId], references: [id])
+  tag     Tag    @relation(fields: [tagId], references: [id])
+  raiseId String
+  tagId   Int
+
+  @@id([raiseId, tagId])
+}
+
+enum SocialTypes {
+  TWITTER
+  FB
+  DISCORD
+  TELEGRAM
+  MEDIUM
+  REDDIT
+}

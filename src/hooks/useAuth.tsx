@@ -1,42 +1,17 @@
 // State
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 // Web3
 import { useWeb3React } from "@web3-react/core";
-import {
-  InjectedConnector,
-  UserRejectedRequestError as UserRejectedRequestErrorInjected,
-} from "@web3-react/injected-connector";
+import { InjectedConnector } from "@web3-react/injected-connector";
 import {
   WalletConnectConnector,
   UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
 } from "@web3-react/walletconnect-connector";
 // data
-import sample from "lodash/sample";
 import { useSetAtom } from "jotai";
 import { connectModal } from "data/atoms";
+import { getRpcUrl, validChains } from "data/chainData";
 
-const validChains = [56, 97];
-
-const getRpcUrl = (chainId: number) => {
-  const chainRpc: { [key: number]: Array<string> | null } = {
-    1: null,
-    56: [
-      "https://bsc-dataseed1.binance.org/",
-      "https://bsc-dataseed1.defibit.io/",
-      "https://bsc-dataseed2.binance.org/",
-      "https://bsc-dataseed3.binance.org/",
-      "https://bsc-dataseed4.binance.org/",
-    ],
-    97: [
-      "https://data-seed-prebsc-1-s1.binance.org:8545/",
-      "https://data-seed-prebsc-2-s1.binance.org:8545/",
-      "http://data-seed-prebsc-1-s2.binance.org:8545/",
-      "http://data-seed-prebsc-2-s2.binance.org:8545/",
-    ],
-  };
-  if (!chainRpc[chainId]) return null;
-  return sample(chainRpc[chainId]);
-};
 // Login and Logout Hook -> Handles Wallet Connection
 export const useAuth = () => {
   const { activate, deactivate, account, chainId } = useWeb3React();
@@ -70,7 +45,7 @@ export const useAuth = () => {
             console.log("failed to activate", e);
           });
     },
-    [activate]
+    [activate, setOpenConnectModal]
   );
 
   const logout = useCallback(() => {

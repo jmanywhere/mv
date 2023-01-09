@@ -85,7 +85,7 @@ const TxCard = (props: { hash: string; data: TxData }) => {
           </button>
         </div>
         <div className="pt-2">{data.description}</div>
-        {shortHash.length < 5 && (
+        {shortHash.length > 5 && (
           <a
             href={chainIdExplorer[data.chainId] + hash}
             rel="noreferrer"
