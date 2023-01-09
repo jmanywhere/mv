@@ -40,8 +40,8 @@ const RaiseCard = (props: RaiseCardProps) => {
     pledgeTokenName: "BUSD",
     rewardTokenAddress: "",
     rewardTokenName: "BUSD",
-    softcap: BigNumber.from("0"),
-    hardcap: BigNumber.from("0"),
+    softcap: parseEther("0"),
+    hardcap: parseEther("0"),
   });
   const [currentSaleData, setCurrentSaleData] = useState({
     userPledged: BigNumber.from("0"),
@@ -50,6 +50,8 @@ const RaiseCard = (props: RaiseCardProps) => {
     tokensPerETH: BigNumber.from("0"),
     userWalletBalance: BigNumber.from("0"),
     referredBy: "",
+    saleStatus: "PENDING",
+    saleEnd: new Date("2023-01-08T00:00:00"),
   });
   const [tempFlags, setTempFlags] = useImmer({
     showRef: false,
@@ -61,6 +63,8 @@ const RaiseCard = (props: RaiseCardProps) => {
     () => currentSaleData.userPledged.gt(0),
     [currentSaleData.userPledged]
   );
+
+  const [pledgeAmount, setPledgeAmount] = useState(parseEther("0"));
 
   // TODOs
   // After wallet is connected show the wallet and balance of fund types it has.
@@ -163,8 +167,14 @@ const RaiseCard = (props: RaiseCardProps) => {
           </div>
         </div>
         <div className="flex-1">
-          <div className="font-semibold text-t_dark">
-            Total Raised / SoftCap|HardCap
+          <div className="flex flex-row gap-x-1 font-semibold text-t_dark">
+            {prettyBN(currentSaleData.totalPledged, 2)} /{" "}
+            {prettyBN(
+              staticSaleData.hardcap.isZero()
+                ? staticSaleData.softcap
+                : staticSaleData.hardcap,
+              2
+            )}
           </div>
           <progress
             value={60}
@@ -185,7 +195,7 @@ const RaiseCard = (props: RaiseCardProps) => {
             >
               Referral
             </label>
-            {true && (
+            {currentSaleData.userPledged.gt(0) && (
               <div className="flex flex-row items-center gap-x-2">
                 <span className="">Your link :</span>
                 <Tooltip
@@ -263,6 +273,17 @@ const RaiseCard = (props: RaiseCardProps) => {
           <div className="flex flex-col gap-1">
             <input
               name="pledge"
+              type="number"
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => {
+                const pA = parseFloat(e.target.value);
+                if (isNaN(pA) || pA < 0) {
+                  e.target.value = "";
+                  setPledgeAmount(parseEther("0"));
+                  return;
+                }
+                setPledgeAmount(parseEther(e.target.value));
+              }}
               className="w-full rounded-xl border-2 border-b_dark bg-bg_darkest px-3 py-1 text-right md:w-[420px]"
             />
             <span className="w-full pr-2 text-right text-sm font-normal text-t_dark md:w-[400px]">
@@ -283,6 +304,26 @@ const RaiseCard = (props: RaiseCardProps) => {
       </div>
       <div className="flex flex-col items-end py-9 md:flex-row md:justify-between">
         <div className="w-full flex-grow font-semibold">
+          <div className="mt-4 flex flex-row justify-between">
+            <span className="flex-grow text-t_dark md:w-60 md:flex-none">
+              Softcap
+            </span>
+            <span className="flex-none text-left md:flex-grow">
+              {prettyBN(staticSaleData.softcap, 4)}{" "}
+              {staticSaleData.pledgeTokenName}
+            </span>
+          </div>
+          {staticSaleData.hardcap.gt(0) && (
+            <div className="mt-4 flex flex-row justify-between">
+              <span className="flex-grow text-t_dark md:w-60 md:flex-none">
+                Hardcap
+              </span>
+              <span className="flex-none text-left md:flex-grow">
+                {prettyBN(staticSaleData.hardcap, 4)}{" "}
+                {staticSaleData.pledgeTokenName}
+              </span>
+            </div>
+          )}
           <div className="mt-4 flex flex-row justify-between">
             <span className="flex-grow text-t_dark md:w-60 md:flex-none">
               Pledged
