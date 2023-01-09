@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@glidejs/glide": "^3.6.0",
     "@prisma/client": "^4.5.0",
     "@tanstack/react-query": "^4.16.0",
     "@trpc/client": "^10.0.0",
@@ -29,6 +30,7 @@
     "react": "18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
+    "react-glidejs": "^1.0.8",
     "react-icons": "^4.7.1",
     "superjson": "1.9.1",
     "use-immer": "^0.8.1",
