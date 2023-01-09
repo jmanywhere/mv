@@ -1,8 +1,10 @@
-import React from "react";
+import React, { Fragment, useRef } from "react";
 //Nextjs
 import Image from "next/image";
 //mv
 import img from "./../../public/images/Big Moon.png"; //Cambiar la imagen por la real
+//Glide
+import Glide, { Slide } from "react-glidejs";
 
 const InfoBanner = () => {
   return (
@@ -39,8 +41,9 @@ const InfoBanner = () => {
                     text-white
                     lg:mb-[139px]
                     lg:ml-[166px]
-                    lg:max-w-[426px]
+                    lg:max-w-[477px]
                     lg:text-left
+                    lg:text-[50px]
                         
           "
           >
@@ -121,14 +124,15 @@ const InfoBanner = () => {
       </section>
       <section className="flex flex-col items-center">
         <h2
-          className=" mb-[58px]
+          className="mb-[58px]
                     max-w-[207px]
                     text-center
-                    text-[34px]
+                    text-[50px]
                     text-white
                     lg:mb-[139px]
                     lg:ml-[166px]
-                    lg:max-w-[426px]
+                    lg:max-w-[268px]
+                    lg:self-start
                     lg:text-left"
         >
           Overview <span className="text-primary"> &</span> Get Started!
@@ -156,6 +160,23 @@ const InfoBanner = () => {
             href=""
           />
         </div>
+      </section>
+      <section>
+        <h2
+          className="mb-[58px]
+                    max-w-[207px]
+                    text-center
+                    text-[50px]
+                    text-white
+                    lg:mb-[139px]
+                    lg:ml-[166px]
+                    lg:max-w-[427px]
+                    lg:self-start
+                    lg:text-left"
+        >
+          Team Behind This
+        </h2>
+        <TeamCarrousel />
       </section>
     </main>
   );
@@ -208,9 +229,45 @@ const TeamCards = (props: teamProps) => {
   const { img, name, title, description } = props;
 
   return (
-    <section>
-      <div>hacuna matata</div>
-    </section>
+    <li>
+      <div className="text-white">hacuna matata{img}</div>
+    </li>
+  );
+};
+
+const TeamCarrousel = () => {
+  const gliderRef = useRef(null);
+  return (
+    <>happy</>
+    /* <div ClassName="glide">
+      <Glide
+        ref={gliderRef}
+        throttle={0}
+        type="slider"
+        customSlideAnimation={{
+          timeout: 500,
+          classNames: "fade",
+        }}
+        peek={{
+          before: 500,
+          after: 500,
+        }}
+        perView={1}
+        startAt={3}
+        slideClassName="slider__frame"
+        focusAt="center"
+      >
+        <Fragment>
+          <TeamCards img="1" />
+        </Fragment>
+        <Fragment>
+          <TeamCards img="2" />
+        </Fragment>
+        <Fragment>
+          <TeamCards img="3" />
+        </Fragment>
+      </Glide>
+    </div> */
   );
 };
 
