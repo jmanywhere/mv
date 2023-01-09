@@ -93,6 +93,7 @@ const MoonPage: NextPage = () => {
             title="Moon Vector"
             subtitle="Investor Raise for Royalties"
             chain={56}
+            contract=""
           />
           <div>OWNER CARD</div>
         </div>
