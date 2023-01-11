@@ -29,7 +29,19 @@ const MoonPage: NextPage = () => {
       <Head>
         <meta
           name="description"
-          content="Invest in Moon Vector project and receive BUSD based on the amount invested. This pool allows you to receive 25% of all raise profits happening in Moon Vector."
+          content="Moon Vector is a new decentralized fund-raising, and CrowdFunding
+            platform that allows projects to seamlessly raise funds utilizing
+            both tokenized and non-tokenized business models."
+        />
+        <meta
+          property="og:description"
+          content="Moon Vector is a new decentralized fund-raising, and CrowdFunding
+            platform that allows projects to seamlessly raise funds utilizing
+            both tokenized and non-tokenized business models."
+        />
+        <meta
+          property="og:image"
+          content="https://moonvector.io/logo/logo_icon_primary.svg"
         />
       </Head>
       <div className="flex justify-center text-white">
