@@ -1,39 +1,43 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useImmer } from "use-immer";
 // Next
 import Image from "next/image";
 import { useRouter } from "next/router";
 // Data stuff
 import { useSetAtom } from "jotai";
-import { connectModal } from "data/atoms";
+import { connectModal, txQueue } from "data/atoms";
 // Web3 stuff
 import { useWeb3React } from "@web3-react/core";
+import { isAddress, parseEther } from "ethers/lib/utils";
+import { BigNumber } from "ethers";
+import { AddressZero } from "@ethersproject/constants";
 // hooks
 import { useAuth } from "hooks/useAuth";
+import useContract from "hooks/useContracts";
 // utils
 import classNames from "classnames";
+import { prettyBN } from "utils/bn";
 // Icons
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { BiCopyAlt } from "react-icons/bi";
-import { isAddress, parseEther } from "ethers/lib/utils";
-import { BigNumber } from "ethers";
-import { prettyBN } from "utils/bn";
+// Components
 import Tooltip from "components/generic/Tooltip";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
-    title = "MoonVector",
-    subtitle = "Crowdfunding",
+    title,
+    subtitle,
     iconLogo = "/logo/logo_icon_primary.svg",
-    contract = "",
-    chain = 56,
+    contract,
+    chain,
   } = props;
 
   const setOpenConnectModal = useSetAtom(connectModal);
-  const { account } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const { logout } = useAuth();
 
   const router = useRouter();
+  const setTxQueue = useSetAtom(txQueue);
   // We'll use static for one Time only Fetches
   const [staticSaleData, setStaticSaleData] = useState({
     pledgeTokenAddress: "",
@@ -52,19 +56,65 @@ const RaiseCard = (props: RaiseCardProps) => {
     referredBy: "",
     saleStatus: "PENDING",
     saleEnd: new Date("2023-01-08T00:00:00"),
+    allowance: parseEther("0"),
+    rewarded: BigNumber.from("0"),
   });
   const [tempFlags, setTempFlags] = useImmer({
     showRef: false,
     copySuccess: false,
+    pledgeLoad: false,
+    claimLoad: false,
   });
-  const [referral, setReferral] = useState("");
+  const [referral, setReferral] = useState((router.query.ref as string) || "");
   const validReferral = referral.length > 0 ? isAddress(referral) : true;
-  const showRefLink = useMemo(
-    () => currentSaleData.userPledged.gt(0),
-    [currentSaleData.userPledged]
-  );
 
   const [pledgeAmount, setPledgeAmount] = useState(parseEther("0"));
+  const pledgeInput = useRef<HTMLInputElement>(null);
+
+  const { reader, writer } = useContract(contract, chain, "MVRaise");
+  const { reader: tokenReader, writer: tokenWriter } = useContract(
+    staticSaleData.pledgeTokenAddress,
+    chain,
+    "ERC20"
+  );
+
+  const getData = useCallback(async () => {
+    if (!reader) return;
+    const data = await reader.raiseStatus(account);
+    // get token name somewhere around here
+    setStaticSaleData({
+      pledgeTokenAddress: data.tokens[0],
+      pledgeTokenName: "BUSD",
+      rewardTokenAddress: data.tokens[1],
+      rewardTokenName: "MVS",
+      softcap: data.numStats[0],
+      hardcap: data.numStats[1],
+    });
+    if (!tokenReader) return;
+    const pledge = await reader.pledges(account);
+    const bal = await tokenReader.balanceOf(account);
+    const allowance = account
+      ? await tokenReader.allowance(account, reader.address)
+      : BigNumber.from("0");
+    setCurrentSaleData({
+      userPledged: data.numStats[3],
+      totalPledged: data.numStats[4],
+      referrals: data.numStats[6],
+      tokensPerETH: data.numStats[2],
+      userWalletBalance: bal,
+      referredBy: pledge.referrer,
+      saleStatus: "In progress",
+      saleEnd: new Date(0),
+      allowance,
+      rewarded: data.numStats[9],
+    });
+  }, [reader, account, tokenReader, setCurrentSaleData, setStaticSaleData]);
+
+  useEffect(() => {
+    if (!staticSaleData.pledgeTokenAddress) getData();
+    const interval = setInterval(getData, 5000);
+    return () => clearInterval(interval);
+  }, [getData, staticSaleData.pledgeTokenAddress]);
 
   // TODOs
   // After wallet is connected show the wallet and balance of fund types it has.
@@ -88,7 +138,7 @@ const RaiseCard = (props: RaiseCardProps) => {
 
   const referralCode = useMemo(() => {
     if (!account) return "";
-    return `https://moonvector.io${router.asPath}?ref=${account}`;
+    return `https://moonvector.io${router.pathname}?ref=${account}`;
   }, [router, account]);
 
   const copyReferral = useCallback(async () => {
@@ -103,10 +153,138 @@ const RaiseCard = (props: RaiseCardProps) => {
   }, [referralCode, setTempFlags]);
 
   const rewardAmount = useMemo(() => {
+    if (currentSaleData.rewarded) return currentSaleData.rewarded;
     return currentSaleData.tokensPerETH
       .mul(currentSaleData.userPledged)
       .div(parseEther("1"));
   }, [currentSaleData]);
+
+  const approve = useCallback(async () => {
+    if (!tokenWriter || !reader || !chainId || chainId != chain) return;
+    setTempFlags((draft) => {
+      draft.pledgeLoad = true;
+    });
+    const tx = await tokenWriter
+      .approve(reader.address, staticSaleData.hardcap)
+      .catch((e: { code: string; reason: string }) => {
+        setTxQueue((draft) => {
+          draft["at1"] = {
+            description: e.reason || e.code,
+            chainId,
+            status: "error",
+            customTimeout: 5000,
+          };
+        });
+        return null;
+      });
+    if (tx) {
+      setTxQueue((draft) => {
+        draft[tx.hash] = {
+          description: "Approve BUSD spend",
+          chainId,
+          status: "pending",
+        };
+      });
+      const rc = await tx.wait();
+      setTxQueue((draft) => {
+        const txnData = draft[tx.hash];
+        if (!txnData) return;
+        txnData.status = rc.status == 1 ? "complete" : "error";
+        draft[tx.hash] = txnData;
+      });
+    }
+    setTempFlags((draft) => {
+      draft.pledgeLoad = false;
+    });
+  }, [
+    tokenWriter,
+    reader,
+    chainId,
+    chain,
+    setTxQueue,
+    staticSaleData.hardcap,
+    setTempFlags,
+  ]);
+
+  const pledge = useCallback(async () => {
+    if (
+      !writer ||
+      (referral && !validReferral) ||
+      !chainId ||
+      chainId != chain ||
+      pledgeAmount.isZero()
+    )
+      return;
+    setTempFlags((draft) => {
+      draft.pledgeLoad = true;
+    });
+    const tx = referral
+      ? await writer
+          .pledgeReferred(pledgeAmount, referral)
+          .catch((e: { code: string; reason: string }) => {
+            setTxQueue((draft) => {
+              draft["at1"] = {
+                description: e.reason || e.code,
+                chainId,
+                status: "error",
+                customTimeout: 5000,
+              };
+            });
+            return null;
+          })
+      : await writer
+          .pledge(pledgeAmount)
+          .catch((e: { code: string; reason: string }) => {
+            setTxQueue((draft) => {
+              draft["at1"] = {
+                description: e.reason || e.code,
+                chainId,
+                status: "error",
+                customTimeout: 5000,
+              };
+            });
+            return null;
+          });
+    if (tx) {
+      setTxQueue((draft) => {
+        draft[tx.hash] = {
+          description:
+            "Pledge " +
+            prettyBN(pledgeAmount, 0) +
+            " " +
+            staticSaleData.pledgeTokenName,
+          chainId,
+          status: "pending",
+        };
+      });
+      const rc = await tx.wait();
+      setTxQueue((draft) => {
+        const txnData = draft[tx.hash];
+        if (!txnData) return;
+        txnData.status = rc.status == 1 ? "complete" : "error";
+        draft[tx.hash] = txnData;
+      });
+    }
+    setTempFlags((draft) => {
+      draft.pledgeLoad = false;
+    });
+    setPledgeAmount(BigNumber.from("0"));
+    setTempFlags((draft) => {
+      draft.pledgeLoad = false;
+    });
+    if (pledgeInput.current) pledgeInput.current.value = "";
+  }, [
+    writer,
+    referral,
+    validReferral,
+    chainId,
+    chain,
+    pledgeAmount,
+    pledgeInput,
+    setTxQueue,
+    setTempFlags,
+    staticSaleData.pledgeTokenName,
+  ]);
 
   return (
     <div className="rounded-3xl bg-bg_f_light px-9 py-8">
@@ -148,7 +326,7 @@ const RaiseCard = (props: RaiseCardProps) => {
               Sale Status
             </span>
             <span className="flex-none text-left uppercase md:flex-grow">
-              Started
+              {currentSaleData.saleStatus}
             </span>
           </div>
           <div className="mt-4 flex flex-row justify-between">
@@ -177,7 +355,16 @@ const RaiseCard = (props: RaiseCardProps) => {
             )}
           </div>
           <progress
-            value={60}
+            value={currentSaleData.totalPledged
+              .mul(100)
+              .div(
+                staticSaleData.softcap.isZero()
+                  ? staticSaleData.hardcap.isZero()
+                    ? 1
+                    : staticSaleData.hardcap
+                  : staticSaleData.softcap
+              )
+              .toNumber()}
             max={100}
             className="raise-progress mt-6 w-full"
           />
@@ -251,6 +438,7 @@ const RaiseCard = (props: RaiseCardProps) => {
             )}
             onFocus={(e) => e.target.select()}
             onChange={(e) => setReferral(e.target.value)}
+            defaultValue={router.query.ref}
           />
           <div
             className={classNames(
@@ -274,6 +462,7 @@ const RaiseCard = (props: RaiseCardProps) => {
             <input
               name="pledge"
               type="number"
+              ref={pledgeInput}
               onFocus={(e) => e.target.select()}
               onChange={(e) => {
                 const pA = parseFloat(e.target.value);
@@ -294,10 +483,26 @@ const RaiseCard = (props: RaiseCardProps) => {
         {/* Pledge Action */}
         <div className="order-4 mt-6 flex justify-center md:mt-0 md:justify-end">
           <button
-            className=" mb-[20px] w-32 rounded-xl bg-primary py-[10px]"
-            // disabled={!whitelisted}
+            className=" mb-[20px] w-32 rounded-xl bg-primary py-[10px] hover:bg-primary/80 disabled:bg-slate-700"
+            disabled={tempFlags.pledgeLoad}
+            onClick={() => {
+              if (currentSaleData.allowance.isZero()) approve();
+              else pledge();
+            }}
           >
-            {"Pledge"}
+            {tempFlags.pledgeLoad ? (
+              <Image
+                src="/ring_loader.svg"
+                width={24}
+                height={24}
+                className="mx-auto w-6"
+                alt="loader"
+              />
+            ) : currentSaleData.allowance.isZero() ? (
+              "Approve"
+            ) : (
+              "Pledge"
+            )}
             {/* {whitelisted ? (approved ? "Pledge" : "Approve") : "Whitelist"} */}
           </button>
         </div>
@@ -306,13 +511,24 @@ const RaiseCard = (props: RaiseCardProps) => {
         <div className="w-full flex-grow font-semibold">
           <div className="mt-4 flex flex-row justify-between">
             <span className="flex-grow text-t_dark md:w-60 md:flex-none">
-              Softcap
+              Pledged
             </span>
             <span className="flex-none text-left md:flex-grow">
-              {prettyBN(staticSaleData.softcap, 4)}{" "}
+              {prettyBN(currentSaleData.userPledged, 4)}{" "}
               {staticSaleData.pledgeTokenName}
             </span>
           </div>
+          {staticSaleData.softcap.gt(0) && (
+            <div className="mt-4 flex flex-row justify-between">
+              <span className="flex-grow text-t_dark md:w-60 md:flex-none">
+                Softcap
+              </span>
+              <span className="flex-none text-left md:flex-grow">
+                {prettyBN(staticSaleData.softcap, 4)}{" "}
+                {staticSaleData.pledgeTokenName}
+              </span>
+            </div>
+          )}
           {staticSaleData.hardcap.gt(0) && (
             <div className="mt-4 flex flex-row justify-between">
               <span className="flex-grow text-t_dark md:w-60 md:flex-none">
@@ -324,21 +540,13 @@ const RaiseCard = (props: RaiseCardProps) => {
               </span>
             </div>
           )}
-          <div className="mt-4 flex flex-row justify-between">
-            <span className="flex-grow text-t_dark md:w-60 md:flex-none">
-              Pledged
-            </span>
-            <span className="flex-none text-left md:flex-grow">
-              {prettyBN(currentSaleData.userPledged, 4)}{" "}
-              {staticSaleData.pledgeTokenName}
-            </span>
-          </div>
+
           <div className="mt-4 flex flex-row justify-between">
             <span className="flex-grow text-t_dark md:w-60 md:flex-none">
               Referrals
             </span>
             <span className="flex-none text-left md:flex-grow">
-              {currentSaleData.referrals}
+              {currentSaleData.referrals.toString()}
             </span>
           </div>
           <div className="mt-4 flex flex-col justify-between md:flex-row">
