@@ -2,15 +2,12 @@
 import classNames from "classnames";
 import type { TxData } from "data/atoms";
 import { txQueue } from "data/atoms";
+import { chains } from "data/chainData";
 import { useSetAtom } from "jotai";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineCloseCircle, AiFillCheckCircle } from "react-icons/ai/";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-
-const chainIdExplorer: { [key: number]: string } = {
-  56: "https://bscscan.com/tx/",
-};
 
 const TxCard = (props: { hash: string; data: TxData }) => {
   const {
@@ -65,6 +62,10 @@ const TxCard = (props: { hash: string; data: TxData }) => {
     complete: "bg-green-400",
   };
 
+  const txUrl =
+    (chains[data.chainId]?.explorer || "") +
+    (chains[data.chainId]?.explorer_tx || "");
+
   return (
     <div
       className={classNames(
@@ -85,16 +86,16 @@ const TxCard = (props: { hash: string; data: TxData }) => {
           </button>
         </div>
         <div className="pt-2">{data.description}</div>
-        {shortHash.length > 5 && (
+        {shortHash.length > 5 && txUrl ? (
           <a
-            href={chainIdExplorer[data.chainId] + hash}
+            href={txUrl + hash}
             rel="noreferrer"
             target="_blank"
             className=" text-sm text-blue-400 underline"
           >
             View in explorer
           </a>
-        )}
+        ) : null}
       </div>
       <div className={classNames("h-2 w-full", statusColors[data.status])} />
     </div>

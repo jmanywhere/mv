@@ -22,6 +22,20 @@ export const chains: { [chainId: number] : ChainInfo} = {
     name: "BSC",
     icon: "",
   },
+  97: {
+    rpcUrls: [
+      "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      "https://data-seed-prebsc-2-s1.binance.org:8545/",
+      "http://data-seed-prebsc-1-s2.binance.org:8545/",
+      "http://data-seed-prebsc-2-s2.binance.org:8545/",
+      "https://data-seed-prebsc-1-s3.binance.org:8545/",
+      "https://data-seed-prebsc-2-s3.binance.org:8545/",
+    ],
+    explorer: "https://testnet.bscscan.com/",
+    explorer_tx: "tx/",
+    name: "BSC Testnet",
+    icon: "",
+  },
 }
 
 export const validChains = Object.keys(chains).map( chainId => parseInt(chainId))
