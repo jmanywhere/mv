@@ -14,7 +14,7 @@ const abiTypes = {
 };
 
 const useContract = (
-  address: string,
+  address: string | null,
   chainId: number,
   type: keyof typeof abiTypes
 ) => {
