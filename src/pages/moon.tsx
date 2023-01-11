@@ -24,23 +24,27 @@ import { useEagerConnect } from "hooks/useAuth";
 
 const MoonPage: NextPage = () => {
   useEagerConnect();
+  const title = "Moon Vector - Investor Raise";
+  const description = `Moon Vector is a new decentralized fund-raising, and CrowdFunding
+  platform that allows projects to seamlessly raise funds utilizing
+  both tokenized and non-tokenized business models.`;
   return (
-    <Layout title="Moon Vector - Investment">
+    <Layout title={title}>
       <Head>
-        <meta
-          name="description"
-          content="Moon Vector is a new decentralized fund-raising, and CrowdFunding
-            platform that allows projects to seamlessly raise funds utilizing
-            both tokenized and non-tokenized business models."
-        />
-        <meta
-          property="og:description"
-          content="Moon Vector is a new decentralized fund-raising, and CrowdFunding
-            platform that allows projects to seamlessly raise funds utilizing
-            both tokenized and non-tokenized business models."
-        />
+        <meta name="og:url" content="https://moonvector.io/moon" />
+        <meta name="og:title" content={title} />
+        <meta name="description" content={description} />
+        <meta property="og:description" content={description} />
         <meta
           property="og:image"
+          content="https://moonvector.io/logo/logo_icon_primary.svg"
+        />
+        <meta property="twitter:card" content="summary" />
+        <meta property="twitter:site" content="@MoonVector_" />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta
+          property="twitter:image"
           content="https://moonvector.io/logo/logo_icon_primary.svg"
         />
       </Head>
