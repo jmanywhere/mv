@@ -37,7 +37,7 @@ const MoonPage: NextPage = () => {
         <meta property="og:description" content={description} />
         <meta
           property="og:image"
-          content="https://moonvector.io/logo/logo_icon_primary.svg"
+          content="https://moonvector.io/logo/mainLogo.png"
         />
         <meta property="twitter:card" content="summary" />
         <meta property="twitter:site" content="@MoonVector_" />
@@ -45,7 +45,7 @@ const MoonPage: NextPage = () => {
         <meta property="twitter:description" content={description} />
         <meta
           property="twitter:image"
-          content="https://moonvector.io/logo/logo_icon_primary.svg"
+          content="https://moonvector.io/logo/mainLogo.png"
         />
       </Head>
       <div className="flex justify-center text-white">
