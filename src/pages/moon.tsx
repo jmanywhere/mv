@@ -47,25 +47,37 @@ const MoonPage: NextPage = () => {
             </h1>
             {/* Only show the socials that we'll be using */}
             <div className="flex flex-row items-center gap-x-4 pt-8 md:pt-0">
-              <AiFillTwitterCircle
+              <a
+                href="https://twitter.com/MoonVector_"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <AiFillTwitterCircle
+                  size="32px"
+                  className="rounded-full bg-white text-primary hover:text-blue-500"
+                />
+              </a>
+              <a
+                href="https://t.me/Moonvector"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <BsTelegram
+                  size="28px"
+                  className="rounded-full bg-white text-primary hover:text-blue-500"
+                />
+              </a>
+              {/* <AiFillMediumCircle
                 size="32px"
-                className="rounded-full bg-white text-primary"
-              />
-              <BsTelegram
-                size="28px"
-                className="rounded-full bg-white text-primary"
-              />
-              <AiFillMediumCircle
-                size="32px"
-                className="rounded-full bg-white text-black"
-              />
-              <BsYoutube size="32px" className=" text-red-500" />
+                className="rounded-full bg-white text-black hover:text-gray-600"
+              /> */}
+              {/* <BsYoutube size="32px" className=" text-red-500" />
               <BsDiscord size="30px" className=" text-purple-500" />
               <BsReddit
                 size="30px"
                 className=" rounded-full bg-white text-[rgb(255,53,0)]"
               />
-              <SiGitbook size="30px" className=" text-[rgb(169,194,255)]" />
+              <SiGitbook size="30px" className=" text-[rgb(169,194,255)]" /> */}
             </div>
           </div>
           {/* This def needs some love */}
@@ -90,12 +102,13 @@ const MoonPage: NextPage = () => {
             You don&apos;t want to miss this one!
           </p>
           <RaiseCard
-            title="Moon Vector"
-            subtitle="Investor Raise for Royalties"
-            chain={56}
-            contract=""
+            title="MoonVector"
+            subtitle="Round 1 Raise"
+            iconLogo="/logo/logo_icon_primary.svg"
+            contract="0xdA6F5B78867E3b08b9352e9d7c2cbEaC51071dc2"
+            chain={97}
           />
-          <div>OWNER CARD</div>
+          <div className="py-4"></div>
         </div>
       </div>
     </Layout>
