@@ -73,14 +73,14 @@ const RaiseCard = (props: RaiseCardProps) => {
 
   const { reader, writer } = useContract(contract, chain, "MVRaise");
   const { reader: tokenReader, writer: tokenWriter } = useContract(
-    staticSaleData.pledgeTokenAddress,
+    staticSaleData.pledgeTokenAddress || null,
     chain,
     "ERC20"
   );
 
   const getData = useCallback(async () => {
     if (!reader) return;
-    const data = await reader.raiseStatus(account);
+    const data = await reader.raiseStatus(account || AddressZero);
     // get token name somewhere around here
     setStaticSaleData({
       pledgeTokenAddress: data.tokens[0],
@@ -90,7 +90,7 @@ const RaiseCard = (props: RaiseCardProps) => {
       softcap: data.numStats[0],
       hardcap: data.numStats[1],
     });
-    if (!tokenReader) return;
+    if (!tokenReader || !account) return;
     const pledge = await reader.pledges(account);
     const bal = await tokenReader.balanceOf(account);
     const allowance = account
@@ -103,7 +103,9 @@ const RaiseCard = (props: RaiseCardProps) => {
       tokensPerETH: data.numStats[2],
       userWalletBalance: bal,
       referredBy: pledge.referrer,
-      saleStatus: "In progress",
+      saleStatus: data.numStats[1].sub(data.numStats[4]).gt(0)
+        ? "In progress"
+        : "Complete",
       saleEnd: new Date(0),
       allowance,
       rewarded: data.numStats[9],
