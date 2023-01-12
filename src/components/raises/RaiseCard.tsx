@@ -209,6 +209,9 @@ const RaiseCard = (props: RaiseCardProps) => {
   ]);
 
   const pledge = useCallback(async () => {
+    alert(
+      "By confirming the next transaction you acknowledge that this is not a token sale, and that shares can not be sold, transfered, or positions exited at this time. Shares represent a percentage of Moon Vector royalties, and only if and when all shares are sold, will the option for OTC shared trading be explored. OTC is not guaranteed, nor is any timeframe set. Shares will be consitant cross-chain. BSC shares will be updated immedeitely, and all other EVM chains Moon Vector is deployed on with be updated at weekly intervals, unless upcharge snapshots are requested."
+    );
     if (
       !writer ||
       (referral && !validReferral) ||
