@@ -121,7 +121,7 @@ const MoonPage: NextPage = () => {
             title="MoonVector"
             subtitle="Round 1 Raise"
             iconLogo="/logo/logo_icon_primary.svg"
-            contract="0xbEb3d8da739e903fe507bd1c5575CFd010bf651B"
+            contract="0xb188909FACD912D71AD409aB29Ec46A1b434371F"
             chain={56}
           />
           <div className="py-4"></div>
