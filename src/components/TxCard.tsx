@@ -70,7 +70,7 @@ const TxCard = (props: { hash: string; data: TxData }) => {
     <div
       className={classNames(
         "w-[307px] overflow-hidden rounded-xl rounded-tr-sm border-2 border-primary bg-bg_f_light pt-3 text-white",
-        shown ? " translate-x-0" : " translate-x-96",
+        shown ? "translate-x-0" : "translate-x-96",
         "transition-transform duration-300"
       )}
     >
