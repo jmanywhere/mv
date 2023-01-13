@@ -54,7 +54,7 @@ const RaiseCard = (props: RaiseCardProps) => {
     tokensPerETH: BigNumber.from("0"),
     userWalletBalance: BigNumber.from("0"),
     referredBy: "",
-    saleStatus: "PENDING",
+    saleStatus: "In progress",
     saleEnd: new Date("2023-01-08T00:00:00"),
     allowance: parseEther("0"),
     rewarded: BigNumber.from("0"),
