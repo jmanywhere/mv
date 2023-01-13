@@ -93,7 +93,7 @@ const RaiseCard = (props: RaiseCardProps) => {
     const pledge = await reader.pledges(account || AddressZero);
     let bal = parseEther("0");
     let allowance = parseEther("0");
-    if (tokenReader) {
+    if (tokenReader && account) {
       bal = await tokenReader.balanceOf(account);
       allowance = account
         ? await tokenReader.allowance(account, reader.address)
