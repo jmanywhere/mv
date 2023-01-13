@@ -407,7 +407,7 @@ const RaiseCard = (props: RaiseCardProps) => {
       <div className="grid auto-rows-auto grid-cols-1 items-center pt-6 pb-0 md:grid-cols-3 md:flex-row md:items-end md:justify-start">
         {/* ReferralInput */}
         <div className="order-3 col-span-2 flex flex-grow flex-col md:order-1 md:pb-3">
-          <div className="flex w-full flex-row items-center justify-between gap-2 pb-2 md:w-[420px]">
+          <div className="flex h-[42px] w-full flex-row items-center justify-between gap-2 pb-2 md:w-[420px]">
             <label
               id="referral-id"
               htmlFor="referral_input"
