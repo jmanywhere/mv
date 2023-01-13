@@ -90,12 +90,15 @@ const RaiseCard = (props: RaiseCardProps) => {
       softcap: data.numStats[0],
       hardcap: data.numStats[1],
     });
-    if (!tokenReader || !account) return;
-    const pledge = await reader.pledges(account);
-    const bal = await tokenReader.balanceOf(account);
-    const allowance = account
-      ? await tokenReader.allowance(account, reader.address)
-      : BigNumber.from("0");
+    const pledge = await reader.pledges(account || AddressZero);
+    let bal = parseEther("0");
+    let allowance = parseEther("0");
+    if (tokenReader) {
+      bal = await tokenReader.balanceOf(account);
+      allowance = account
+        ? await tokenReader.allowance(account, reader.address)
+        : parseEther("0");
+    }
     setCurrentSaleData({
       userPledged: data.numStats[3],
       totalPledged: data.numStats[4],
