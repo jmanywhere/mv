@@ -312,7 +312,7 @@ const RaiseCard = (props: RaiseCardProps) => {
         <Tooltip text={account ? "Disconnect" : "Connect"} position="bottom">
           <button
             className={classNames(
-              "rounded-xl bg-t_dark px-7 py-5",
+              "rounded-xl px-7 py-5",
               account
                 ? "bg-t_dark hover:bg-primary"
                 : "bg-primary hover:bg-t_dark"
