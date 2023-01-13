@@ -83,10 +83,16 @@ const MoonPage: NextPage = () => {
                   className="rounded-full bg-white text-primary hover:text-blue-500"
                 />
               </a>
-              {/* <AiFillMediumCircle
-                size="32px"
-                className="rounded-full bg-white text-black hover:text-gray-600"
-              /> */}
+              <a
+                href="https://medium.com/@moonvector"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <AiFillMediumCircle
+                  size="32px"
+                  className="rounded-full bg-white text-black hover:text-gray-600"
+                />
+              </a>
               {/* <BsYoutube size="32px" className=" text-red-500" />
               <BsDiscord size="30px" className=" text-purple-500" />
               <BsReddit
