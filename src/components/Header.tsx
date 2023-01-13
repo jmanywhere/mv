@@ -66,17 +66,26 @@ const Header = (props: HeaderProps) => {
               >
                 <Link
                   href="/"
-                  className="hover:border-2/30 w-full items-center justify-center rounded-md px-5 py-4 text-center transition duration-500 ease-in-out hover:rounded-md hover:bg-primary lg:w-auto lg:py-2"
+                  className="hover:border-2/30 w-full items-center justify-center rounded-md px-5 py-4 text-center transition duration-500 ease-in-out hover:rounded-md hover:bg-primary/50 lg:w-auto lg:py-2"
                 >
                   About
                 </Link>
-                <button className="hover:border-2/30 w-full items-center justify-center rounded-md px-5 py-4 text-slate-500 transition duration-500 ease-in-out hover:rounded-md hover:bg-primary lg:w-auto lg:py-2">
+                <button
+                  className="hover:border-2/30 w-full items-center justify-center rounded-md px-5 py-4 text-slate-500 transition duration-500 ease-in-out hover:rounded-md hover:bg-primary/50 lg:w-auto lg:py-2"
+                  disabled
+                >
                   Dock
                 </button>
-                <button className="hover:border-2/30 flex w-full items-center justify-center whitespace-nowrap rounded-md px-5 py-4 text-slate-500 lg:hidden">
+                <button
+                  className="hover:border-2/30 flex w-full items-center justify-center whitespace-nowrap rounded-md px-5 py-4 text-slate-500 hover:bg-primary/50 lg:hidden"
+                  disabled
+                >
                   Explore Project
                 </button>
-                <button className=" hover:border-2/30 rounded-m w-full items-center justify-center px-5 py-4 text-center text-slate-500 transition duration-500 ease-in-out lg:hidden">
+                <button
+                  className=" hover:border-2/30 rounded-m w-full items-center justify-center px-5 py-4 text-center transition duration-500 ease-in-out hover:bg-primary/50 lg:hidden"
+                  onClick={() => setShowModal(true)}
+                >
                   Connect
                 </button>
                 <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 py-2 text-slate-500 lg:hidden">
