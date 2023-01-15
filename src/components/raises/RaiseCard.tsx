@@ -211,18 +211,43 @@ const RaiseCard = (props: RaiseCardProps) => {
     setTempFlags,
   ]);
 
+  const pledgeError = useMemo(() => {
+    if (!chainId) return "Please connect";
+    if (!writer) return "Pending writer lib";
+    if (referral.length > 0 && !validReferral) return "Invalid Referral";
+    if (chainId !== chain) return "Switch to correct network";
+    if (pledgeAmount.isZero() && pledgeInput.current?.value)
+      return "Invalid pledgeAmount";
+    return null;
+  }, [
+    writer,
+    referral,
+    chainId,
+    chain,
+    pledgeAmount,
+    validReferral,
+    pledgeInput,
+  ]);
+
   const pledge = useCallback(async () => {
     alert(
       "By confirming the next transaction you acknowledge that this is not a token sale, and that shares can not be sold, transfered, or positions exited at this time. Shares represent a percentage of Moon Vector royalties, and only if and when all shares are sold, will the option for OTC shared trading be explored. OTC is not guaranteed, nor is any timeframe set. Shares will be consitant cross-chain. BSC shares will be updated immedeitely, and all other EVM chains Moon Vector is deployed on with be updated at weekly intervals, unless upcharge snapshots are requested."
     );
     if (
       !writer ||
-      (referral && !validReferral) ||
+      (referral.length > 0 && !validReferral) ||
       !chainId ||
-      chainId != chain ||
+      chainId !== chain ||
       pledgeAmount.isZero()
     )
-      return;
+      return console.log({
+        stat1: !writer,
+        referral,
+        stat2: referral && !validReferral,
+        stat3: !chainId,
+        stat4: chainId != chain,
+        stat5: pledgeAmount.isZero(),
+      });
     setTempFlags((draft) => {
       draft.pledgeLoad = true;
     });
@@ -382,7 +407,7 @@ const RaiseCard = (props: RaiseCardProps) => {
       <div className="grid auto-rows-auto grid-cols-1 items-center pt-6 pb-0 md:grid-cols-3 md:flex-row md:items-end md:justify-start">
         {/* ReferralInput */}
         <div className="order-3 col-span-2 flex flex-grow flex-col md:order-1 md:pb-3">
-          <div className="flex w-full flex-row items-center justify-between gap-2 pb-2 md:w-[420px]">
+          <div className="flex h-[42px] w-full flex-row items-center justify-between gap-2 pb-2 md:w-[420px]">
             <label
               id="referral-id"
               htmlFor="referral_input"
@@ -448,6 +473,9 @@ const RaiseCard = (props: RaiseCardProps) => {
             onChange={(e) => setReferral(e.target.value)}
             defaultValue={router.query.ref}
           />
+          {pledgeError && (
+            <span className="font-bold text-red-400">{pledgeError}</span>
+          )}
           <div
             className={classNames(
               "select-text whitespace-normal break-words pt-2 text-sm font-light md:whitespace-nowrap",
