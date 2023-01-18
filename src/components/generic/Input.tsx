@@ -8,6 +8,11 @@ const Input = (props: {
   helperText?: string;
   multiline?: boolean;
   className?: string;
+  containerClassName?: string;
+  placeholder?: string;
+  onChange?: (value: string) => void;
+  value?: string;
+  error?: string;
 }) => {
   const {
     align = "left",
@@ -15,6 +20,11 @@ const Input = (props: {
     helperText,
     multiline,
     className = "",
+    containerClassName = "",
+    placeholder,
+    value,
+    onChange,
+    error,
   } = props;
   const [focused, setFocused] = useState(false);
   const alignment = {
@@ -25,10 +35,8 @@ const Input = (props: {
   const inputRef = useRef<HTMLInputElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
-  const [inputValue, setInputValue] = useState("");
-
   return (
-    <div className="group flex flex-col">
+    <div className={classNames("group flex flex-col", containerClassName)}>
       {label &&
         (typeof label == "string" ? (
           <label
@@ -43,7 +51,11 @@ const Input = (props: {
       <div
         className={classNames(
           "rounded-xl border-2 bg-bg_darkest px-3 py-1 text-right",
-          focused ? "border-primary" : " border-slate-500"
+          error
+            ? "border-red-500"
+            : focused
+            ? "border-primary"
+            : " border-slate-500"
         )}
         onClick={() => inputRef.current?.focus() || taRef.current?.focus()}
       >
@@ -59,8 +71,8 @@ const Input = (props: {
             style={{
               height: (taRef.current?.scrollHeight || 0) + "px",
             }}
-            onChange={(e) => setInputValue(e.target?.value || "")}
-            value={inputValue}
+            onChange={(e) => onChange && onChange(e.target?.value || "")}
+            value={value}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
           />
@@ -73,16 +85,23 @@ const Input = (props: {
               alignment[align],
               className
             )}
-            onChange={(e) => setInputValue(e.target?.value || "")}
-            value={inputValue}
+            placeholder={placeholder}
+            onChange={(e) => onChange && onChange(e.target?.value || "")}
+            value={value}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
           />
         )}
       </div>
-      {helperText && (
-        <span className={classNames("ml-2 mt-2 text-sm text-t_dark")}>
+      {(helperText || error) && (
+        <span
+          className={classNames(
+            "ml-2 mt-2 text-sm",
+            error ? "text-red-500" : "text-t_dark"
+          )}
+        >
           {helperText}
+          {error && " ERROR:" + error}
         </span>
       )}
     </div>
