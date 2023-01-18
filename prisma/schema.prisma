@@ -19,16 +19,21 @@ model Raise {
   raised      BigInt
   goal        BigInt
   showcase    Boolean
-  owner       String
+  ownerId     String
+  owner       User             @relation("owner", fields: [ownerId], references: [id])
   description String
   logo_icon   String
   banner      String
   name        String
   chainId     Int
+  referrerId  String? // wallet Address
+  referrer    User?            @relation("referrer", fields: [referrerId], references: [id])
   features    Feature[]
   writeups    Writeup[]
   socials     SocialsOnFunds[]
   TagsOnRaise TagsOnRaise[]
+  User        User?            @relation(fields: [userId], references: [id])
+  userId      String?
 }
 
 model Feature {
@@ -52,9 +57,13 @@ model User {
   writer      Boolean
   dev         Boolean
   auditor     Boolean
+  referrer    Boolean
   other       Boolean
   otherDetail String
   Writeup     Writeup[]
+  raises      Raise[]   @relation("owner")
+  referred    Raise[]   @relation("referrer")
+  Raise       Raise[]
 }
 
 // Necessary Model to fulfill the Many-Many relations
