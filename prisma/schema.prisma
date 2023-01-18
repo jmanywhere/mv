@@ -11,29 +11,31 @@ datasource db {
 }
 
 model Raise {
-  id          String           @id @default(cuid())
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  chain       Chain            @relation(fields: [chainId], references: [id])
-  contract    String
-  raised      BigInt
-  goal        BigInt
-  showcase    Boolean
-  ownerId     String
-  owner       User             @relation("owner", fields: [ownerId], references: [id])
-  description String
-  logo_icon   String
-  banner      String
-  name        String
-  chainId     Int
-  referrerId  String? // wallet Address
-  referrer    User?            @relation("referrer", fields: [referrerId], references: [id])
-  features    Feature[]
-  writeups    Writeup[]
-  socials     SocialsOnFunds[]
-  TagsOnRaise TagsOnRaise[]
-  User        User?            @relation(fields: [userId], references: [id])
-  userId      String?
+  id            String           @id @default(cuid())
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  chain         Chain            @relation(fields: [chainId], references: [id])
+  contract      String
+  raised        BigInt
+  goal          BigInt
+  showcase      Boolean
+  ownerId       String
+  owner         User             @relation("owner", fields: [ownerId], references: [id])
+  description   String
+  logo_icon     String
+  banner        String
+  name          String
+  chainId       Int
+  flexibleStart Boolean
+  startTime     DateTime
+  referrerId    String? // wallet Address
+  referrer      User?            @relation("referrer", fields: [referrerId], references: [id])
+  features      Feature[]
+  writeups      Writeup[]
+  socials       SocialsOnFunds[]
+  TagsOnRaise   TagsOnRaise[]
+  User          User?            @relation(fields: [userId], references: [id])
+  userId        String?
 }
 
 model Feature {
