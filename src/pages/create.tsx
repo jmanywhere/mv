@@ -5,9 +5,11 @@ import Layout from "components/Layout";
 import RaiseBasic from "components/create/RaiseBasic";
 import Step from "components/raises/Step";
 import classNames from "classnames";
+import { useAtomValue } from "jotai";
+import { stepAtom } from "data/raiseAtoms";
 
 const Create: NextPage = () => {
-  const [step, setStep] = useState(2);
+  const step = useAtomValue(stepAtom);
 
   return (
     <Layout title="Create your Raise">
@@ -20,7 +22,7 @@ const Create: NextPage = () => {
               value={step - 1}
               max={4}
               className={classNames(
-                "meter-step absolute top-[32px] right-12 z-10 h-2 w-[calc(100%-96px)]"
+                "meter-step absolute top-[32px] right-8 z-10 h-2 w-[calc(100%-64px)] sm:right-12 sm:w-[calc(100%-96px)]"
               )}
             />
             <div className="flex flex-row items-center justify-between py-4">
@@ -37,20 +39,6 @@ const Create: NextPage = () => {
             {step == 2 && <RaiseBasic />}
             {step == 3 && <RaiseBasic />}
             {step == 4 && <RaiseBasic />}
-          </div>
-          <div className="flex flex-row justify-between pt-6">
-            <button
-              className="rounded-lg bg-slate-600 px-4 py-2"
-              onClick={() => setStep((s) => s - 1)}
-            >
-              Back
-            </button>
-            <button
-              className="rounded-lg bg-primary px-4 py-2"
-              onClick={() => setStep((s) => s + 1)}
-            >
-              Next
-            </button>
           </div>
         </div>
       </div>
