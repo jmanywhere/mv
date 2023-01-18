@@ -29,6 +29,7 @@ model Raise {
   flexibleStart Boolean
   startTime     DateTime
   referrerId    String? // wallet Address
+  type          RaiseType
   referrer      User?            @relation("referrer", fields: [referrerId], references: [id])
   features      Feature[]
   writeups      Writeup[]
@@ -115,4 +116,10 @@ enum SocialTypes {
   TELEGRAM
   MEDIUM
   REDDIT
+}
+
+enum RaiseType {
+  FUNDRAISE
+  CROWDSALE
+  CHARITY
 }
