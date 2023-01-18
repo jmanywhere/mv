@@ -9,10 +9,11 @@ const SingleMultipleChoice = (props: {
   type: "single" | "multiple";
   label: string;
   options: Array<{ value: string; title: string; description?: string }>;
-  onChange?: (value: { [key: string]: boolean }) => void;
+  onChange?: (value: string | string[]) => void;
   className?: string;
 }) => {
   const { type, options, label, onChange, className = "" } = props;
+
   const [selected, setSelected] = useImmer<{
     [key: typeof options[number]["value"]]: boolean;
   }>(() => {
@@ -22,10 +23,6 @@ const SingleMultipleChoice = (props: {
     });
     return obj;
   });
-
-  useEffect(() => {
-    if (onChange) onChange(selected);
-  }, [onChange, selected]);
 
   return (
     <fieldset className={classNames("flex flex-col", className)}>
@@ -41,14 +38,15 @@ const SingleMultipleChoice = (props: {
                 value={option.value}
                 checked={selected[option.value]}
                 className="mt-[6.5px] cursor-pointer"
-                onChange={() =>
+                onChange={() => {
+                  onChange && onChange(option.value);
                   setSelected((draft) => {
                     const keys = Object.keys(draft);
                     keys.forEach((key) => {
                       draft[key] = key == option.value;
                     });
-                  })
-                }
+                  });
+                }}
               />
             ) : (
               <input
@@ -56,11 +54,15 @@ const SingleMultipleChoice = (props: {
                 name="choice"
                 className="mt-[6.5px] cursor-pointer"
                 checked={selected[option.value]}
-                onChange={() =>
+                onChange={() => {
+                  onChange &&
+                    onChange(
+                      Object.keys(selected).filter((key) => selected[key])
+                    );
                   setSelected((draft) => {
                     draft[option.value] = !draft[option.value];
-                  })
-                }
+                  });
+                }}
               />
             )}
 
