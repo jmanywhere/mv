@@ -17,6 +17,7 @@ export const raiseCreateAtom = atomWithImmer({
     reddit: "",
     facebook: "",
     website: "",
+    docs: "",
     // these others are nice to have
     instagram: "",
     linkedin: "",
