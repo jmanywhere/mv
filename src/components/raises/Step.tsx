@@ -20,7 +20,7 @@ const Step = (props: { current: number; number: number; title: string }) => {
       </div>
       <h4
         className={classNames(
-          "pt-2 text-center text-sm",
+          "pt-2 text-center text-xs sm:text-sm",
           current < number
             ? "text-t_dark"
             : current > number
