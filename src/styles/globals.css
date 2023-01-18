@@ -44,6 +44,21 @@
     border-style: solid;
     border-color: rgb(51 65 85) transparent transparent transparent;
   }
+
+  .collapse-transition{
+    transition: height 350ms ease-in-out;
+  }
+
+  .meter-step{
+    @apply bg-transparent;
+  }
+  .meter-step::-webkit-meter-bar{
+    @apply bg-slate-500 h-2 border-0;
+  }
+  .meter-step::-webkit-meter-optimum-value{
+    @apply bg-primary;
+    transition: width 500ms ease-in-out;
+  }
 }
 
 @layer components{
