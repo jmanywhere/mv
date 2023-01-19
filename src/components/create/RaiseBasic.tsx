@@ -6,6 +6,8 @@ import SingleMultipleChoice from "components/generic/SingleMultipleChoice";
 import RaiseActions from "components/raises/RaiseActions";
 // icons
 import { AiFillMediumCircle, AiFillTwitterCircle } from "react-icons/ai";
+import { BiWorld } from "react-icons/bi";
+import { BsYoutube } from "react-icons/bs";
 import { BsTelegram } from "react-icons/bs";
 import { SiGitbook } from "react-icons/si";
 import { isAddress } from "ethers/lib/utils";
@@ -14,7 +16,13 @@ import classNames from "classnames";
 import { useImmerAtom } from "jotai-immer";
 import { raiseCreateAtom } from "data/raiseAtoms";
 
-type SocialList = "twitter" | "medium" | "telegram" | "docs";
+type SocialList =
+  | "twitter"
+  | "medium"
+  | "telegram"
+  | "docs"
+  | "website"
+  | "youtube";
 
 const RaiseBasic = () => {
   const [raiseData, setRaiseData] = useImmerAtom(raiseCreateAtom);
@@ -41,19 +49,35 @@ const RaiseBasic = () => {
         const socials = Object.keys(values.socials) as SocialList[];
         let socialCount = 0;
         socials.forEach((s) => {
+          let url;
+          if (values.raiseType !== "charity" && s === "website") {
+            try {
+              if (values.socials[s]) url = new URL(values.socials[s]);
+              else throw Error("No website");
+            } catch (err) {
+              errors.socials = "Required Website URL, Check URL is valid. ";
+              return;
+            }
+          }
           if (values.socials[s].length > 0) {
-            if (!values.socials[s].startsWith("https://")) {
-              errors.socials = "Invalid URL";
+            try {
+              url = new URL(values.socials[s]);
+              if (url.protocol !== "https:")
+                errors.socials += s + " URL must be secure https. ";
+            } catch (err) {
+              errors.socials += s + " Check URL is valid. ";
               return;
             }
             socialCount++;
           }
         });
-        if (socialCount < 2) errors.socials = "At least 2 socials are required";
+        if (socialCount < 2)
+          if (errors.socials)
+            errors.socials += "At least 2 socials are required";
+          else errors.socials = "At least 2 socials are required";
         return errors;
       }}
       onSubmit={(values) => {
-        console.log(values, "clicked here");
         setRaiseData((draft) => {
           draft.name = values.projectName;
           draft.description = values.raiseDescription;
@@ -72,8 +96,8 @@ const RaiseBasic = () => {
         submitForm,
       }) => {
         const anyErrors =
-          (Object.values(touched).filter((x) => x).length == 0 &&
-            Object.values(values).filter((v) => !!v).length == 1) ||
+          (Object.values(touched).filter((x) => x).length - 1 < 1 &&
+            Object.values(values).filter((v) => !!v).length <= 2) ||
           Object.keys(errors).length > 0;
         return (
           <Form>
@@ -82,8 +106,10 @@ const RaiseBasic = () => {
                 name="projectName"
                 label="Project Name"
                 helperText="The name of your project"
+                required
               />
               <Input
+                required
                 name="raiseDescription"
                 label="Raise Description"
                 helperText="Brief introduction to what this raise is about"
@@ -95,8 +121,8 @@ const RaiseBasic = () => {
                 type="single"
                 className="ml-2"
                 onChange={(v) => {
-                  setFieldValue("raiseType", v);
-                  setFieldTouched("raiseType", true);
+                  setFieldValue("raiseType", v, false);
+                  setFieldTouched("raiseType", true, false);
                 }}
                 options={[
                   {
@@ -133,12 +159,42 @@ const RaiseBasic = () => {
                 helperText="Referrer's address (?): Enter the address of the person who referred you to this platform"
               />
               <legend className="ml-3">
-                <h3 className=" text-lg font-semibold">Socials</h3>
-                <h4 className=" text-sm text-t_dark">
-                  At least 2 are required
+                <h3
+                  className={classNames(
+                    " text-lg font-semibold",
+                    touched.socials && errors.socials
+                      ? "text-red-500"
+                      : "text-white"
+                  )}
+                >
+                  Socials <span className="text-red-500">*</span>
+                </h3>
+                <h4
+                  className={classNames(
+                    "text-sm",
+                    touched.socials && errors.socials
+                      ? "text-red-300"
+                      : "text-t_dark"
+                  )}
+                >
+                  <>
+                    {!errors.socials && "At least 2 are required"}{" "}
+                    {errors.socials}
+                  </>
                 </h4>
               </legend>
               <div className="flex max-w-full flex-col gap-y-2 md:max-w-[80%]">
+                <div className="flex w-full flex-row items-start gap-x-4">
+                  <Input
+                    placeholder="Website"
+                    containerClassName="flex-grow"
+                    name="socials.website"
+                  />
+                  <BiWorld
+                    size="36px"
+                    className="rounded-full bg-transparent text-white"
+                  />
+                </div>
                 <div className="flex w-full flex-row items-start gap-x-4">
                   <Input
                     placeholder="Medium"
@@ -171,6 +227,14 @@ const RaiseBasic = () => {
                     size="36px"
                     className="rounded-full bg-white text-primary"
                   />
+                </div>
+                <div className="flex w-full flex-row items-start gap-x-4">
+                  <Input
+                    placeholder="Youtube"
+                    containerClassName="flex-grow"
+                    name="socials.youtube"
+                  />
+                  <BsYoutube size="36px" className=" text-red-500" />
                 </div>
                 <div className="flex w-full flex-row items-start gap-x-4">
                   <Input
