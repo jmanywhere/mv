@@ -12,8 +12,10 @@ const FormInput = (props: {
   className?: string;
   containerClassName?: string;
   placeholder?: string;
+  required?: boolean;
 }) => {
   const {
+    required,
     placeholder = "",
     align = "left",
     label,
@@ -43,7 +45,7 @@ const FormInput = (props: {
             htmlFor={field.name}
             className="pl-2 pb-2 text-lg font-semibold"
           >
-            {label}
+            {label} {required && <span className="text-red-500">*</span>}
           </label>
         ) : (
           <div>{label}</div>
@@ -100,11 +102,11 @@ const FormInput = (props: {
         <span
           className={classNames(
             "ml-2 mt-2 whitespace-pre text-sm",
-            meta.error ? "text-red-500" : "text-t_dark"
+            meta.touched && meta.error ? "text-red-500" : "text-t_dark"
           )}
         >
           {helperText}
-          {meta.error && "\nERROR: " + meta.error}
+          {meta.touched && meta.error && "\nERROR: " + meta.error}
         </span>
       )}
     </div>
