@@ -9,6 +9,7 @@ export const raiseCreateAtom = atomWithImmer({
   name: "",
   description: "",
   referral: "",
+  type: "", // options: "fund" || "token" || "charity" || "other
   socials: {
     twitter: "",
     medium: "",
