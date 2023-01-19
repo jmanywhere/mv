@@ -29,60 +29,49 @@ const SingleMultipleChoice = (props: {
       {label && <legend className="pb-2 text-lg font-bold">{label}</legend>}
       {options.map((option, index) => {
         return (
-          <div
+          <button
+            type="button"
             key={index}
-            className={classNames("flex items-start pb-3 last:pb-0")}
+            className={classNames(
+              "flex items-start pb-3 text-left last:pb-0 hover:bg-primary/25"
+            )}
+            onClick={() => {
+              if (onChange) {
+                type == "single" && onChange(option.value);
+                type == "multiple" &&
+                  onChange(
+                    Object.keys(selected).filter((key) => selected[key])
+                  );
+              }
+              setSelected((draft) => {
+                if (type == "multiple")
+                  draft[option.value] = !draft[option.value];
+                else {
+                  const keys = Object.keys(draft);
+                  keys.forEach((key) => {
+                    draft[key] = key == option.value;
+                  });
+                }
+              });
+            }}
           >
             {type == "single" ? (
               <input
                 type="radio"
-                name="choice"
                 id={`choice-${index}=${option.value}`}
-                value={option.value}
                 checked={selected[option.value]}
                 className="mt-[6.5px] cursor-pointer"
-                onChange={() => {
-                  onChange && onChange(option.value);
-                  setSelected((draft) => {
-                    const keys = Object.keys(draft);
-                    keys.forEach((key) => {
-                      draft[key] = key == option.value;
-                    });
-                  });
-                }}
               />
             ) : (
               <input
                 type="checkbox"
-                name="choice"
                 className="mt-[6.5px] cursor-pointer"
                 checked={selected[option.value]}
-                onChange={() => {
-                  onChange &&
-                    onChange(
-                      Object.keys(selected).filter((key) => selected[key])
-                    );
-                  setSelected((draft) => {
-                    draft[option.value] = !draft[option.value];
-                  });
-                }}
               />
             )}
 
             <label className="ml-2" htmlFor={`choice-${index}=${option.value}`}>
               <p
-                onClick={() =>
-                  setSelected((draft) => {
-                    if (type == "multiple")
-                      draft[option.value] = !draft[option.value];
-                    else {
-                      const keys = Object.keys(draft);
-                      keys.forEach((key) => {
-                        draft[key] = key == option.value;
-                      });
-                    }
-                  })
-                }
                 className={classNames(
                   "cursor-pointer",
                   selected[option.value]
@@ -93,10 +82,12 @@ const SingleMultipleChoice = (props: {
                 {option.title}
               </p>
               {option.description && (
-                <p className="text-sm text-t_dark">{option.description}</p>
+                <p className="cursor-pointer text-sm text-t_dark">
+                  {option.description}
+                </p>
               )}
             </label>
-          </div>
+          </button>
         );
       })}
     </fieldset>
