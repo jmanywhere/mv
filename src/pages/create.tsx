@@ -34,11 +34,11 @@ const Create: NextPage = () => {
             </div>
           </div>
           <div className="w-full">
-            {step == 0 && <RaiseBasic />}
             {step == 1 && <RaiseBasic />}
-            {step == 2 && <RaiseBasic />}
-            {step == 3 && <RaiseBasic />}
-            {step == 4 && <RaiseBasic />}
+            {step == 2 && "step2"}
+            {step == 3 && "step3"}
+            {step == 4 && "step4"}
+            {step == 5 && "step5"}
           </div>
         </div>
       </div>
