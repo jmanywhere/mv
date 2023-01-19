@@ -99,12 +99,12 @@ const FormInput = (props: {
       {(helperText || meta.error) && (
         <span
           className={classNames(
-            "ml-2 mt-2 text-sm",
+            "ml-2 mt-2 whitespace-pre text-sm",
             meta.error ? "text-red-500" : "text-t_dark"
           )}
         >
           {helperText}
-          {meta.error && " meta.error:" + meta.error}
+          {meta.error && "\nERROR: " + meta.error}
         </span>
       )}
     </div>
