@@ -29,7 +29,10 @@ const SingleMultipleChoice = (props: {
       {label && <legend className="pb-2 text-lg font-bold">{label}</legend>}
       {options.map((option, index) => {
         return (
-          <div key={index} className={classNames("flex items-start pb-3")}>
+          <div
+            key={index}
+            className={classNames("flex items-start pb-3 last:pb-0")}
+          >
             {type == "single" ? (
               <input
                 type="radio"
