@@ -57,6 +57,7 @@ const SingleMultipleChoice = (props: {
           >
             {type == "single" ? (
               <input
+                readOnly
                 type="radio"
                 id={`choice-${index}=${option.value}`}
                 checked={selected[option.value]}
@@ -64,6 +65,7 @@ const SingleMultipleChoice = (props: {
               />
             ) : (
               <input
+                readOnly
                 type="checkbox"
                 className="mt-[6.5px] cursor-pointer"
                 checked={selected[option.value]}
