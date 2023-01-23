@@ -50,31 +50,54 @@ const RaiseBasic = () => {
         let socialCount = 0;
         socials.forEach((s) => {
           let url;
+          const social = values.socials[s];
           if (values.raiseType !== "charity" && s === "website") {
             try {
-              if (values.socials[s]) url = new URL(values.socials[s]);
+              if (values.socials[s]) url = new URL(social || "");
               else throw Error("No website");
             } catch (err) {
               errors.socials = "Required Website URL, Check URL is valid. ";
               return;
             }
           }
-          if (values.socials[s].length > 0) {
-            try {
-              url = new URL(values.socials[s]);
-              if (url.protocol !== "https:")
-                errors.socials += s + " URL must be secure https. ";
-            } catch (err) {
-              errors.socials += s + " Check URL is valid. ";
-              return;
+          if (social) {
+            if (social.length > 0) {
+              try {
+                url = new URL(social);
+                if (url.protocol !== "https:")
+                  errors.socials =
+                    (errors.socials ? errors.socials + " " : "") +
+                    s +
+                    " URL must be secure https. ";
+                else {
+                  if (s !== "website") {
+                    if (url.host.split(".")[0] !== s)
+                      errors.socials =
+                        (errors.socials ? errors.socials + " " : "") +
+                        s +
+                        " Invalid host URL. ";
+                    if (url.pathname.length < 2)
+                      errors.socials =
+                        (errors.socials ? errors.socials + " " : "") +
+                        s +
+                        " Invalid path URL. ";
+                  }
+                }
+              } catch (err) {
+                errors.socials =
+                  (errors.socials ? errors.socials + " " : "") +
+                  s +
+                  " Check URL is valid. ";
+                return;
+              }
+              socialCount++;
             }
-            socialCount++;
           }
         });
         if (socialCount < 2)
-          if (errors.socials)
-            errors.socials += "At least 2 socials are required";
-          else errors.socials = "At least 2 socials are required";
+          errors.socials =
+            (errors.socials ? errors.socials + " " : "") +
+            "At least 2 socials are required";
         return errors;
       }}
       onSubmit={(values) => {
@@ -121,8 +144,8 @@ const RaiseBasic = () => {
                 type="single"
                 className="ml-2"
                 onChange={(v) => {
-                  setFieldValue("raiseType", v, false);
-                  setFieldTouched("raiseType", true, false);
+                  setFieldValue("raiseType", v);
+                  setFieldTouched("raiseType", true, true);
                 }}
                 options={[
                   {
