@@ -5,6 +5,7 @@
 @layer base{
   html{
     @apply bg-bg_dark_m;
+    color-scheme: dark;
   }
 }
 
