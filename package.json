@@ -20,6 +20,7 @@
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.2.13",
     "classnames": "^2.3.2",
+    "date-fns": "^2.29.3",
     "ethers": "^5.7.2",
     "formik": "^2.2.9",
     "immer": "^9.0.17",
