@@ -4,7 +4,7 @@ import { atomWithImmer } from "jotai-immer";
 
 export const stepAtom = atom(1);
 
-export const raiseCreateAtom = atomWithImmer({
+export const raiseCreateAtom = atomWithImmer<RaiseFormType>({
   // Basics
   name: "",
   description: "",
@@ -59,3 +59,60 @@ export const raiseCreateAtom = atomWithImmer({
   // UPSELLS -> these are all optional but affect pricing
   extras: []
 })
+
+type RaiseFormType = {
+  // Basics
+  name: string;
+  description: string;
+  referral: string;
+  type: string; // options: "fund" ||
+  socials: {
+    twitter?: string;
+    medium?: string;
+    telegram?: string;
+    website?: string;
+    docs?: string;
+    youtube?: string;
+    // these others are nice to have
+    discord?: string;
+    facebook?: string;
+    reddit?: string;
+    instagram?: string;
+    linkedin?: string;
+    tiktok?: string;
+    twitch?: string;
+    github?: string;
+  };
+  // customization
+  backgroundColor: string;
+  primaryColor: string;
+  secondaryColor: string;
+  logo: string;
+  banner: string;
+  // Raise Specifics
+  softcap?: BigNumber;
+  hardcap: BigNumber;
+  minContribution?: BigNumber;
+  maxContribution?: BigNumber;
+  minContributionStep?: BigNumber;
+  raiseDuration: number;
+  raiseStart: number;
+  flexibleDate: boolean;
+  hasReferral: boolean;
+  // Token Specifics
+  tokenToReceive: string; // options depend on chain: busd || native
+  // Whitelist
+  whitelist: boolean;
+  whitelistInfo: {
+    type: string; // options: token || list
+    // If type is token
+    tokenAddress: string;
+    tokenAmount: BigNumber;
+  };
+  // PriceSelection
+  // Pricing -> 0 ,1 ,2 ,3 and so on depending on how many pricing options we want
+  pricing: number; // will only show/use 0 -> free if factory has user with a free raise
+  // UPSELLS -> these are all optional but affect pricing
+  extras: string[];
+};
+
