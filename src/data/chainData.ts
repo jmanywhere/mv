@@ -6,7 +6,7 @@ type ChainInfo = {
   explorer_tx: string, // Explorer tx URL path
   name: string, // Name of the chain
   icon: string, // URL to icon image
-  allowedTokens: Array< {symbol: string, decimals: number, address?: string,} >
+  allowedTokens: Array< {symbol: string, decimals: number, address: string,} >
 }
 
 export const chains: { [chainId: number] : ChainInfo} = {
@@ -23,7 +23,7 @@ export const chains: { [chainId: number] : ChainInfo} = {
     name: "BSC",
     icon: "",
     allowedTokens: [
-      {symbol: "bnb", decimals: 18, },
+      {symbol: "bnb", decimals: 18, address: "0x0000000000000000000000000000000000000000"},
       {symbol: "busd", decimals: 18, address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"},
       {symbol: "usdt", decimals: 18, address: "0x55d398326f99059ff775485246999027b3197955"},
     ]
