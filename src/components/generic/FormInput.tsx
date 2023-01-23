@@ -13,6 +13,7 @@ const FormInput = (props: {
   containerClassName?: string;
   placeholder?: string;
   required?: boolean;
+  type?: HTMLInputElement["type"];
 }) => {
   const {
     required,
@@ -23,6 +24,7 @@ const FormInput = (props: {
     multiline,
     className = "",
     containerClassName = "",
+    type = "text",
   } = props;
 
   const [field, meta, helpers] = useField(props.name);
@@ -52,7 +54,7 @@ const FormInput = (props: {
         ))}
       <div
         className={classNames(
-          "rounded-xl border-2 bg-bg_darkest px-3 py-1 text-right",
+          "rounded-xl border-2 bg-bg_darkest px-3 py-1 text-right ",
           meta.error && meta.touched
             ? "border-red-500"
             : focused
@@ -84,10 +86,11 @@ const FormInput = (props: {
           <input
             ref={inputRef}
             className={classNames(
-              "w-full bg-transparent text-white focus:outline-none",
+              "min-h-[26px] w-full bg-transparent text-white focus:outline-none",
               alignment[align],
               className
             )}
+            type={type}
             {...field}
             placeholder={placeholder}
             onFocus={() => setFocused(true)}
@@ -106,7 +109,9 @@ const FormInput = (props: {
           )}
         >
           {helperText}
-          {meta.touched && meta.error && "\nERROR: " + meta.error}
+          {meta.touched &&
+            meta.error &&
+            (helperText ? "\n" : "") + "ERROR: " + meta.error}
         </span>
       )}
     </div>
