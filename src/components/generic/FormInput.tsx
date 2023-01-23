@@ -14,6 +14,7 @@ const FormInput = (props: {
   placeholder?: string;
   required?: boolean;
   type?: HTMLInputElement["type"];
+  disableBottomMargin?: boolean;
 }) => {
   const {
     required,
@@ -25,6 +26,7 @@ const FormInput = (props: {
     className = "",
     containerClassName = "",
     type = "text",
+    disableBottomMargin = false,
   } = props;
 
   const [field, meta, helpers] = useField(props.name);
@@ -101,19 +103,19 @@ const FormInput = (props: {
           />
         )}
       </div>
-      {(helperText || meta.error) && (
-        <span
-          className={classNames(
-            "ml-2 mt-2 whitespace-pre text-sm",
-            meta.touched && meta.error ? "text-red-500" : "text-t_dark"
-          )}
-        >
-          {helperText}
-          {meta.touched &&
-            meta.error &&
-            (helperText ? "\n" : "") + "ERROR: " + meta.error}
-        </span>
-      )}
+
+      <span
+        className={classNames(
+          "ml-2 whitespace-pre text-sm",
+          meta.touched && meta.error ? "text-red-500" : "text-t_dark",
+          disableBottomMargin && !(meta.touched && meta.error) ? "mt-0" : "mt-2"
+        )}
+      >
+        {helperText || (meta.touched && meta.error ? "" : " ")}
+        {meta.touched &&
+          meta.error &&
+          (helperText ? "\n" : "") + "ERROR: " + meta.error}
+      </span>
     </div>
   );
 };
