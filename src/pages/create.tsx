@@ -5,11 +5,14 @@ import Layout from "components/Layout";
 import RaiseBasic from "components/create/RaiseBasic";
 import Step from "components/raises/Step";
 import classNames from "classnames";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { stepAtom } from "data/raiseAtoms";
+import RaiseSpecific from "components/create/RaiseSpecific";
+import RaiseCustomization from "components/create/RaiseCustomization";
+import RaiseActions from "components/raises/RaiseActions";
 
 const Create: NextPage = () => {
-  const step = useAtomValue(stepAtom);
+  const [step, setStep] = useAtom(stepAtom);
 
   return (
     <Layout title="Create your Raise">
@@ -26,19 +29,54 @@ const Create: NextPage = () => {
               )}
             />
             <div className="flex flex-row items-center justify-between py-4">
-              <Step current={step} number={1} title="Basics" />
-              <Step current={step} number={2} title="Raise" />
-              <Step current={step} number={3} title="Customize" />
-              <Step current={step} number={4} title="Extras" />
-              <Step current={step} number={5} title="Complete" />
+              <Step
+                setCurrent={setStep}
+                current={step}
+                number={1}
+                title="Basics"
+              />
+              <Step
+                setCurrent={setStep}
+                current={step}
+                number={2}
+                title="Raise"
+              />
+              <Step
+                setCurrent={setStep}
+                current={step}
+                number={3}
+                title="Customize"
+              />
+              <Step
+                setCurrent={setStep}
+                current={step}
+                number={4}
+                title="Checkout"
+              />
+              <Step
+                setCurrent={setStep}
+                current={step}
+                number={5}
+                title="Complete"
+              />
             </div>
           </div>
           <div className="w-full">
             {step == 1 && <RaiseBasic />}
-            {step == 2 && "step2"}
-            {step == 3 && "step3"}
-            {step == 4 && "step4"}
-            {step == 5 && "step5"}
+            {step == 2 && <RaiseSpecific />}
+            {step == 3 && <RaiseCustomization />}
+            {step == 4 && (
+              <RaiseActions
+                action={() => console.log("back")}
+                disableNext={false}
+              />
+            )}
+            {step == 5 && (
+              <RaiseActions
+                action={() => console.log("back")}
+                disableNext={false}
+              />
+            )}
           </div>
         </div>
       </div>
