@@ -2,8 +2,13 @@ import { useAtom } from "jotai";
 import { stepAtom } from "data/raiseAtoms";
 import classNames from "classnames";
 
-const RaiseActions = (props: { disableNext: boolean; action: () => void }) => {
-  const { disableNext, action } = props;
+const RaiseActions = (props: {
+  disableNext: boolean;
+  action: () => void | Promise<void>;
+  disableScreenNext?: boolean;
+  loading?: boolean;
+}) => {
+  const { disableNext, action, disableScreenNext, loading } = props;
   const [step, setStep] = useAtom(stepAtom);
   const scrollTop = (fwd: boolean) => {
     window.scrollTo({ top: 60, behavior: "smooth" });
@@ -24,15 +29,19 @@ const RaiseActions = (props: { disableNext: boolean; action: () => void }) => {
         </button>
       )}
       <button
-        type="submit"
-        className="rounded-lg bg-primary px-4 py-2 disabled:bg-slate-600 disabled:text-t_dark"
-        onClick={() => {
-          action();
-          scrollTop(true);
+        type="button"
+        className={classNames(
+          "rounded-lg bg-primary px-4 py-2 disabled:bg-slate-600",
+          loading ? "disabled:text-primary" : "disabled:text-t_dark"
+        )}
+        onClick={async () => {
+          console.log("this");
+          await action();
+          if (!disableScreenNext) scrollTop(true);
         }}
-        disabled={disableNext}
+        disabled={disableNext || loading}
       >
-        Next
+        {loading ? "..." : "Next"}
       </button>
     </div>
   );
