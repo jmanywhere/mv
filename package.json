@@ -19,6 +19,7 @@
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.2.13",
+    "backblaze-b2": "^1.7.0",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "ethers": "^5.7.2",
@@ -31,12 +32,14 @@
     "react": "18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-icons": "^4.7.1",
     "superjson": "1.9.1",
     "use-immer": "^0.8.1",
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@types/backblaze-b2": "^1.5.2",
     "@types/lodash": "^4.14.191",
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.14",
