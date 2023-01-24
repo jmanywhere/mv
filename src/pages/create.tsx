@@ -39,13 +39,13 @@ const Create: NextPage = () => {
                 setCurrent={setStep}
                 current={step}
                 number={2}
-                title="Raise"
+                title="Customize"
               />
               <Step
                 setCurrent={setStep}
                 current={step}
                 number={3}
-                title="Customize"
+                title="Raise"
               />
               <Step
                 setCurrent={setStep}
@@ -63,8 +63,8 @@ const Create: NextPage = () => {
           </div>
           <div className="w-full">
             {step == 1 && <RaiseBasic />}
-            {step == 2 && <RaiseSpecific />}
-            {step == 3 && <RaiseCustomization />}
+            {step == 2 && <RaiseCustomization />}
+            {step == 3 && <RaiseSpecific />}
             {step == 4 && (
               <RaiseActions
                 action={() => console.log("back")}
