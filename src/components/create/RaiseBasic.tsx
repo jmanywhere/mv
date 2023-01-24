@@ -100,7 +100,8 @@ const RaiseBasic = () => {
             "At least 2 socials are required";
         return errors;
       }}
-      onSubmit={(values) => {
+      onSubmit={(values, { setSubmitting }) => {
+        setSubmitting(true);
         setRaiseData((draft) => {
           draft.name = values.projectName;
           draft.description = values.raiseDescription;
@@ -108,6 +109,7 @@ const RaiseBasic = () => {
           draft.referral = values.referrer;
           draft.socials = values.socials;
         });
+        setSubmitting(false);
       }}
     >
       {({
@@ -117,6 +119,7 @@ const RaiseBasic = () => {
         setFieldValue,
         setFieldTouched,
         submitForm,
+        isSubmitting,
       }) => {
         const anyErrors =
           (Object.values(touched).filter((x) => x).length - 1 < 1 &&
@@ -269,7 +272,11 @@ const RaiseBasic = () => {
                 </div>
               </div>
             </div>
-            <RaiseActions disableNext={anyErrors} action={submitForm} />
+            <RaiseActions
+              disableNext={anyErrors}
+              action={submitForm}
+              loading={isSubmitting}
+            />
           </Form>
         );
       }}
