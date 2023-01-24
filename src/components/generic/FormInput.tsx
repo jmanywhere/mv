@@ -15,6 +15,7 @@ const FormInput = (props: {
   required?: boolean;
   type?: HTMLInputElement["type"];
   disableBottomMargin?: boolean;
+  accept?: string;
 }) => {
   const {
     required,
@@ -27,6 +28,7 @@ const FormInput = (props: {
     containerClassName = "",
     type = "text",
     disableBottomMargin = false,
+    accept,
   } = props;
 
   const [field, meta, helpers] = useField(props.name);
@@ -61,9 +63,13 @@ const FormInput = (props: {
             ? "border-red-500"
             : focused
             ? "border-primary"
-            : " border-slate-500"
+            : " border-slate-500",
+          type == "color" ? "flex cursor-pointer flex-row items-center" : ""
         )}
-        onClick={() => inputRef.current?.focus() || taRef.current?.focus()}
+        onClick={() => {
+          inputRef.current?.focus() || taRef.current?.focus();
+          if (type == "color") inputRef.current?.showPicker();
+        }}
       >
         {multiline ? (
           <textarea
@@ -88,12 +94,14 @@ const FormInput = (props: {
           <input
             ref={inputRef}
             className={classNames(
-              "min-h-[26px] w-full bg-transparent text-white focus:outline-none",
+              "min-h-[26px] bg-transparent text-white focus:outline-none",
+              type == "color" ? "w-10" : "w-full",
               alignment[align],
               className
             )}
             type={type}
             {...field}
+            accept={accept}
             placeholder={placeholder}
             onFocus={() => setFocused(true)}
             onBlur={() => {
@@ -102,6 +110,7 @@ const FormInput = (props: {
             }}
           />
         )}
+        {type == "color" && <span className="pl-2">{field.value}</span>}
       </div>
 
       <span
