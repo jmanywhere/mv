@@ -16,7 +16,8 @@ import { isMultiple } from "utils/nm";
 import isPast from "date-fns/isPast";
 import { useImmerAtom } from "jotai-immer";
 import { raiseCreateAtom } from "data/raiseAtoms";
-import { parseUnits } from "@ethersproject/units";
+import { formatEther, parseUnits } from "@ethersproject/units";
+import formatISO9075 from "date-fns/formatISO9075";
 
 const RaiseSpecific = () => {
   const raiseTokens = chains[56]?.allowedTokens;
@@ -26,18 +27,26 @@ const RaiseSpecific = () => {
   return (
     <Formik
       initialValues={{
-        softcap: "",
-        hardcap: "",
+        softcap: raiseData.softcap ? formatEther(raiseData.softcap) : "",
+        hardcap: raiseData.hardcap ? formatEther(raiseData.hardcap) : "",
         whitelist: "", // type: "token" | "list"
         whitelistToken: "", // token address
         whitelistAmount: "", // amount of token to whitelist
         whitelistList: "", // comma separated list of addresses
-        tokenSymbol: raiseTokens?.[0]?.symbol || "",
+        tokenSymbol: raiseData.tokenToReceive
+          ? raiseTokens?.find((x) => x.address === raiseData.tokenToReceive)
+              ?.symbol
+          : raiseTokens?.[0]?.symbol || "",
         minContribution: "",
         maxContribution: "",
         minStep: "",
-        timePeriod: "1",
-        startDateTime: "", // Date object
+        timePeriod: raiseData.raiseDuration
+          ? Math.floor(raiseData.raiseDuration / 86400).toString()
+          : "1",
+        startDateTime:
+          (raiseData.raiseStart &&
+            formatISO9075(new Date(raiseData.raiseStart * 1000))) ||
+          "", // Date object
       }}
       validate={(values) => {
         const errors: any = {};
@@ -92,9 +101,10 @@ const RaiseSpecific = () => {
         }
         return errors;
       }}
-      onSubmit={(values) => {
+      onSubmit={(values, { setSubmitting }) => {
+        setSubmitting(true);
         const token = raiseTokens?.find((t) => t.symbol === values.tokenSymbol);
-        if (!token) return;
+        if (!token) return setSubmitting(false);
         setRaiseData((draft) => {
           draft.softcap = values.softcap
             ? parseUnits("" + values.softcap, token.decimals)
@@ -110,7 +120,9 @@ const RaiseSpecific = () => {
           draft.minContributionStep = values.minStep
             ? parseUnits("" + values.minStep, token.decimals)
             : undefined;
-          draft.raiseStart = new Date(values.startDateTime).getTime() / 1000; // Need to convert to seconds
+          draft.raiseStart = Math.floor(
+            new Date(values.startDateTime).getTime() / 1000
+          ); // Need to convert to seconds
           draft.raiseDuration = parseInt(values.timePeriod) * 86400;
           // TODO - whitelist
           // draft.whitelist = false;
@@ -118,6 +130,7 @@ const RaiseSpecific = () => {
           // draft.whitelistAmount = values.whitelistAmount;
           // draft.whitelistList = values.whitelistList;
         });
+        setSubmitting(false);
       }}
     >
       {({
@@ -128,6 +141,7 @@ const RaiseSpecific = () => {
         submitForm,
         touched,
         errors,
+        isSubmitting,
       }) => {
         const tokenSrc =
           "https://f004.backblazeb2.com/file/w3-assets/mv/tokens/" +
@@ -139,7 +153,7 @@ const RaiseSpecific = () => {
             Object.values(values).filter((v) => !!v).length <= 2) ||
           Object.keys(errors).length > 0;
 
-        console.log(anyErrors, errors);
+        console.log(values);
 
         return (
           <Form onSubmit={handleSubmit}>
@@ -163,7 +177,9 @@ const RaiseSpecific = () => {
                     src={tokenSrc}
                     height={22}
                     width={22}
-                    alt={values.tokenSymbol.toUpperCase() + "_token_logo"}
+                    alt={
+                      (values.tokenSymbol?.toUpperCase() || "") + "_token_logo"
+                    }
                   />
                   <select
                     name="tokenSymbol"
@@ -272,7 +288,11 @@ const RaiseSpecific = () => {
                 {values.whitelist === "list" && <div>"list"</div>}
               </div>
             </Collapse> */}
-            <RaiseActions disableNext={anyErrors} action={submitForm} />
+            <RaiseActions
+              disableNext={anyErrors}
+              action={submitForm}
+              loading={isSubmitting}
+            />
           </Form>
         );
       }}
