@@ -1,8 +1,9 @@
 import { BigNumber } from "ethers";
 import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
+import { AddressZero } from "@ethersproject/constants";
 
-export const stepAtom = atom(1);
+export const stepAtom = atom(3);
 
 export const raiseCreateAtom = atomWithImmer<RaiseFormType>({
   // Basics
@@ -43,8 +44,8 @@ export const raiseCreateAtom = atomWithImmer<RaiseFormType>({
   raiseStart: 0,
   flexibleDate: false,
   hasReferral: false,
-  // Token Specifics
-  tokenToReceive: "busd", // options depend on chain: busd || native
+  // Token Specifics - we'll use token address
+  tokenToReceive: AddressZero, // options depend on chain: busd || native
   // Whitelist
   whitelist: false,
   whitelistInfo: {
