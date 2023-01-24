@@ -2,6 +2,14 @@ import B2 from 'backblaze-b2';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const uploadHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // check for valid method
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
+  // check for valid headers
+  if (!req.headers['x-project-name'] || !req.headers['x-filename']) {
+    return res.status(400).json({ message: 'Invalid Request' });
+  }
   // reconstruct file buffer from stream
   const file = await new Promise<Buffer>((resolve) => {
     const chunks: Uint8Array[] = [];
