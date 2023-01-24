@@ -3,6 +3,7 @@
 //  Styles change based on component props
 
 import classNames from "classnames";
+import { BsCheck } from "react-icons/bs";
 
 const Step = (props: {
   current: number;
@@ -26,7 +27,7 @@ const Step = (props: {
           "transition-colors delay-500 duration-300"
         )}
       >
-        {number}
+        {current > number ? <BsCheck className="path-animation" /> : number}
       </div>
       <h4
         className={classNames(

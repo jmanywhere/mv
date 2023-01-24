@@ -60,6 +60,28 @@
     @apply bg-primary;
     transition: width 500ms ease-in-out;
   }
+
+  .path-animation{
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    stroke-width: 1px;
+    stroke: white;
+    height: 28px;
+    width: 28px;
+    color: transparent;
+    animation: path-trace 1s ease-in-out forwards 1;
+  }
+
+  @keyframes path-trace{
+    from{
+      stroke-dashoffset: 100;
+      color: transparent;
+    }
+    to{
+      stroke-dashoffset: 0;
+      color: white;
+    }
+  }
 }
 
 @layer components{
