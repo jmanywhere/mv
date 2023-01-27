@@ -11,7 +11,9 @@ import img from "./../../public/images/Logo-2.png";
 import Modal from "./Modal";
 import { useAtom, useAtomValue } from "jotai";
 import { connectModal, raiseBasic } from "data/atoms";
-import { ConnectorNames } from "hooks/useAuth";
+import { ConnectorNames, useAuth } from "hooks/useAuth";
+import { useWeb3React } from "@web3-react/core";
+import { shortAddress } from "utils/txt";
 
 type HeaderProps = {
   price: number;
@@ -20,7 +22,7 @@ type HeaderProps = {
 
 const Header = (props: HeaderProps) => {
   const { price, hideHeader } = props;
-
+  const { account, logout } = useAuth();
   const raiseInfo = useAtomValue(raiseBasic);
   const [showModal, setShowModal] = useAtom(connectModal);
 
@@ -102,10 +104,13 @@ const Header = (props: HeaderProps) => {
                   </button>
                 </div>
                 <button
-                  className="hover:border-2/30 rounded-md px-5 py-2 transition duration-200 ease-in-out hover:bg-primary"
-                  onClick={() => setShowModal(true)}
+                  className={classNames(
+                    "rounded-lg px-5 py-2 transition duration-200 ease-in-out",
+                    "hover:border-2/30 hover:border-white hover:bg-primary hover:text-black"
+                  )}
+                  onClick={() => (account ? logout() : setShowModal(true))}
                 >
-                  Connect
+                  {account ? shortAddress(account) : "Connect"}
                 </button>
               </nav>
             </>
