@@ -34,7 +34,7 @@ const Header = (props: HeaderProps) => {
       {!hideHeader && (
         <header
           className={classNames(
-            "sticky top-0 z-20 flex w-full grow flex-row items-center justify-center py-6 px-10 lg:relative",
+            "sticky top-0 z-30 flex w-full grow flex-row items-center justify-center py-6 px-10 lg:relative",
             raiseInfo.bg_dark,
             raiseInfo.text
           )}
