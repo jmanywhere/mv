@@ -21,7 +21,7 @@ export const chains: { [chainId: number] : ChainInfo} = {
     explorer: "https://bscscan.com/",
     explorer_tx: "tx/",
     name: "BSC",
-    icon: "",
+    icon: "https://f004.backblazeb2.com/file/w3-assets/chains/bsc+logo.png",
     allowedTokens: [
       {symbol: "bnb", decimals: 18, address: "0x0000000000000000000000000000000000000000"},
       {symbol: "busd", decimals: 18, address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"},
@@ -40,7 +40,7 @@ export const chains: { [chainId: number] : ChainInfo} = {
     explorer: "https://testnet.bscscan.com/",
     explorer_tx: "tx/",
     name: "BSC Testnet",
-    icon: "",
+    icon: "https://f004.backblazeb2.com/file/w3-assets/chains/TESTbsc+logo.png",
     allowedTokens: []
   },
 }
