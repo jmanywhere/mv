@@ -10,10 +10,11 @@ import { stepAtom } from "data/raiseAtoms";
 import RaiseSpecific from "components/create/RaiseSpecific";
 import RaiseCustomization from "components/create/RaiseCustomization";
 import RaiseActions from "components/raises/RaiseActions";
+import { useEagerConnect } from "hooks/useAuth";
 
 const Create: NextPage = () => {
   const [step, setStep] = useAtom(stepAtom);
-
+  useEagerConnect();
   return (
     <Layout title="Create your Raise">
       <div className="flex w-full items-center justify-center py-8 px-6 text-white">
@@ -65,18 +66,8 @@ const Create: NextPage = () => {
             {step == 1 && <RaiseBasic />}
             {step == 2 && <RaiseCustomization />}
             {step == 3 && <RaiseSpecific />}
-            {step == 4 && (
-              <RaiseActions
-                action={() => console.log("back")}
-                disableNext={false}
-              />
-            )}
-            {step == 5 && (
-              <RaiseActions
-                action={() => console.log("back")}
-                disableNext={false}
-              />
-            )}
+            {step == 4 && <RaiseActions disableNext={false} />}
+            {step == 5 && <RaiseActions disableNext={false} />}
           </div>
         </div>
       </div>
