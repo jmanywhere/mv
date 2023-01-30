@@ -46,6 +46,7 @@ export const raiseCreateAtom = atomWithImmer<RaiseFormType>({
   hasReferral: false,
   // Token Specifics - we'll use token address
   tokenToReceive: AddressZero, // options depend on chain: busd || native
+  chainId: 0, // options: 1 || 56 
   // Whitelist
   whitelist: false,
   whitelistInfo: {
@@ -102,6 +103,7 @@ type RaiseFormType = {
   hasReferral: boolean;
   // Token Specifics
   tokenToReceive: string; // options depend on chain: busd || native
+  chainId: number; // options: 1 || 56 
   // Whitelist
   whitelist: boolean;
   whitelistInfo: {
