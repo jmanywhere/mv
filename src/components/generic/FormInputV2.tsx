@@ -14,6 +14,7 @@ const FormInput = (
     type?: HTMLInputElement["type"];
     disableBottomMargin?: boolean;
     accept?: string;
+    disableSelectAllOnFocus?: boolean;
   } & UseControllerProps<any>
 ) => {
   const {
@@ -31,6 +32,7 @@ const FormInput = (
     rules,
     defaultValue,
     control,
+    disableSelectAllOnFocus,
   } = props;
 
   const {
@@ -80,7 +82,8 @@ const FormInput = (
         onClick={() => {
           taRef.current?.focus();
           inputRef.current?.focus();
-          if (type == "color") inputRef.current?.showPicker();
+          if (type == "color" || type == "datetime-local")
+            inputRef.current?.showPicker();
         }}
       >
         {multiline ? (
@@ -95,7 +98,11 @@ const FormInput = (
             }}
             {...field}
             placeholder={placeholder}
-            onFocus={() => setFocused(true)}
+            onFocus={(e) => {
+              setFocused(true);
+              if (disableSelectAllOnFocus) return;
+              e.target.select();
+            }}
           />
         ) : (
           <input
@@ -112,7 +119,11 @@ const FormInput = (
             onChange={field.onChange}
             ref={setRef}
             placeholder={placeholder}
-            onFocus={() => setFocused(true)}
+            onFocus={(e) => {
+              setFocused(true);
+              if (disableSelectAllOnFocus) return;
+              e.target.select();
+            }}
             onBlur={(e) => {
               setFocused(false);
               field.onBlur();
