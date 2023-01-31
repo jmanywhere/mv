@@ -213,7 +213,7 @@ const RaiseSpecific = () => {
   const actionsRef = useRef<RaiseActionsHandle>(null);
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(submit)}>
       <div className="flex flex-col items-start gap-x-2 pb-3 md:flex-row md:items-end">
         <div>
           <label className="pl-2 text-lg font-semibold" htmlFor="tokenAddress">
