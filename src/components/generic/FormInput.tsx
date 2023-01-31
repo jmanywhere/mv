@@ -68,7 +68,8 @@ const FormInput = (props: {
         )}
         onClick={() => {
           inputRef.current?.focus() || taRef.current?.focus();
-          if (type == "color") inputRef.current?.showPicker();
+          if (type == "color" || type == "datetime-local")
+            inputRef.current?.showPicker();
         }}
       >
         {multiline ? (
