@@ -7,7 +7,7 @@ import RaiseActions, {
 } from "components/raises/RaiseActions";
 import { raiseCreateAtom } from "data/raiseAtoms";
 import { useImmerAtom } from "jotai-immer";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 type FormValues = {
   background: string;
@@ -59,7 +59,7 @@ const RaiseCustomization = () => {
     },
   });
 
-  const submit = async (values: FormValues) => {
+  const submit: SubmitHandler<FormValues> = async (values) => {
     let logoUrl = "";
     let bannerUrl = "";
     if (values.logo) {
@@ -182,7 +182,11 @@ const RaiseCustomization = () => {
         </div>
       </div>
 
-      <RaiseActions disableNext={!isValid} loading={isSubmitting} />
+      <RaiseActions
+        disableNext={!isValid}
+        loading={isSubmitting}
+        ref={actionsRef}
+      />
     </form>
   );
 };
