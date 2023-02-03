@@ -21,10 +21,10 @@ const Step = (props: {
         className={classNames(
           "flex h-10 w-10 items-center justify-center rounded-full border-4  text-white",
           current > number
-            ? "cursor-pointer bg-primary"
+            ? "cursor-pointer bg-green_accent hover:bg-primary"
             : "cursor-default bg-slate-700",
           current >= number ? "border-primary" : "border-slate-700",
-          "transition-colors delay-500 duration-300"
+          "transition-[background-color] delay-300 duration-300"
         )}
       >
         {current > number ? <BsCheck className="path-animation" /> : number}
