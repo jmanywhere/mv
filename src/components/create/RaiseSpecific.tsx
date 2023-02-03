@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 // Form Stuff
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 // Components
 // import FormInput from "components/generic/FormInput";
 import FormInput from "components/generic/FormInputV2";
