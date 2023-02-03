@@ -63,7 +63,7 @@ const Header = (props: HeaderProps) => {
               <nav
                 className={
                   (showNav ? "right-0" : "-right-full") +
-                  " fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] text-white duration-300 ease-in-out lg:static lg:mx-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
+                  " fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] text-white duration-300 ease-in-out lg:static lg:ml-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
                 }
               >
                 <Link
@@ -95,7 +95,7 @@ const Header = (props: HeaderProps) => {
                 </button>
               </nav>
               <nav className=" hidden grow items-center justify-end text-white lg:flex">
-                <div className="transition-left mx-10 flex h-[40px] flex-row items-center gap-x-2 border-r-2 border-l-2 border-[#2B313A] px-9">
+                <div className="transition-left mx-6 flex h-[40px] flex-row items-center gap-x-2 border-r-2 border-l-2 border-[#2B313A] px-9">
                   <button className="items-center justify-center whitespace-nowrap rounded-md px-5 py-2 font-sans text-slate-500 transition duration-200 ease-in-out hover:rounded-md hover:bg-primary">
                     Explore Projects
                   </button>
