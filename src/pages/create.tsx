@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
-import { useState } from "react";
 // components
 import Layout from "components/Layout";
 import RaiseBasic from "components/create/RaiseBasic";
 import Step from "components/raises/Step";
 import classNames from "classnames";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { stepAtom } from "data/raiseAtoms";
 import RaiseSpecific from "components/create/RaiseSpecific";
 import RaiseCustomization from "components/create/RaiseCustomization";
