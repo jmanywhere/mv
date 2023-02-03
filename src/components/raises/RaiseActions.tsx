@@ -31,6 +31,7 @@ const RaiseActions = forwardRef<RaiseActionsHandle, RaiseActionsProps>(
           <div />
         ) : (
           <button
+            type="button"
             className={classNames(
               "rounded-lg bg-slate-300 px-4 py-2 text-black hover:bg-white"
             )}
