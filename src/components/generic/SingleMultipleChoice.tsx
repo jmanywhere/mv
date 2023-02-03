@@ -9,17 +9,30 @@ const SingleMultipleChoice = (props: {
   type: "single" | "multiple";
   label: string;
   options: Array<{ value: string; title: string; description?: string }>;
+  defaultValue?: string | string[];
   onChange?: (value: string | string[]) => void;
   className?: string;
 }) => {
-  const { type, options, label, onChange, className = "" } = props;
+  const {
+    type,
+    options,
+    label,
+    onChange,
+    className = "",
+    defaultValue,
+  } = props;
 
   const [selected, setSelected] = useImmer<{
     [key: typeof options[number]["value"]]: boolean;
   }>(() => {
     const obj: { [key: typeof options[number]["value"]]: boolean } = {};
+    const defaultExists = defaultValue && defaultValue.length > 0;
+    const defaultIsArray = Array.isArray(defaultValue);
     options.forEach((option) => {
-      obj[option.value] = false;
+      obj[option.value] =
+        defaultExists && defaultIsArray
+          ? (defaultValue as string[]).includes(option.value)
+          : option.value == defaultValue;
     });
     return obj;
   });
