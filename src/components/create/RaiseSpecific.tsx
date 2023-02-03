@@ -83,9 +83,15 @@ const RaiseSpecific = () => {
             (x) => x.address === raiseData.tokenToReceive
           )?.symbol || ""
         : "",
-      minContribution: "",
-      maxContribution: "",
-      minStep: "",
+      minContribution: raiseData.minContribution
+        ? formatEther(raiseData.minContribution)
+        : "",
+      maxContribution: raiseData.maxContribution
+        ? formatEther(raiseData.maxContribution)
+        : "",
+      minStep: raiseData.minContributionStep
+        ? formatEther(raiseData.minContributionStep)
+        : "",
       timePeriod: raiseData.raiseDuration
         ? Math.floor(raiseData.raiseDuration / 86400).toString()
         : "1",
@@ -96,65 +102,6 @@ const RaiseSpecific = () => {
         "", // Date object
     },
   });
-
-  // useEffect(() => {
-  //   setErrors((draft) => {
-  //     const softCap = parseFloat(specific.softcap);
-  //     const hardCap = parseFloat(specific.hardcap);
-  //     const hasSoft = !isNaN(softCap) && softCap > 0;
-  //     const hasHard = !isNaN(hardCap) && hardCap > 0;
-
-  //     if (hasSoft) {
-  //       if (softCap > hardCap) draft.softcap = "Less than hardcap";
-  //       if (softCap < hardCap / 2) draft.softcap = "Min 50% of hardcap";
-  //     }
-  //     if (!hasHard) {
-  //       draft.hardcap = "Required";
-  //     }
-  //     if (!specific.tokenSymbol) {
-  //       draft.tokenSymbol = "Required";
-  //     }
-  //     const minPledge = parseFloat(specific.minContribution);
-  //     const maxPledge = parseFloat(specific.maxContribution);
-  //     const minStep = parseFloat(specific.minStep);
-  //     const hasMin = !isNaN(minPledge);
-  //     const hasMax = !isNaN(maxPledge);
-  //     const hasStep = !isNaN(minStep);
-  //     if (hasMin && hasMax && minPledge >= maxPledge) {
-  //       draft.minContribution = "Min. Pledge must be less than Max. Pledge";
-  //     }
-  //     if (hasStep && hasMin) {
-  //       if (minStep > minPledge) draft.minStep = "Larger than Min. Pledge";
-  //       if (!isMultiple(minPledge, minStep))
-  //         draft.minContribution = "Not multiple of Min. Step";
-  //     }
-  //     if (hasStep && hasMax) {
-  //       if (minStep >= maxPledge) draft.minStep = "> Max. Pledge";
-  //       if (!isMultiple(maxPledge, minStep))
-  //         draft.maxContribution = "Not a multiple of Min. Step";
-  //     }
-
-  //     if (
-  //       !specific.timePeriod ||
-  //       isNaN(parseInt(specific.timePeriod)) ||
-  //       parseInt(specific.timePeriod) < 1
-  //     ) {
-  //       draft.timePeriod = "Time period must be at least 1 day";
-  //     }
-
-  //     if (!specific.startDateTime) {
-  //       draft.startDateTime = "Required";
-  //     } else {
-  //       if (isPast(new Date(specific.startDateTime)))
-  //         draft.startDateTime = "Future only";
-  //     }
-  //     console.log(specific.chainId, chainId);
-  //     if (specific.chainId !== chainId) {
-  //       if (!chainId) draft.chainId = "Please connect wallet";
-  //       else draft.chainId = "Wrong chain selected";
-  //     }
-  //   });
-  // }, [specific, setErrors, chainId]);
 
   const raiseTokens = (
     (raiseData.chainId &&
