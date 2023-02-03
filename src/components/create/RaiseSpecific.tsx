@@ -191,7 +191,6 @@ const RaiseSpecific = () => {
                 validate: {
                   connected: () => !!chainId || "Please connect wallet",
                   sameChain: (v) => {
-                    console.log("validate", v, chainId);
                     return (
                       parseInt(v + "") === chainId ||
                       "Switch to the selected chain"
