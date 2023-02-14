@@ -35,8 +35,10 @@ model Raise {
   writeups      Writeup[]
   socials       SocialsOnFunds[]
   TagsOnRaise   TagsOnRaise[]
+  reports       Report[]
   User          User?            @relation(fields: [userId], references: [id])
   userId        String?
+  acceptTerms   String // wallet needs to sign message to accept terms
 }
 
 model Feature {
@@ -71,10 +73,12 @@ model User {
 
 // Necessary Model to fulfill the Many-Many relations
 model SocialsOnFunds {
-  raise    Raise  @relation(fields: [raiseId], references: [id])
-  social   Social @relation(fields: [socialId], references: [id])
+  raise    Raise   @relation(fields: [raiseId], references: [id])
+  social   Social  @relation(fields: [socialId], references: [id])
+  verified Boolean
   raiseId  String
   socialId Int
+  removed  Boolean @default(false)
 
   @@id([raiseId, socialId])
 }
@@ -107,6 +111,14 @@ model TagsOnRaise {
   tagId   Int
 
   @@id([raiseId, tagId])
+}
+
+model Report {
+  id       String @id @default(cuid())
+  raise    Raise  @relation(fields: [raiseId], references: [id])
+  raiseId  String // uuid
+  text     String
+  reporter String // wallet Address
 }
 
 enum SocialTypes {
