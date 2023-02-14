@@ -11,7 +11,7 @@ const defaultRaiseData = {
   name: "",
   description: "",
   referral: "",
-  type: "", // options: "fund" || "token" || "charity" || "other
+  type: "" as const, // options: "fund" || "token" || "charity" || "other
   socials: {
     twitter: "",
     medium: "",
@@ -67,7 +67,7 @@ const raiseTestData = {
   name: "Test MoonVector",
   description: "Really dope raise description of stuff, this needs to be at leaste 100 characters long but still not too long in order for it to make sense and look good",
   referral: "0x123456789123456789123456789123456789",
-  type: "charity", // options: "fund" || "token" || "charity" || "other
+  type: "charity" as const, // options: "fund" || "token" || "charity" || "other
   socials: {
     twitter: "https://twitter.com/Moonvector_",
     medium: "https://medium.com/@moonvector",
@@ -126,7 +126,7 @@ type RaiseFormType = {
   name: string;
   description: string;
   referral: string;
-  type: string; // options: "fund" ||
+  type: "fund" | "token" | "charity" | "";
   socials: {
     twitter?: string;
     medium?: string;
