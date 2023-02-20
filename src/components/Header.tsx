@@ -8,12 +8,12 @@ import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import Image from "next/image";
 //MV
 import img from "./../../public/images/Logo-2.png";
-import Modal from "./Modal";
-import { useAtom, useAtomValue } from "jotai";
-import { connectModal, raiseBasic } from "data/atoms";
-import { ConnectorNames, useAuth } from "hooks/useAuth";
-import { useWeb3React } from "@web3-react/core";
+import { useAtomValue } from "jotai";
+import { raiseBasic } from "data/atoms";
+import { useWeb3Modal } from "@web3modal/react";
 import { shortAddress } from "utils/txt";
+import { useAccount, useNetwork } from "wagmi";
+import { chains } from "data/chainData";
 
 type HeaderProps = {
   price: number;
@@ -22,12 +22,15 @@ type HeaderProps = {
 
 const Header = (props: HeaderProps) => {
   const { price, hideHeader } = props;
-  const { account, logout } = useAuth();
   const raiseInfo = useAtomValue(raiseBasic);
-  const [showModal, setShowModal] = useAtom(connectModal);
+
+  const { open } = useWeb3Modal();
+  const { address } = useAccount();
+  const { chain } = useNetwork();
 
   const [showNav, setShowNav] = useState(false);
-  const handleOnClose = () => setShowModal(false);
+
+  const chainIcon = (chain?.id && chains[chain.id]?.icon) ?? null;
 
   return (
     <>
@@ -63,7 +66,7 @@ const Header = (props: HeaderProps) => {
               <nav
                 className={
                   (showNav ? "right-0" : "-right-full") +
-                  " fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 border-[#2B313A] bg-[#10161f] text-white duration-300 ease-in-out lg:static lg:ml-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
+                  " fixed bottom-0 top-[88px] flex w-full flex-col items-center gap-x-2 gap-y-4 border-[#2B313A] bg-[#10161f] text-white duration-300 ease-in-out lg:static lg:ml-10 lg:flex-row lg:border-l-2 lg:bg-transparent lg:px-9"
                 }
               >
                 <Link
@@ -85,10 +88,21 @@ const Header = (props: HeaderProps) => {
                   Explore Project
                 </button>
                 <button
-                  className=" hover:border-2/30 rounded-m w-full items-center justify-center px-5 py-4 text-center transition duration-500 ease-in-out hover:bg-primary/50 lg:hidden"
-                  onClick={() => setShowModal(true)}
+                  className={classNames(
+                    "flex w-[150px] flex-row items-center gap-x-2 rounded-lg px-2 py-2 transition duration-200 ease-in-out lg:hidden",
+                    "hover:border-2/30 hover:border-white hover:bg-primary hover:text-black"
+                  )}
+                  onClick={() => open()}
                 >
-                  Connect
+                  {chainIcon && (
+                    <Image
+                      src={chainIcon}
+                      width={28}
+                      height={28}
+                      alt={`current chain: ${chain?.name}`}
+                    />
+                  )}
+                  {address ? shortAddress(address) : "Connect"}
                 </button>
                 <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 py-2 text-slate-500 lg:hidden">
                   Get Started
@@ -105,38 +119,26 @@ const Header = (props: HeaderProps) => {
                 </div>
                 <button
                   className={classNames(
-                    "rounded-lg px-5 py-2 transition duration-200 ease-in-out",
+                    "flex w-[150px] flex-row items-center gap-x-2 rounded-lg px-2 py-2 transition duration-200 ease-in-out",
                     "hover:border-2/30 hover:border-white hover:bg-primary hover:text-black"
                   )}
-                  onClick={() => (account ? logout() : setShowModal(true))}
+                  onClick={() => open()}
                 >
-                  {account ? shortAddress(account) : "Connect"}
+                  {chainIcon && (
+                    <Image
+                      src={chainIcon}
+                      width={28}
+                      height={28}
+                      alt={`current chain: ${chain?.name}`}
+                    />
+                  )}
+                  {address ? shortAddress(address) : "Connect"}
                 </button>
               </nav>
             </>
           )}
         </header>
       )}
-      <Modal
-        onClose={handleOnClose}
-        visible={showModal}
-        modalAnchors={[
-          {
-            label: "Metamask",
-            connector: ConnectorNames.INJECTED,
-            icon: "https://f004.backblazeb2.com/file/w3-assets/metamask.png",
-          },
-          {
-            label: "WalletConnect",
-            connector: ConnectorNames.WALLET_CONNECT,
-            icon: "https://f004.backblazeb2.com/file/w3-assets/walletconnect.png",
-          },
-          // {
-          //   label: "Meatlink",
-          //   connector: "",
-          // },
-        ]}
-      />
     </>
   );
 };
