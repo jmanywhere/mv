@@ -121,7 +121,7 @@ const raiseTestData = {
 
 export const raiseCreateAtom = atomWithImmer<RaiseFormType>(raiseTestData)
 
-type RaiseFormType = {
+export type RaiseFormType = {
   // Basics
   name: string;
   description: string;
