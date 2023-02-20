@@ -14,7 +14,7 @@ import { isAddress } from "ethers/lib/utils";
 import Collapse from "components/generic/Collapse";
 import classNames from "classnames";
 import { useImmerAtom } from "jotai-immer";
-import { raiseCreateAtom } from "data/raiseAtoms";
+import { raiseCreateAtom, type RaiseFormType } from "data/raiseAtoms";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRef } from "react";
 
@@ -29,7 +29,7 @@ type SocialList =
 type FormValues = {
   projectName: string;
   raiseDescription: string;
-  raiseType: string;
+  raiseType: RaiseFormType["type"];
   referrer: string;
   socials: { [key in SocialList]: string };
 };
@@ -81,11 +81,11 @@ const RaiseBasic = () => {
         });
         return socialCount >= 2 ? true : "Please provide at least 2 socials";
       },
-      website: (value) => {
-        if (watch("raiseType") !== "charity" && !value.website)
-          return "Please provide a website";
-        return true;
-      },
+      // website: (value) => {
+      //   if (watch("raiseType") !== "charity" && !value.website)
+      //     return "Please provide a website";
+      //   return true;
+      // },
       checkValidSocials: (value) => {
         const socials = Object.keys(value) as SocialList[];
         let url: URL | undefined;
@@ -147,7 +147,7 @@ const RaiseBasic = () => {
           className="ml-2"
           defaultValue={raiseData.type}
           onChange={(v) => {
-            setValue("raiseType", v as string);
+            setValue("raiseType", v as RaiseFormType["type"]);
             trigger("raiseType");
             trigger("socials");
           }}
