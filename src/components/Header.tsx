@@ -1,19 +1,22 @@
 //React
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 //React-icons
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 //Nextjs
 import Image from "next/image";
-//MV
-import img from "./../../public/images/Logo-2.png";
+// data
 import { useAtomValue } from "jotai";
 import { raiseBasic } from "data/atoms";
-import { useWeb3Modal } from "@web3modal/react";
-import { shortAddress } from "utils/txt";
-import { useAccount, useNetwork } from "wagmi";
 import { chains } from "data/chainData";
+// Web3
+import { useWeb3Modal } from "@web3modal/react";
+import { useAccount, useNetwork } from "wagmi";
+//MV
+import img from "./../../public/images/Logo-2.png";
+import ConnectButton from "components/layout/ConnectButton";
+import { shortAddress } from "utils/txt";
 
 type HeaderProps = {
   price: number;
@@ -24,13 +27,7 @@ const Header = (props: HeaderProps) => {
   const { price, hideHeader } = props;
   const raiseInfo = useAtomValue(raiseBasic);
 
-  const { open } = useWeb3Modal();
-  const { address } = useAccount();
-  const { chain } = useNetwork();
-
   const [showNav, setShowNav] = useState(false);
-
-  const chainIcon = (chain?.id && chains[chain.id]?.icon) ?? null;
 
   return (
     <>
@@ -52,7 +49,7 @@ const Header = (props: HeaderProps) => {
                 width={raiseInfo.icon_logo ? 100 : undefined}
                 height={raiseInfo.icon_logo ? 100 : undefined}
                 alt="logo"
-              ></Image>
+              />
             </Link>
             {!raiseInfo.icon_logo && (
               <HiOutlineMenuAlt2
@@ -87,23 +84,9 @@ const Header = (props: HeaderProps) => {
                 >
                   Explore Project
                 </button>
-                <button
-                  className={classNames(
-                    "flex w-[150px] flex-row items-center gap-x-2 rounded-lg px-2 py-2 transition duration-200 ease-in-out lg:hidden",
-                    "hover:border-2/30 hover:border-white hover:bg-primary hover:text-black"
-                  )}
-                  onClick={() => open()}
-                >
-                  {chainIcon && (
-                    <Image
-                      src={chainIcon}
-                      width={28}
-                      height={28}
-                      alt={`current chain: ${chain?.name}`}
-                    />
-                  )}
-                  {address ? shortAddress(address) : "Connect"}
-                </button>
+                <div className="lg:hidden">
+                  <ConnectButton />
+                </div>
                 <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 py-2 text-slate-500 lg:hidden">
                   Get Started
                 </button>
@@ -117,23 +100,7 @@ const Header = (props: HeaderProps) => {
                     Get Started
                   </button>
                 </div>
-                <button
-                  className={classNames(
-                    "flex w-[150px] flex-row items-center gap-x-2 rounded-lg px-2 py-2 transition duration-200 ease-in-out",
-                    "hover:border-2/30 hover:border-white hover:bg-primary hover:text-black"
-                  )}
-                  onClick={() => open()}
-                >
-                  {chainIcon && (
-                    <Image
-                      src={chainIcon}
-                      width={28}
-                      height={28}
-                      alt={`current chain: ${chain?.name}`}
-                    />
-                  )}
-                  {address ? shortAddress(address) : "Connect"}
-                </button>
+                <ConnectButton />
               </nav>
             </>
           )}
