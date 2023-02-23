@@ -6,12 +6,14 @@ import { parseEther } from "ethers/lib/utils";
 
 export const stepAtom = atom(4);
 
-const defaultRaiseData = {
+const defaultRaiseData: RaiseFormType = {
   // Basics
   name: "",
   description: "",
   referral: "",
   type: "" as const, // options: "fund" || "token" || "charity" || "other
+  personalContact: "",
+  personalContact2: "",
   socials: {
     twitter: "",
     medium: "",
@@ -43,13 +45,13 @@ const defaultRaiseData = {
   minContributionStep: BigNumber.from("0"),
   raiseDuration: 0,
   raiseStart: 0,
-  flexibleDate: false,
-  hasReferral: false,
   // Token Specifics - we'll use token address
+  tokensPerEth: BigNumber.from("0"), // options depend on chain: busd || native
+  tokenToGive: AddressZero, // options depend on chain: busd || native
   tokenToReceive: AddressZero, // options depend on chain: busd || native
+  tokenToPay: AddressZero, // options depend on chain: busd || native
   chainId: 0, // options: 1 || 56 
   // Whitelist
-  whitelist: false,
   whitelistInfo: {
     type: "token", // options: token || list
     // If type is token
@@ -60,14 +62,25 @@ const defaultRaiseData = {
   // Pricing -> 0 ,1 ,2 ,3 and so on depending on how many pricing options we want
   pricing: 0, // will only show/use 0 -> free if factory has user with a free raise
   // UPSELLS -> these are all optional but affect pricing
-  extras: []
+  extras: {
+    referrals: false,
+    flexibleDate: false, // send to DB as well
+    whitelist: false,
+    vesting: false,
+    whitelabelFooter: false,
+    whitelabelURL: undefined,
+    kyc: false,
+    audit: false,
+  }
 }
-const raiseTestData = {
+const raiseTestData: RaiseFormType = {
   // Basics
   name: "Test MoonVector",
   description: "Really dope raise description of stuff, this needs to be at leaste 100 characters long but still not too long in order for it to make sense and look good",
-  referral: "0x123456789123456789123456789123456789",
+  referral: "0x6b230Af9527AF9d253Fd0B503a9D451239a9e2cE",
   type: "charity" as const, // options: "fund" || "token" || "charity" || "other
+  personalContact: "",
+  personalContact2: "",
   socials: {
     twitter: "https://twitter.com/Moonvector_",
     medium: "https://medium.com/@moonvector",
@@ -99,13 +112,13 @@ const raiseTestData = {
   minContributionStep: parseEther("1"),
   raiseDuration: 3 * 24 * 3600, //3 days
   raiseStart: 1678838400,
-  flexibleDate: false,
-  hasReferral: false,
   // Token Specifics - we'll use token address
   tokenToReceive: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", // options depend on chain: busd || native
+  tokenToGive: "", // options depend on chain: busd || native
+  tokenToPay: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", // options depend on chain: busd || native
+  tokensPerEth: BigNumber.from("0"),
   chainId: 56, // options: 1 || 56 
   // Whitelist
-  whitelist: false,
   whitelistInfo: {
     type: "token", // options: token || list
     // If type is token
@@ -116,17 +129,27 @@ const raiseTestData = {
   // Pricing -> 0 ,1 ,2 ,3 and so on depending on how many pricing options we want
   pricing: 0, // will only show/use 0 -> free if factory has user with a free raise
   // UPSELLS -> these are all optional but affect pricing
-  extras: []
+  extras: {
+    referrals: false,
+    flexibleDate: false, // send to DB as well
+    whitelist: false,
+    vesting: false,
+    whitelabelFooter: false,
+    whitelabelURL: undefined,
+    kyc: false,
+    kycTime: "now",
+    audit: false,
+  }
 }
 
 export const raiseCreateAtom = atomWithImmer<RaiseFormType>(raiseTestData)
 
 export type RaiseFormType = {
-  // Basics
+  // DB Info
   name: string;
   description: string;
-  referral: string;
-  type: "fund" | "token" | "charity" | "";
+  referral: string; // also to Contract
+  type: "fund" | "token" | "charity" | ""; // transform in order to send to contract
   socials: {
     twitter?: string;
     medium?: string;
@@ -144,33 +167,32 @@ export type RaiseFormType = {
     twitch?: string;
     github?: string;
   };
-  // customization
+  personalContact: string;
+  personalContact2: string;
   backgroundColor: string;
   primaryColor: string;
   secondaryColor: string;
   logo: string;
   banner: string;
-  // Raise Specifics
-  softcap?: BigNumber;
-  hardcap: BigNumber;
+  chainId: number; // options: 1 || 56 
+  // Contract Values
+  softcap?: BigNumber; // send to DB if hardcap not set
+  hardcap: BigNumber;  // send to DB if no softcap
   minContribution?: BigNumber;
   maxContribution?: BigNumber;
   minContributionStep?: BigNumber;
   raiseDuration: number;
-  raiseStart: number;
-  flexibleDate: boolean;
-  hasReferral: boolean;
-  // Token Specifics
-  tokenToReceive: string; // options depend on chain: busd || native
-  chainId: number; // options: 1 || 56 
-  // Whitelist
-  whitelist: boolean;
+  raiseStart: number; // send to dB as well
+  tokenToReceive: string; // token that the raise will receive options depend on chain: busd || native
+  tokenToGive: string; // token to give to pledgers - custom tokens
+  tokenToPay: string; // payment token
   whitelistInfo: {
-    type: string; // options: token || list
+    type: "token" | "list" | null; // options: token || list
     // If type is token
     tokenAddress: string;
     tokenAmount: BigNumber;
   };
+  tokensPerEth: BigNumber;
   // PriceSelection
   // Pricing -> 0 ,1 ,2 ,3 and so on depending on how many pricing options we want
   // 0 - free, transfer fee 10% - success fee 15%
@@ -182,6 +204,16 @@ export type RaiseFormType = {
   // 6+ - 0$, transfer fee 4% - success fee  0%  CHARITY ONLY
   pricing: number; // will only show/use 0 -> free if factory has user with a free raise
   // UPSELLS -> these are all optional but affect pricing
-  extras: string[];
+  extras: {
+    referrals: boolean;
+    flexibleDate: boolean; // send to DB as well
+    whitelist: boolean;
+    vesting: boolean;
+    whitelabelFooter: boolean;
+    whitelabelURL?: string;
+    kyc: boolean;
+    kycTime?: "now" | "later";
+    audit: boolean;
+  };
 };
 
