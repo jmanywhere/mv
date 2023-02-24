@@ -168,6 +168,7 @@ model Upsell {
   executor   User       @relation(fields: [executorId], references: [id])
   amount     BigInt
   type       UpsellType
+  routeName  String // for whitelabels
   otherType  String?
   token      String // Token Name
 }
