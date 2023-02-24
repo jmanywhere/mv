@@ -23,6 +23,15 @@ type CheckoutForm = {
   pricing: number;
   security: {
     audit: boolean;
+    kyc: boolean;
+    kycTime: boolean;
+  };
+  extras: {
+    marketing: boolean;
+    development: boolean;
+    design: boolean;
+    contact: string;
+    contact2: string;
   };
   public: boolean;
   terms: string | null;
@@ -98,6 +107,7 @@ const Checkout = () => {
       security: {
         audit: false,
       },
+      help: {},
       public: false,
       terms: null,
     },
