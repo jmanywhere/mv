@@ -2,6 +2,23 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          "primary": "#2192DD",
+          "secondary": "#FFE066",
+          "accent": "#56e19a",
+          "neutral": "#8a93a1",
+          "base-100": "#151d29",
+          "info": "#9448BC",
+          "success": "#21CC51",
+          "warning": "#FF6154",
+          "error": "#DE1C8D",
+        },
+      },
+    ],
+  },
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -20,5 +37,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
 };
