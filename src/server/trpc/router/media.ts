@@ -53,7 +53,7 @@ export const mediaRouter = router({
           data: input.banner.image,
           fileName: reqFileName,
         });
-        bannerUrl = `${downloadURL}/file/${bucketName}/${bannerFile.fileName}?timestapm=${bannerFile.uploadTimestamp}`;
+        bannerUrl = `${downloadURL}/file/${bucketName}/${bannerFile.fileName}?timestamp=${bannerFile.uploadTimestamp}`;
       }
       if(input.logo){
         const { data: uploadData } = await b2.getUploadUrl({
@@ -70,8 +70,8 @@ export const mediaRouter = router({
           data: input.logo.image,
           fileName: reqFileName,
         });
-        
-        logoUrl = `${downloadURL}/file/${bucketName}/${logoFile.fileName}?timestapm=${logoFile.uploadTimestamp}`;
+
+        logoUrl = `${downloadURL}/file/${bucketName}/${logoFile.fileName}?timestamp=${logoFile.uploadTimestamp}`;
       }
 
       return {
