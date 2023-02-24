@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import FileUpload from "components/generic/FileUpload";
 import FormInput from "components/generic/FormInputV2";
@@ -8,6 +8,10 @@ import RaiseActions, {
 import { raiseCreateAtom } from "data/raiseAtoms";
 import { useImmerAtom } from "jotai-immer";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { trpc } from "utils/trpc";
+import { txQueue } from "data/atoms";
+import { useSetAtom } from "jotai";
+import { fileToBase64 } from "utils/files";
 
 type FormValues = {
   background: string;
@@ -15,17 +19,28 @@ type FormValues = {
   secondary: string;
   logo: File | null;
   banner: File | null;
+  whitelabel: boolean;
+  customPath: string;
+  footerOnly: boolean;
 };
 
 const RaiseCustomization = () => {
+  const {
+    mutate: uploadImages,
+    data,
+    error,
+    isLoading,
+    reset,
+  } = trpc.media.uploadImages.useMutation();
+
   const [raise, setRaise] = useImmerAtom(raiseCreateAtom);
+  const setTxQueue = useSetAtom(txQueue);
 
   const actionsRef = useRef<RaiseActionsHandle>(null);
 
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     trigger,
     control,
@@ -59,48 +74,73 @@ const RaiseCustomization = () => {
     },
   });
 
-  const submit: SubmitHandler<FormValues> = async (values) => {
-    let logoUrl = "";
-    let bannerUrl = "";
-    if (values.logo) {
-      const fileName = `logo.${values.logo?.name.split(".")[1]}`;
-
-      // Upload file using fetch
-      const resp = await fetch("/api/media/upload", {
-        method: "POST",
-        headers: {
-          "x-filename": fileName,
-          "x-project-name": raise.name,
-        },
-        body: values.logo,
+  useEffect(() => {
+    if (error) {
+      setTxQueue((draft) => {
+        draft["up1"] = {
+          status: "error",
+          description: "Error uploading images",
+          chainId: 0,
+        };
       });
-      const data = await resp.json();
-      logoUrl = data.url.split("?")[0];
     }
-    if (values.banner) {
-      const fileName = `banner.${values.banner?.name.split(".")[1]}`;
-
-      // Upload file using fetch
-      const resp = await fetch("/api/media/upload", {
-        method: "POST",
-        headers: {
-          "x-filename": fileName,
-          "x-project-name": raise.name,
-        },
-        body: values.banner,
+    if (data) {
+      setTxQueue((draft) => {
+        draft["up1"] = {
+          status: "complete",
+          description: "Images uploaded",
+          chainId: 0,
+        };
       });
-      const data = await resp.json();
-      bannerUrl = data.url.split("?")[0];
+      setRaise((draft) => {
+        if (data.logoUrl) draft.logo = data.logoUrl;
+        if (data.bannerUrl) draft.banner = data.bannerUrl;
+      });
+      reset();
+      actionsRef.current?.next();
+    }
+  }, [data, error, reset, setRaise, setTxQueue, actionsRef]);
+
+  const submit: SubmitHandler<FormValues> = async (values) => {
+    const bannerBase64 = values.banner
+      ? await fileToBase64(values.banner)
+      : null;
+    const logoBase64 = values.logo ? await fileToBase64(values.logo) : null;
+
+    const imageData = {
+      projectName: raise.name,
+      banner:
+        bannerBase64 && values.banner
+          ? {
+              image: bannerBase64,
+              fileType: values.banner.type,
+              fileName: values.banner.name,
+            }
+          : undefined,
+      logo:
+        logoBase64 && values.logo
+          ? {
+              image: logoBase64,
+              fileType: values.logo.type,
+              fileName: values.logo.name,
+            }
+          : undefined,
+    };
+    if (bannerBase64 || logoBase64) {
+      setTxQueue((draft) => {
+        draft["up1"] = {
+          status: "pending",
+          description: "Uploading images",
+          chainId: 0,
+        };
+      });
+      uploadImages(imageData);
     }
     setRaise((draft) => {
-      if (logoUrl) draft.logo = logoUrl;
-      if (bannerUrl) draft.banner = bannerUrl;
       draft.backgroundColor = values.background;
       draft.primaryColor = values.primary;
       draft.secondaryColor = values.secondary;
     });
-
-    actionsRef.current?.next();
   };
 
   return (
@@ -184,7 +224,7 @@ const RaiseCustomization = () => {
 
       <RaiseActions
         disableNext={!isValid}
-        loading={isSubmitting}
+        loading={isSubmitting || isLoading}
         ref={actionsRef}
       />
     </form>
