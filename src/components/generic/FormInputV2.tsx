@@ -15,6 +15,7 @@ const FormInput = (
     disableBottomMargin?: boolean;
     accept?: string;
     disableSelectAllOnFocus?: boolean;
+    labelCss?: string;
   } & UseControllerProps<any>
 ) => {
   const {
@@ -33,6 +34,7 @@ const FormInput = (
     defaultValue,
     control,
     disableSelectAllOnFocus,
+    labelCss,
   } = props;
 
   const {
@@ -62,12 +64,15 @@ const FormInput = (
         (typeof label == "string" ? (
           <label
             htmlFor={field.name}
-            className="pl-2 pb-2 text-lg font-semibold"
+            className={classNames(
+              "pl-2 pb-2",
+              labelCss || "text-lg font-semibold"
+            )}
           >
             {label} {rules?.required && <span className="text-red-500">*</span>}
           </label>
         ) : (
-          <div>{label}</div>
+          label
         ))}
       <div
         className={classNames(
