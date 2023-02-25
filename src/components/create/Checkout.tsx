@@ -33,7 +33,7 @@ type CheckoutForm = {
     contact: string;
     contact2: string;
   };
-  public: boolean;
+  showToPublic: boolean;
   terms: string | null;
 };
 
@@ -107,8 +107,7 @@ const Checkout = () => {
       security: {
         audit: false,
       },
-      help: {},
-      public: false,
+      showToPublic: false,
       terms: null,
     },
   });
@@ -595,7 +594,7 @@ const Checkout = () => {
             investors to join?
           </label>
           <div>
-            <Checkbox {...register("public")} />
+            <Checkbox {...register("showToPublic")} />
           </div>
         </div>
         <div className="flex flex-row items-center justify-between gap-x-3">
