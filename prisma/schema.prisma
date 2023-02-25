@@ -68,9 +68,9 @@ model User {
   auditor     Boolean
   referrer    Boolean
   other       Boolean
-  contact     String
+  contact     String?
   contact2    String?
-  otherDetail String
+  otherDetail String?
   Writeup     Writeup[]
   raises      Raise[]   @relation("owner")
   referred    Raise[]   @relation("referrer")
@@ -136,6 +136,20 @@ model Report {
   reporter String // wallet Address
 }
 
+model Upsell {
+  id         String     @id @default(cuid())
+  raise      Raise      @relation(fields: [raiseId], references: [id])
+  raiseId    String // uuid
+  name       String
+  executorId String // wallet Address
+  executor   User       @relation(fields: [executorId], references: [id])
+  amount     BigInt
+  type       UpsellType
+  routeName  String // for whitelabels
+  otherType  String?
+  token      String // Token Name
+}
+
 enum SocialTypes {
   TWITTER
   FB
@@ -157,18 +171,4 @@ enum UpsellType {
   AUDIT
   MARKETING
   OTHER
-}
-
-model Upsell {
-  id         String     @id @default(cuid())
-  raise      Raise      @relation(fields: [raiseId], references: [id])
-  raiseId    String // uuid
-  name       String
-  executorId String // wallet Address
-  executor   User       @relation(fields: [executorId], references: [id])
-  amount     BigInt
-  type       UpsellType
-  routeName  String // for whitelabels
-  otherType  String?
-  token      String // Token Name
 }
