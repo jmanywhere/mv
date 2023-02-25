@@ -8,7 +8,10 @@ export const raiseRouter = router({
     .query(async ({ ctx, input }) => {
       return (await ctx.prisma.upsell.count({
         where: {
-          routeName: input
+          routeName: {
+            equals: input,
+            mode: "insensitive"
+          }
         }
       })) > 0
     })
