@@ -1,3 +1,4 @@
+"use client";
 // Custom components
 import Input from "components/generic/FormInputV2";
 import SingleMultipleChoice from "components/generic/SingleMultipleChoice";
@@ -16,7 +17,8 @@ import classNames from "classnames";
 import { useImmerAtom } from "jotai-immer";
 import { raiseCreateAtom, type RaiseFormType } from "data/raiseAtoms";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 
 type SocialList =
   | "twitter"
@@ -37,6 +39,8 @@ type FormValues = {
 const RaiseBasic = () => {
   const [raiseData, setRaiseData] = useImmerAtom(raiseCreateAtom);
 
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -51,10 +55,20 @@ const RaiseBasic = () => {
       projectName: raiseData.name,
       raiseDescription: raiseData.description,
       raiseType: raiseData.type,
-      referrer: raiseData.referral,
+      referrer: raiseData.referral || "",
       socials: raiseData.socials,
     },
   });
+
+  useEffect(() => {
+    if (
+      router.query.ref &&
+      isAddress(router.query.ref as string) &&
+      raiseData.referral !== router.query.ref
+    ) {
+      setValue("referrer", router.query.ref as string);
+    }
+  }, [router, setValue, raiseData]);
 
   const actionRef = useRef<RaiseActionsHandle>(null);
 
