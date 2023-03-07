@@ -175,7 +175,7 @@ const Checkout = () => {
 
       <button
         type="button"
-        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 p-4 hover:bg-primary/25"
+        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 bg-bg_f_light p-4 hover:bg-primary/25"
         onClick={() =>
           setCollapsed((draft) => {
             draft.details = !draft.details;
@@ -194,19 +194,19 @@ const Checkout = () => {
         <div className="flex w-full flex-col items-center pb-8">
           <table className="w-full table-auto overflow-hidden rounded-t-xl md:w-[70%]">
             <thead>
-              <tr className="bg-bg_darkest">
+              <tr className=" bg-bg_f_light">
                 <th className="py-4">Item</th>
                 <th className="py-4">Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Raise Chain</td>
                 <td className="py-2 pr-5 text-right">
                   {raise.chainId} - {chain?.name}
                 </td>
               </tr>
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Raise Token</td>
                 <td className="py-2 pr-5 text-right">
                   {chain?.allowedTokens
@@ -214,7 +214,7 @@ const Checkout = () => {
                     ?.symbol.toUpperCase()}
                 </td>
               </tr>
-              <tr className="border-t-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="whitespace-pre-line py-2 pl-5">
                   Hardcap
                   {raise.hardcap?.gt(0) && (
@@ -284,7 +284,7 @@ const Checkout = () => {
                   )}
                 </td>
               </tr>
-              <tr className="border-t-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="whitespace-pre-line py-2 pl-5">
                   Softcap
                   {raise.softcap?.gt(0) && (
@@ -354,7 +354,7 @@ const Checkout = () => {
                   )}
                 </td>
               </tr>
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Min. Contribution</td>
                 <td className="py-2 pr-5 text-right">
                   {raise.minContribution
@@ -362,7 +362,7 @@ const Checkout = () => {
                     : "-"}
                 </td>
               </tr>
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Max. Contribution</td>
                 <td className="py-2 pr-5 text-right">
                   {raise.maxContribution
@@ -370,7 +370,7 @@ const Checkout = () => {
                     : "-"}
                 </td>
               </tr>
-              {/* <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              {/* <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest bg-slate-700 hover:text-primary">
                 <td className="py-2 pl-5">Step Contribution</td>
                 <td className="py-2 pr-5 text-right">
                   {raise.minContributionStep
@@ -378,7 +378,7 @@ const Checkout = () => {
                     : "-"}
                 </td>
               </tr> */}
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Start Date</td>
                 <td className="py-2 pr-5 text-right">
                   {raise.raiseStart
@@ -389,7 +389,7 @@ const Checkout = () => {
                     : "-"}
                 </td>
               </tr>
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Raise Duration</td>
                 <td className="py-2 pr-5 text-right">
                   {raise.raiseDuration
@@ -404,7 +404,7 @@ const Checkout = () => {
       <button
         type="button"
         className={classNames(
-          "flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 p-4 transition-[margin] delay-200 hover:bg-primary/25",
+          "flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 bg-bg_f_light p-4 transition-[margin] delay-200 hover:bg-primary/25",
           collapsed.customization ? "mb-0" : "mb-6"
         )}
         onClick={() =>
@@ -441,20 +441,20 @@ const Checkout = () => {
                 </td>
               </tr>
               <tr
-                className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary"
+                className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary"
                 style={{ backgroundColor: raise.primaryColor }}
               >
                 <td className="py-2 pl-5">Primary Color</td>
                 <td className="py-2 pr-5 text-right">{raise.primaryColor}</td>
               </tr>
               <tr
-                className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary"
+                className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary"
                 style={{ backgroundColor: raise.secondaryColor }}
               >
                 <td className="py-2 pl-5">Secondary Color</td>
                 <td className="py-2 pr-5 text-right">{raise.secondaryColor}</td>
               </tr>
-              <tr className="border-t-2 border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-t-2 border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5">Logo</td>
                 <td className="flex items-end justify-end py-2 pr-5 text-right">
                   <img
@@ -464,12 +464,12 @@ const Checkout = () => {
                   />
                 </td>
               </tr>
-              <tr className="border-b-0 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className="border-b-0 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td className="py-2 pl-5 text-center" colSpan={2}>
                   Banner
                 </td>
               </tr>
-              <tr className=" border-b-2 border-slate-400/50 hover:bg-bg_darkest hover:text-primary">
+              <tr className=" border-b-2 border-slate-400/50 bg-slate-700 hover:bg-bg_darkest hover:text-primary">
                 <td colSpan={2}>
                   <img
                     src={raise.banner}
@@ -484,7 +484,7 @@ const Checkout = () => {
       </Collapse>
       <button
         type="button"
-        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 p-4 "
+        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 bg-bg_f_light p-4"
         onClick={() =>
           setCollapsed((draft) => {
             draft.marketing = !draft.marketing;
@@ -512,7 +512,7 @@ const Checkout = () => {
       </Collapse>
       <button
         type="button"
-        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 p-4 hover:bg-primary/25"
+        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 bg-bg_f_light p-4 hover:bg-primary/25"
         onClick={() =>
           setCollapsed((draft) => {
             draft.security = !draft.security;
@@ -569,7 +569,7 @@ const Checkout = () => {
       </Collapse>
       <button
         type="button"
-        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 p-4 hover:bg-primary/25"
+        className="mb-6 flex w-full flex-row justify-between rounded-t-2xl border-b-2 border-primary/75 bg-bg_f_light p-4 hover:bg-primary/25"
         onClick={() =>
           setCollapsed((draft) => {
             draft.extras = !draft.extras;
