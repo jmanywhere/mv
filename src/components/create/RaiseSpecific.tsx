@@ -22,8 +22,7 @@ import { useImmerAtom } from "jotai-immer";
 import { raiseCreateAtom } from "data/raiseAtoms";
 import { formatEther, parseUnits } from "@ethersproject/units";
 import formatISO9075 from "date-fns/formatISO9075";
-import { useWeb3React } from "@web3-react/core";
-import { useImmer } from "use-immer";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 
 type SpecificRaiseType = {
   softcap: string;
@@ -57,7 +56,8 @@ type SpecificRaiseErrorType = {
 };
 
 const RaiseSpecific = () => {
-  const { chainId, account } = useWeb3React();
+  const { chain, chains: workingChains } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
   const [showWhitelist, setShowWhitelist] = useState(false);
   const [raiseData, setRaiseData] = useImmerAtom(raiseCreateAtom);
@@ -95,7 +95,7 @@ const RaiseSpecific = () => {
       timePeriod: raiseData.raiseDuration
         ? Math.floor(raiseData.raiseDuration / 86400).toString()
         : "1",
-      chainId: chainId && chains[chainId] ? chainId : 0,
+      chainId: chain?.id || 0,
       startDateTime:
         (raiseData.raiseStart &&
           formatISO9075(new Date(raiseData.raiseStart * 1000))) ||
@@ -151,17 +151,16 @@ const RaiseSpecific = () => {
 
   const chainSrc =
     chains[watch("chainId")]?.icon || "/images/alt/blank chain.png";
-  const chainKeys = Object.keys(chains).map((x) => parseInt(x));
 
   useEffect(() => {
-    if (account || chainId) trigger("chainId");
-  }, [trigger, chainId, account]);
+    if (chain) trigger("chainId");
+  }, [trigger, chain]);
 
   const actionsRef = useRef<RaiseActionsHandle>(null);
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <div className="flex flex-col items-start gap-x-2 pb-3 md:flex-row md:items-end">
+      <div className="flex flex-col items-start gap-x-2 pb-3">
         <div>
           <label className="pl-2 text-lg font-semibold" htmlFor="tokenAddress">
             Chain
@@ -169,7 +168,7 @@ const RaiseSpecific = () => {
           <br />
           <div
             className={classNames(
-              "flex max-w-[210px] flex-row items-center justify-between",
+              "flex max-w-[270px] flex-row items-center justify-between",
               "mt-2 rounded-xl border-2 bg-bg_darkest px-4 py-1 text-right",
               "h-[38px]",
               errors.chainId ? "border-red-500" : "border-slate-500"
@@ -185,14 +184,17 @@ const RaiseSpecific = () => {
               className={classNames("ml-2 bg-transparent focus:outline-none")}
               {...register("chainId", {
                 required: true,
-                onChange: () => {
+                onChange: (e) => {
                   setValue("tokenSymbol", "");
+                  const chainId = parseInt(e.target.value);
+                  if (isNaN(chainId)) return;
+                  switchNetwork?.(chainId);
                 },
                 validate: {
-                  connected: () => !!chainId || "Please connect wallet",
+                  connected: () => !!chain || "Please connect wallet",
                   sameChain: (v) => {
                     return (
-                      parseInt(v + "") === chainId ||
+                      (chain && parseInt(v + "") === chain.id) ||
                       "Switch to the selected chain"
                     );
                   },
@@ -202,12 +204,13 @@ const RaiseSpecific = () => {
               <option value={0} disabled className="min-w-[80px]">
                 Select Chain
               </option>
-              {chainKeys?.map((cId) => {
-                if (!chains[cId]) return null;
-
+              {workingChains.map((chainInfo) => {
                 return (
-                  <option key={`${chains[cId]?.name}-chain-${cId}`} value={cId}>
-                    {chains[cId]?.name} ({cId})
+                  <option
+                    key={`${chainInfo.name}-chain-${chainInfo.id}`}
+                    value={chainInfo.id}
+                  >
+                    {chainInfo.name} ({chainInfo.id})
                   </option>
                 );
               })}
