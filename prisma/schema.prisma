@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-kysely"
+  output   = "../src/server/db"
 }
 
 datasource db {
