@@ -11,7 +11,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { bsc } from "@wagmi/chains";
+import { bsc, bscTestnet } from "@wagmi/chains";
 
 import { Web3ReactProvider } from "@web3-react/core";
 import { providers } from "ethers";
@@ -20,7 +20,7 @@ if (!process.env.NEXT_PUBLIC_PROJECT_ID) {
   throw new Error("You need to provide NEXT_PUBLIC_PROJECT_ID env variable");
 }
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
-const chains = [bsc];
+const chains = [bsc, bscTestnet];
 
 const { provider } = configureChains(chains, [
   walletConnectProvider({ projectId }),
