@@ -2,16 +2,17 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-kysely"
 }
 
 datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL_PS")
+  relationMode = "prisma"
 }
 
 model Raise {
-  id            String           @id @default(cuid())
+  id            String           @id @default(dbgenerated("(uuid())")) // uuid() need to be in parentheses to work
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
   contract      String
@@ -42,22 +43,32 @@ model Raise {
   socials       SocialsOnFunds[]
   TagsOnRaise   TagsOnRaise[]
   reports       Report[]
+
+  @@index([chainId], name: "raise_chain")
+  @@index([ownerId], name: "raise_owner")
+  @@index([referrerId], name: "raise_referrer")
+  @@index([userId], name: "raise_user")
 }
 
 model Feature {
-  id       String @id @default(cuid())
+  id       String @id @default(dbgenerated("(uuid())"))
   duration BigInt
   raise    Raise  @relation(fields: [raiseId], references: [id])
   raiseId  String
+
+  @@index([raiseId], name: "feature_raise")
 }
 
 model Writeup {
-  id       String @id @default(cuid())
-  raise    Raise  @relation(fields: [raiseId], references: [id])
-  user     User   @relation(fields: [authorId], references: [id])
+  id       String @id @default(dbgenerated("(uuid())"))
   raiseId  String // uuid
   text     String
   authorId String // wallet Address
+  raise    Raise  @relation(fields: [raiseId], references: [id])
+  user     User   @relation(fields: [authorId], references: [id])
+
+  @@index([raiseId], name: "writeup_raise")
+  @@index([authorId], name: "writeup_author")
 }
 
 model User {
@@ -88,6 +99,8 @@ model SocialsOnFunds {
   removed  Boolean @default(false)
 
   @@id([raiseId, socialId])
+  @@index([socialId], name: "socialsOnFunds_social")
+  @@index([raiseId], name: "socialsOnFunds_raise")
 }
 
 // TODO we should get a form of validation for socials. In the meantime this is going to have to be a manual process
@@ -99,18 +112,24 @@ model Social {
 }
 
 model Chain {
-  id    Int      @id @unique // This is ChainId
-  name  String
-  rpcs  String[] // Free(if not well keep costs in mind) RPC URLs
-  Raise Raise[]
+  id           Int            @id @unique // This is ChainId
+  name         String
+  Raise        Raise[]
+  PaymentToken PaymentToken[]
 }
 
 model PaymentToken {
-  id       String  @id @unique // This is ChainId
+  id       String  @id @unique // This is token address (let's use a uuid)
+  address  String // This can be 0x0000 for default ETH values
   name     String
   symbol   String
   decimals Int
+  chainId  Int
   logo     String? // optional since we'll be pulling from other sources... COINGECKO MAYBE?
+  chain    Chain   @relation(fields: [chainId], references: [id])
+
+  //  We can support multiple payment tokens per chain, but since (theoretically) each token will have it's own address, we can just use the address as the id
+  @@index([chainId], name: "paymentToken_chain")
 }
 
 model Tag {
@@ -126,18 +145,22 @@ model TagsOnRaise {
   tagId   Int
 
   @@id([raiseId, tagId])
+  @@index([tagId], name: "tagsOnRaise_tag")
+  @@index([raiseId], name: "tagsOnRaise_raise")
 }
 
 model Report {
-  id       String @id @default(cuid())
+  id       String @id @default(dbgenerated("(uuid())"))
   raise    Raise  @relation(fields: [raiseId], references: [id])
   raiseId  String // uuid
   text     String
   reporter String // wallet Address
+
+  @@index([raiseId], name: "report_raise")
 }
 
 model Upsell {
-  id         String     @id @default(cuid())
+  id         String     @id @default(dbgenerated("(uuid())"))
   raise      Raise      @relation(fields: [raiseId], references: [id])
   raiseId    String // uuid
   name       String
@@ -148,6 +171,9 @@ model Upsell {
   routeName  String // for whitelabels
   otherType  String?
   token      String // Token Name
+
+  @@index([raiseId], name: "upsell_raise")
+  @@index([executorId], name: "upsell_executor")
 }
 
 enum SocialTypes {
