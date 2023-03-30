@@ -2,6 +2,7 @@ import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { isAddress } from "ethers/lib/utils.js";
+import { sql } from 'kysely'
 
 export const raiseRouter = router({
   customPathCheck: publicProcedure
@@ -12,13 +13,8 @@ export const raiseRouter = router({
           code: "BAD_REQUEST",
           message: "Address is not a valid route name"
         })
-      return (await ctx.prisma.upsell.count({
-        where: {
-          routeName: {
-            equals: input,
-            mode: "insensitive"
-          }
-        }
-      })) > 0
+
+      const queryValue = await ctx.ps.selectFrom("Upsell").selectAll().where(sql`LOWER(routeName) = ${input}`).executeTakeFirst()
+      return !!queryValue
     })
 })
