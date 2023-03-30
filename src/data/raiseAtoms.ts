@@ -4,7 +4,7 @@ import { atomWithImmer } from "jotai-immer";
 import { AddressZero } from "@ethersproject/constants";
 import { parseEther } from "ethers/lib/utils";
 
-export const stepAtom = atom(4);
+export const stepAtom = atom(1);
 
 const defaultRaiseData: RaiseFormType = {
   // Basics
