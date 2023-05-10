@@ -12,10 +12,6 @@ const config = {
   images:{
     domains: ["f004.backblazeb2.com"]
   },
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-  },
   experimental: {
     appDir: true,
   }

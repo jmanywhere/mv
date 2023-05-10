@@ -1,6 +1,6 @@
 //React
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 //React-icons
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
@@ -9,14 +9,10 @@ import Image from "next/image";
 // data
 import { useAtomValue } from "jotai";
 import { raiseBasic } from "data/atoms";
-import { chains } from "data/chainData";
 // Web3
-import { useWeb3Modal } from "@web3modal/react";
-import { useAccount, useNetwork } from "wagmi";
 //MV
 import img from "./../../public/images/Logo-2.png";
 import ConnectButton from "components/layout/ConnectButton";
-import { shortAddress } from "utils/txt";
 
 type HeaderProps = {
   price: number;
@@ -24,7 +20,7 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
-  const { price, hideHeader } = props;
+  const { hideHeader } = props;
   const raiseInfo = useAtomValue(raiseBasic);
 
   const [showNav, setShowNav] = useState(false);
