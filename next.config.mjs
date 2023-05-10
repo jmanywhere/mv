@@ -14,6 +14,35 @@ const config = {
   },
   experimental: {
     appDir: true,
+  },
+  async redirects() {
+    return [
+      {
+        source: "/moon",
+        destination: "/",
+        permanent: false
+      },
+      {
+        source: "/create",
+        destination: "/",
+        permanent: false
+      },
+      {
+        source: "/raise",
+        destination: "/",
+        permanent: false
+      },
+      {
+        source: "/raise/:path*",
+        destination: "/",
+        permanent: false
+      },
+      {
+        source: "/private",
+        destination: "/",
+        permanent: false
+      },
+    ]
   }
 };
 export default config;

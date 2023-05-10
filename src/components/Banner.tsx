@@ -1,4 +1,3 @@
-//Nextjs
 import Image from "next/image";
 
 const Banner = () => {
