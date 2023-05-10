@@ -15,7 +15,6 @@ import { prettyBN } from "utils/bn";
 import useContract from "hooks/useContracts";
 import { formatEther, parseEther } from "ethers/lib/utils";
 import { useRef } from "react";
-import Countdown from "react-countdown";
 
 const RaiseCard = (props: RaiseCardProps) => {
   const {
@@ -254,7 +253,8 @@ const RaiseCard = (props: RaiseCardProps) => {
               {prettyBN(saleData.hardcap, 2)}
             </span>
             <span suppressHydrationWarning>
-              <Countdown
+              {/* FOR SOME REASON  COUNTDOWN WENT BUST MAKE SURE TO GET ANOTHER FIX */}
+              {/* <Countdown
                 date={new Date(1673240400000)}
                 renderer={({ days, hours, minutes, seconds, completed }) => {
                   if (completed) return "Sale Over";
@@ -288,7 +288,7 @@ const RaiseCard = (props: RaiseCardProps) => {
                       </>
                     );
                 }}
-              />
+              /> */}
             </span>
           </div>
           <progress

@@ -12,7 +12,7 @@ import { raiseBasic } from "data/atoms";
 // Web3
 //MV
 import img from "./../../public/images/Logo-2.png";
-import ConnectButton from "components/layout/ConnectButton";
+import { Web3Button } from "@web3modal/react";
 
 type HeaderProps = {
   price: number;
@@ -81,7 +81,7 @@ const Header = (props: HeaderProps) => {
                   Explore Project
                 </button>
                 <div className="lg:hidden">
-                  <ConnectButton />
+                  <Web3Button />
                 </div>
                 <button className="hover:border-2/30 mb-[34px] flex max-w-[131px] items-center justify-center rounded-md bg-primary  px-5 py-2 text-slate-500 lg:hidden">
                   Get Started
@@ -96,7 +96,7 @@ const Header = (props: HeaderProps) => {
                     Get Started
                   </button>
                 </div>
-                <ConnectButton />
+                <Web3Button />
               </nav>
             </>
           )}

@@ -10,15 +10,35 @@ export type SocialTypes =
   | "TELEGRAM"
   | "MEDIUM"
   | "REDDIT";
+export const SocialTypes = {
+  TWITTER: "TWITTER",
+  FB: "FB",
+  DISCORD: "DISCORD",
+  TELEGRAM: "TELEGRAM",
+  MEDIUM: "MEDIUM",
+  REDDIT: "REDDIT",
+};
 export type RaiseType = "FUNDRAISE" | "CROWDSALE" | "CHARITY";
+export const RaiseType = {
+  FUNDRAISE: "FUNDRAISE",
+  CROWDSALE: "CROWDSALE",
+  CHARITY: "CHARITY",
+};
 export type UpsellType = "WHITELABEL" | "DEV" | "AUDIT" | "MARKETING" | "OTHER";
+export const UpsellType = {
+  WHITELABEL: "WHITELABEL",
+  DEV: "DEV",
+  AUDIT: "AUDIT",
+  MARKETING: "MARKETING",
+  OTHER: "OTHER",
+};
 export type Chain = {
   id: number;
   name: string;
 };
 export type Feature = {
   id: Generated<string>;
-  duration: bigint;
+  duration: number;
   raiseId: string;
 };
 export type PaymentToken = {
@@ -36,16 +56,16 @@ export type Raise = {
   updatedAt: Timestamp;
   contract: string;
   tokenRaised: string;
-  raised: bigint;
-  goal: bigint;
-  showcase: boolean;
+  raised: number;
+  goal: number;
+  showcase: number;
   ownerId: string;
   description: string;
   logo_icon: string;
   banner: string;
   name: string;
   chainId: number;
-  flexibleStart: boolean;
+  flexibleStart: number;
   startTime: Timestamp;
   referrerId: string | null;
   userId: string | null;
@@ -65,10 +85,10 @@ export type Social = {
   url: string;
 };
 export type SocialsOnFunds = {
-  verified: boolean;
+  verified: number;
   raiseId: string;
   socialId: number;
-  removed: Generated<boolean>;
+  removed: Generated<number>;
 };
 export type Tag = {
   id: Generated<number>;
@@ -83,7 +103,7 @@ export type Upsell = {
   raiseId: string;
   name: string;
   executorId: string;
-  amount: bigint;
+  amount: number;
   type: UpsellType;
   routeName: string;
   otherType: string | null;
@@ -92,11 +112,11 @@ export type Upsell = {
 export type User = {
   id: string;
   alias: string | null;
-  writer: boolean;
-  dev: boolean;
-  auditor: boolean;
-  referrer: boolean;
-  other: boolean;
+  writer: number;
+  dev: number;
+  auditor: number;
+  referrer: number;
+  other: number;
   contact: string | null;
   contact2: string | null;
   otherDetail: string | null;

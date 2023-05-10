@@ -13,11 +13,11 @@ import RaiseActions, {
 } from "components/raises/RaiseActions";
 // Data
 import { chains } from "data/chainData";
-import Collapse from "components/generic/Collapse";
-import SingleMultipleChoice from "components/generic/SingleMultipleChoice";
-// utils
-import { isMultiple } from "utils/nm";
-import isPast from "date-fns/isPast";
+// import Collapse from "components/generic/Collapse";
+// import SingleMultipleChoice from "components/generic/SingleMultipleChoice";
+// // utils
+// import { isMultiple } from "utils/nm";
+// import isPast from "date-fns/isPast";
 import { useImmerAtom } from "jotai-immer";
 import { raiseCreateAtom } from "data/raiseAtoms";
 import { formatEther, parseUnits } from "@ethersproject/units";
