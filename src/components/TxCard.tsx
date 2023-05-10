@@ -5,7 +5,7 @@ import { txQueue } from "data/atoms";
 import { chains } from "data/chainData";
 import { useSetAtom } from "jotai";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { AiOutlineCloseCircle, AiFillCheckCircle } from "react-icons/ai/";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
@@ -31,7 +31,7 @@ const TxCard = (props: { hash: string; data: TxData }) => {
     );
   }, [setTxQueue, data.status, hash]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(() => setShown(true), 100);
     if (data.status == "pending") return;
     const timeout = setTimeout(close, data.customTimeout ?? 12000);
