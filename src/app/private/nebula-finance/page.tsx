@@ -5,14 +5,21 @@ import Web3ButtonContainer from "app/Web3ButtonContainer";
 import classNames from "classnames";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { BsTelegram } from "react-icons/bs";
+// Images
+import neb1Bg from "../../../../public/partners/background_nebula.png";
+import nebBanner from "../../../../public/partners/bg_banner.png";
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start px-4">
-      <div className="absolute left-0 z-0 h-screen w-screen bg-[url('/partners/background_nebula.png')] bg-cover bg-center bg-no-repeat brightness-50" />
+    <main className="relative flex min-h-screen flex-col items-center justify-start px-4">
+      <Image
+        src={neb1Bg}
+        alt="Nebulous Background 1"
+        className="absolute z-0 h-full w-full object-cover brightness-50"
+      />
       <header
         className={
-          "z-30 flex w-full flex-row items-center justify-between py-6 px-6 lg:relative"
+          "z-30 flex min-h-[88px] w-full flex-row items-center justify-between px-6 py-6 lg:relative"
         }
       >
         <div>
@@ -20,26 +27,33 @@ export default function Page() {
         </div>
         <Web3ButtonContainer />
       </header>
-      <div className="z-10 flex w-full max-w-4xl grow flex-col items-center pt-16">
+      <div className="z-10 flex w-full max-w-4xl grow flex-col items-center pt-20">
         {/* Banner */}
-        <div
-          className={classNames(
-            "rounded-tr-smf relative flex h-[220px] w-full max-w-4xl flex-row items-center justify-center rounded-3xl  md:h-[338px]",
-            "bg-[url('/partners/bg_banner.png')] bg-cover bg-bottom bg-no-repeat",
-            "border-8 border-bg_f_light shadow-xl"
-          )}
-        >
+        <div className="relative w-full max-w-4xl">
           <div
             className={classNames(
-              "w-42 h-42 absolute left-[calc(50%-64px)] -top-[86px] z-10 rounded-full border-4 border-bg_f_light bg-bg_darkest px-5 py-8"
+              "w-42 h-42 absolute -top-[63px] left-[calc(50%-64px)] z-10 rounded-full border-4 border-bg_f_light bg-bg_darkest px-5 py-8"
             )}
           >
             <Image src={NebulaLogo} alt="Logo main" height={80} width={80} />
           </div>
-          <h1 className="z-10 w-full grow text-center text-4xl font-bold text-white">
-            Nebula Finance Private Sale
-          </h1>
-          <div className="absolute left-0 top-0 z-0 h-full w-full backdrop-brightness-75" />
+          <div
+            className={classNames(
+              "md:h-[250px] relative flex h-[220px] w-full flex-row items-center justify-center rounded-3xl  rounded-tr-sm",
+              " overflow-hidden border-8 border-bg_f_light shadow-xl"
+            )}
+          >
+            <Image
+              src={nebBanner}
+              alt="Nebulous Banner"
+              className="absolute top-0 h-full w-full object-cover"
+            />
+
+            <h1 className="z-10 w-full grow text-center text-4xl font-bold text-readable">
+              Nebula Finance Private Sale
+            </h1>
+            <div className="absolute left-0 top-0 z-0 h-full w-full backdrop-brightness-75" />
+          </div>
         </div>
         {/* Socials */}
         <div className="max-w- flex w-full flex-row items-center justify-end gap-x-6 pt-6">
@@ -50,17 +64,17 @@ export default function Page() {
           >
             <AiFillTwitterCircle
               size="40px"
-              className="rounded-full bg-white text-primary hover:text-blue-500"
+              className="rounded-full bg-white text-primary hover:text-primary-focus"
             />
           </a>
           <a href="https://t.me/NebulaFinance" target="_blank" rel="noreferrer">
             <BsTelegram
               size="40px"
-              className="rounded-full border-2 border-white bg-white text-primary hover:text-blue-500"
+              className="rounded-full border-2 border-white bg-white text-primary hover:text-primary-focus"
             />
           </a>
         </div>
-        <p className="mt-4 whitespace-pre-wrap text-justify text-white">
+        <p className="mt-4 whitespace-pre-wrap pb-12 text-justify text-readable">
           Introducing <strong className="text-[#01EEE7]">Nebula Finance</strong>
           , a new hybrid stablecoin solution blending the advantages of both
           algorithmic and collateralized stablecoin models. Utilizing a

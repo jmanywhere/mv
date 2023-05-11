@@ -31,6 +31,7 @@ module.exports = {
         t_dark: "#8a93a1",
         b_dark: "#202b3b",
         green_accent: "#56e19a",
+        readable: "#efefef"
       },
       fontFamily:{
         sans:['"Lexend"', ...defaultTheme.fontFamily.sans]
