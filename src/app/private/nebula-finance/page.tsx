@@ -1,5 +1,5 @@
-import Image from "next/image";
 // Import logo
+import Image from "next/image";
 import Web3ButtonContainer from "app/Web3ButtonContainer";
 import classNames from "classnames";
 import { AiFillTwitterCircle } from "react-icons/ai";
@@ -9,6 +9,7 @@ import NebulaLogo from "../../../../public/partners/NebulaLogo.png";
 import neb1Bg from "../../../../public/partners/background_nebula.png";
 import nebBanner from "../../../../public/partners/bg_banner.png";
 import PrivateCardNebFinance from "./PrivateCard";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
@@ -95,7 +96,9 @@ export default function Page() {
           crypto ecosystem. Get ready to experience a revolutionary stablecoin
           solution that achieves the vision it set out to become!
         </p>
-        <PrivateCardNebFinance />
+        <Suspense fallback={<></>}>
+          <PrivateCardNebFinance />
+        </Suspense>
       </div>
     </main>
   );

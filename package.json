@@ -45,8 +45,8 @@
     "sharp": "^0.32.1",
     "superjson": "1.9.1",
     "use-immer": "^0.8.1",
-    "viem": "^0.3.19",
-    "wagmi": "^1.0.1",
+    "viem": "^0.3.24",
+    "wagmi": "^1.0.4",
     "zod": "^3.18.0"
   },
   "devDependencies": {

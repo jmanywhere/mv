@@ -9,6 +9,7 @@ import { Web3Modal } from "@web3modal/react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { bsc, bscTestnet } from "@wagmi/chains";
+import TxContainer from "components/TxContainer";
 
 if (!process.env.NEXT_PUBLIC_PROJECT_ID) {
   throw new Error("You need to provide NEXT_PUBLIC_PROJECT_ID env variable");
@@ -34,7 +35,10 @@ const ethereumClient = new EthereumClient(wagmiConfig, chains);
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider>
-      <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
+      <WagmiConfig config={wagmiConfig}>
+        <TxContainer />
+        {children}
+      </WagmiConfig>
       <Web3Modal
         projectId={projectId}
         ethereumClient={ethereumClient}
