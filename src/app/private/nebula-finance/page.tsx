@@ -1,13 +1,14 @@
 import Image from "next/image";
 // Import logo
-import NebulaLogo from "../../../../public/partners/NebulaLogo.png";
 import Web3ButtonContainer from "app/Web3ButtonContainer";
 import classNames from "classnames";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { BsTelegram } from "react-icons/bs";
 // Images
+import NebulaLogo from "../../../../public/partners/NebulaLogo.png";
 import neb1Bg from "../../../../public/partners/background_nebula.png";
 import nebBanner from "../../../../public/partners/bg_banner.png";
+import PrivateCardNebFinance from "./PrivateCard";
 
 export default function Page() {
   return (
@@ -27,7 +28,7 @@ export default function Page() {
         </div>
         <Web3ButtonContainer />
       </header>
-      <div className="z-10 flex w-full max-w-4xl grow flex-col items-center pt-20">
+      <div className="z-10 flex w-full max-w-4xl grow flex-col items-center py-20">
         {/* Banner */}
         <div className="relative w-full max-w-4xl">
           <div
@@ -39,7 +40,7 @@ export default function Page() {
           </div>
           <div
             className={classNames(
-              "md:h-[250px] relative flex h-[220px] w-full flex-row items-center justify-center rounded-3xl  rounded-tr-sm",
+              "relative flex h-[220px] w-full flex-row items-center justify-center rounded-3xl rounded-tr-sm  md:h-[250px]",
               " overflow-hidden border-8 border-bg_f_light shadow-xl"
             )}
           >
@@ -94,6 +95,7 @@ export default function Page() {
           crypto ecosystem. Get ready to experience a revolutionary stablecoin
           solution that achieves the vision it set out to become!
         </p>
+        <PrivateCardNebFinance />
       </div>
     </main>
   );
