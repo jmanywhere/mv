@@ -81,7 +81,7 @@ export default function Page() {
           , a new hybrid stablecoin solution blending the advantages of both
           algorithmic and collateralized stablecoin models. Utilizing a
           two-token system - Nebula Cash (NUSD) as the stablecoin, and Nebula
-          Shares (NSH) the Share token - our protocol introduces dynamic fee
+          (NSH) the reward token - our protocol introduces dynamic fee
           distribution and tax allocations that respond to market conditions,
           ensuring stability and enticing user engagement.
           {"\n"}
