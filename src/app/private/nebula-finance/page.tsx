@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Nebula Finance Private Sale",
     images: [
       {
-        url: "https://moonvector.com/partners/NebulaLogo.png",
+        url: "https://moonvector.io/partners/NebulaLogo.png",
       },
     ],
   },
