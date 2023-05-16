@@ -229,7 +229,7 @@ const PrivateCardNebFinance = () => {
               onFocus={(e) => e.target.select()}
             />
             <span className=" ml-3 whitespace-pre-wrap text-sm font-normal text-t_dark">
-              Min: 0.35 BNB, Max: 10 BNB{"\n"}Wallet:{" "}
+              Min: 0.5 BNB, Max: 10 BNB{"\n"}Wallet:{" "}
               {formatEther(userBalance?.value || 0n)
                 .split(".")
                 .map((x, i) => (i == 1 ? x.slice(0, 3) : x))
