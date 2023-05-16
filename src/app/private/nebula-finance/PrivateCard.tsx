@@ -16,7 +16,7 @@ import { useSetAtom } from "jotai";
 import { txQueue } from "data/atoms";
 import { waitForTransaction } from "@wagmi/core";
 
-const raiseContract = "0x20CF1fe9f1854E705e36Af5d1B5eaCEA55489897";
+const raiseContract = "0x7F7D4b9c86B49C5856C496188C79980A1C2f15eD";
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
 const PrivateCardNebFinance = () => {
