@@ -1,4 +1,5 @@
 // Import logo
+import type { Metadata } from "next";
 import Image from "next/image";
 import Web3ButtonContainer from "app/Web3ButtonContainer";
 import classNames from "classnames";
@@ -10,6 +11,26 @@ import neb1Bg from "../../../../public/partners/background_nebula.png";
 import nebBanner from "../../../../public/partners/bg_banner.png";
 import PrivateCardNebFinance from "./PrivateCard";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Nebula Finance Private Sale",
+  description:
+    "A new hybrid stablecoin solution blending the advantages of both algorithmic and collateralized stablecoin models.",
+  creator: "Moonvector",
+  openGraph: {
+    type: "website",
+    url: "https://moonvector.io",
+    title: "Nebula Finance Private Sale",
+    description:
+      "A new hybrid stablecoin solution blending the advantages of both algorithmic and collateralized stablecoin models.",
+    siteName: "Nebula Finance Private Sale",
+    images: [
+      {
+        url: "https://moonvector.com/partners/NebulaLogo.png",
+      },
+    ],
+  },
+};
 
 export default function Page() {
   return (
