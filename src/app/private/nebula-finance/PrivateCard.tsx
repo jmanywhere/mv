@@ -11,10 +11,11 @@ import {
 import { formatEther, parseEther } from "viem";
 import { useWeb3Modal } from "@web3modal/react";
 import raiseAbi from "abi/SimpleRaiseABI";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSetAtom } from "jotai";
 import { txQueue } from "data/atoms";
 import { waitForTransaction } from "@wagmi/core";
+import { commifyJs } from "utils/bn";
 
 const raiseContract = "0x7F7D4b9c86B49C5856C496188C79980A1C2f15eD";
 const zeroAddress = "0x0000000000000000000000000000000000000000";
@@ -35,7 +36,7 @@ const PrivateCardNebFinance = () => {
         address: raiseContract,
         abi: raiseAbi,
         functionName: "user",
-        args: [address ?? zeroAddress],
+        args: ["0xd844092e83521eb016ae4c40139b81c96265868a"],
       },
       {
         address: raiseContract,
@@ -72,6 +73,8 @@ const PrivateCardNebFinance = () => {
     functionName: "pledge",
     value: parseEther(`${pledgeAmount}`),
   });
+
+  const totalPrivateSale = parseEther(`${375_000_000}`);
 
   const inputError = useMemo(() => {
     const userPledgeAmount = data?.[0]?.result?.pledge || 0n;
@@ -130,6 +133,14 @@ const PrivateCardNebFinance = () => {
     setLoading(false);
     refetch();
   }, [pledgeAmount, writeAsync, refetch, inputError]);
+
+  useEffect(() => {
+    if (!address) return;
+    const interval = setInterval(() => {
+      refetch();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [data, refetch]);
 
   return (
     <div className="w-full rounded-3xl bg-bg_f_light px-9 py-8 text-readable">
@@ -245,7 +256,9 @@ const PrivateCardNebFinance = () => {
           <button
             className={classNames(
               "btn w-32",
-              loading || inputError.status ? "btn-disabled" : "btn-primary"
+              // loading || inputError.status ?
+              "btn-disabled"
+              //  : "btn-primary"
             )}
             onClick={() => {
               setLoading(true);
@@ -280,7 +293,18 @@ const PrivateCardNebFinance = () => {
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-48 font-semibold">Amount to Receive</div>
-          <div className="w-28 text-right text-primary">TBD</div>
+          <div className="w-28 text-right text-primary">
+            ~
+            {commifyJs(
+              formatEther(
+                (totalPrivateSale * (data?.[0]?.result?.pledge || 0n)) /
+                  parseEther(`${80}`)
+              )
+            )}
+          </div>
+        </div>
+        <div className="flex w-full flex-row items-center gap-x-6 pt-6 text-readable/50">
+          <div className="text-sm">Claim available before launch</div>
         </div>
       </div>
     </div>

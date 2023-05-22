@@ -17,3 +17,15 @@ export const prettyBN = (input: BigNumber, decimals?: number) : string => {
   
   return stringResult
 }
+
+export const commifyJs = (input: string) : string => {
+  const splitInput = input.split(".")
+  const ints = splitInput[0]
+  const decimals = splitInput?.[1]
+  const newString: string[] = []
+  if(ints)
+    newString.push(ints.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+  if(decimals)
+    newString.push(decimals)
+  return newString.join(".")
+}
