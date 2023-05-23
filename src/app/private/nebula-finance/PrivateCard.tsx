@@ -36,7 +36,7 @@ const PrivateCardNebFinance = () => {
         address: raiseContract,
         abi: raiseAbi,
         functionName: "user",
-        args: ["0xd844092e83521eb016ae4c40139b81c96265868a"],
+        args: [address ?? zeroAddress],
       },
       {
         address: raiseContract,
