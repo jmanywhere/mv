@@ -256,9 +256,7 @@ const PrivateCardNebFinance = () => {
           <button
             className={classNames(
               "btn w-32",
-              // loading || inputError.status ?
-              "btn-disabled"
-              //  : "btn-primary"
+              loading || inputError.status ? "btn-disabled" : "btn-primary"
             )}
             onClick={() => {
               setLoading(true);
