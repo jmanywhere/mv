@@ -294,7 +294,6 @@ const PrivateCardNebFinance = () => {
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-48 font-semibold">Amount to Receive</div>
           <div className="w-28 text-right text-primary">
-            ~
             {commifyJs(
               formatEther(
                 (totalPrivateSale * (data?.[0]?.result?.pledge || 0n)) /
