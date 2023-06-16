@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from 'next/image'
 import classNames from 'classnames';
 // Components
@@ -10,6 +11,26 @@ import nebBanner from "../../../../public/partners/bg_banner.png";
 import NebulaLogo from "../../../../public/partners/NebulaLogo.png";
 import Nebuloids from "../../../../public/partners/Nebuloids.png";
 import MintCard from './MintCard';
+
+export const metadata: Metadata = {
+  title: "Nebuloids Mint",
+  description:
+    "Nebuloids is a unique collection of NFTs created by Nebula Finance to accompany our hybrid stable coin protocol. Holding the NFT in your wallet creates several benefits to users staked in the Nebulous Conclave, included increased rewards, and team leader abilities. The Nebuloids are a group of intergalactic warriors split into teams and species. Thematically generated to include rarity, a lot of love and effort went into creating this collection. Reveal coming soon.",
+  creator: "Moonvector",
+  openGraph: {
+    type: "website",
+    url: "https://moonvector.io",
+    title: "Nebuloids Mint",
+    description:
+    "Nebuloids is a unique collection of NFTs created by Nebula Finance to accompany our hybrid stable coin protocol. Holding the NFT in your wallet creates several benefits to users staked in the Nebulous Conclave, included increased rewards, and team leader abilities. The Nebuloids are a group of intergalactic warriors split into teams and species. Thematically generated to include rarity, a lot of love and effort went into creating this collection. Reveal coming soon.",
+    siteName: "Nebuloids Mint",
+    images: [
+      {
+        url: "https://moonvector.io/partners/Nebuloids.png",
+      },
+    ],
+  },
+};
 
 
 const NFTMintPage = () => {
