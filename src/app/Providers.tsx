@@ -8,14 +8,14 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import { bsc, mainnet } from "@wagmi/chains";
+import { bsc, mainnet, pulsechain } from "@wagmi/chains";
 import TxContainer from "components/TxContainer";
 
 if (!process.env.NEXT_PUBLIC_PROJECT_ID) {
   throw new Error("You need to provide NEXT_PUBLIC_PROJECT_ID env variable");
 }
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
-const supportedChains = [bsc, mainnet];
+const supportedChains = [bsc, mainnet, pulsechain];
 
 const { chains, publicClient } = configureChains(supportedChains, [
   publicProvider(),

@@ -85,11 +85,35 @@
 }
 
 @layer components{
-  ::-webkit-progress-value{
-    @apply bg-green_accent rounded-full h-3;
+  .main-progress{
+    @apply h-3;
+    appearance: none;
+    ::-webkit-progress-value{
+      @apply bg-green_accent rounded-full h-3;
+    }
+    ::-webkit-progress-bar{
+      @apply bg-bg_darkest rounded-full h-3;
+    }
   }
-  ::-webkit-progress-bar{
-    @apply bg-bg_darkest rounded-full h-3;
+  .second-progress{
+    @apply h-3;
+    appearance: none;
+    ::-webkit-progress-value{
+      @apply bg-[#0C639E] rounded-full h-3;
+    }
+    ::-webkit-progress-bar{
+      @apply bg-transparent rounded-full h-3;
+    }
+  }
+  .third-progress{
+    @apply h-3;
+    appearance: none;
+    ::-webkit-progress-value{
+      @apply bg-yellow-600 rounded-full h-3;
+    }
+    ::-webkit-progress-bar{
+      @apply bg-transparent rounded-full h-3;
+    }
   }
   .raise-progress{
     @apply h-3;

@@ -190,7 +190,7 @@ const PrivateCardNebFinance = () => {
             </span>
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 main-progress">
           <div className="flex justify-between font-semibold text-t_dark">
             <span>
               {data?.[1]?.result ? formatEther(data[1].result) : "--"} /{" "}
