@@ -115,12 +115,12 @@ export default function Page() {
                 className="rounded-full border-2 border-white bg-primary text-white hover:bg-primary-focus p-1"
               />
             </a>
-            <a href="https://m.facebook.com/dripstax/" target="_blank" rel="noreferrer">
+            {/* <a href="https://m.facebook.com/dripstax/" target="_blank" rel="noreferrer">
               <BsFacebook
                 size="40px"
                 className="rounded-full border-2 border-white bg-white text-primary hover:text-primary-focus"
               />
-            </a>
+            </a> */}
             <a href="https://www.snapchat.com/add/dripstax" target="_blank" rel="noreferrer">
               <FaSnapchat
                 size="40px"
