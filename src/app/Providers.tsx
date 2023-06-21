@@ -8,8 +8,11 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { bsc, mainnet, pulsechain } from "@wagmi/chains";
 import TxContainer from "components/TxContainer";
+import {chains as chainData} from 'data/chainData'
+import sample from "lodash/sample";
 
 if (!process.env.NEXT_PUBLIC_PROJECT_ID) {
   throw new Error("You need to provide NEXT_PUBLIC_PROJECT_ID env variable");
@@ -20,6 +23,14 @@ const supportedChains = [bsc, mainnet, pulsechain];
 const { chains, publicClient } = configureChains(supportedChains, [
   publicProvider(),
   w3mProvider({ projectId }),
+  jsonRpcProvider({
+    rpc: (chain) => {
+      const chainRpcs = chainData[chain.id]?.rpcUrls || [];
+      return {
+        http: chainRpcs.length > 0 ? chainRpcs[0] as string : chain.rpcUrls.default.http[0] as string,
+      }
+    }
+  }),
 ]);
 const wagmiConfig = createConfig({
   autoConnect: true,

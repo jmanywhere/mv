@@ -13,6 +13,7 @@ type ChainInfo = {
 export const chains: { [chainId: number] : ChainInfo} = {
   56: {
     rpcUrls: [
+      "https://bscrpc.com",
       "https://bsc-dataseed1.binance.org/",
       "https://bsc-dataseed1.defibit.io/",
       "https://bsc-dataseed2.binance.org/",
@@ -45,6 +46,26 @@ export const chains: { [chainId: number] : ChainInfo} = {
     icon: "https://f004.backblazeb2.com/file/w3-assets/chains/TESTbsc+logo.png",
     allowedTokens: []
   },
+  1 : {
+    rpcUrls: [
+      "https://eth.public-rpc.com",
+    ],
+    explorer: "https://etherscan.io/",
+    explorer_tx: "tx/",
+    name: "Ethereum",
+    icon: "https://f004.backblazeb2.com/file/w3-assets/chains/eth+logo.png",
+    allowedTokens: []
+  },
+  369 : {
+    rpcUrls: [
+      "https://rpc.pulsechain.com",
+    ],
+    explorer: "https://scan.pulsechain.com/",
+    explorer_tx: "tx/",
+    name: "Ethereum",
+    icon: "https://f004.backblazeb2.com/file/w3-assets/chains/eth+logo.png",
+    allowedTokens: []
+  }
 }
 
 export const validChains = Object.keys(chains).map( chainId => parseInt(chainId))

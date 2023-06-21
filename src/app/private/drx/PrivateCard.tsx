@@ -10,13 +10,19 @@ import {
 } from "wagmi";
 import { formatEther, parseEther } from "viem";
 import { useWeb3Modal } from "@web3modal/react";
-import raiseAbi from "abi/SimpleRaiseABI";
+import raiseAbi from "abi/EthOpenRaise";
+import priceFeedAbi from "abi/ChainlinkPriceFeed";
+import plsPairAbi from 'abi/PLSV2Pair';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSetAtom } from "jotai";
 import { txQueue } from "data/atoms";
 import { waitForTransaction } from "@wagmi/core";
 
-const raiseContract = "0x7F7D4b9c86B49C5856C496188C79980A1C2f15eD";
+const raiseContractBNB = "0x683aA822D3c30a60f93286d3BE4E52722e7091b2";
+const raiseContractETH = "0xbEb3d8da739e903fe507bd1c5575CFd010bf651B";
+const ethPriceFeed = "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419";
+const bnbPriceFeed = "0x0567f2323251f0aab15c8dfb1967e4e8a7d42aee";
+const plsDaiLP = "0xE56043671df55dE5CDf8459710433C10324DE0aE"
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
 export type PrivateCardProps = {
@@ -49,84 +55,166 @@ const PrivateCard = (props: PrivateCardProps) => {
 
   const { data, refetch } = useContractReads({
     contracts: [
+      // BSC
       {
-        address: raiseContract,
+        address: raiseContractBNB,
         chainId: 56,
         abi: raiseAbi,
-        functionName: "user",
+        functionName: "contributions",
         args: [address ?? zeroAddress],
       },
       {
-        address: raiseContract,
+        address: raiseContractBNB,
         chainId: 56,
         abi: raiseAbi,
-        functionName: "totalPledge",
+        functionName: "totalContributions",
       },
       {
-        address: raiseContract,
+        address: raiseContractBNB,
         chainId: 56,
         abi: raiseAbi,
-        functionName: "tokensPerETH",
+        functionName: "min",
       },
       {
-        address: raiseContract,
+        address: raiseContractBNB,
         chainId: 56,
         abi: raiseAbi,
-        functionName: "hardcap",
+        functionName: "max",
+      },
+      // ETH
+      {
+        address: raiseContractETH,
+        chainId: 1,
+        abi: raiseAbi,
+        functionName: "contributions",
+        args: [address ?? zeroAddress],
       },
       {
-        address: raiseContract,
-        chainId: 56,
+        address: raiseContractETH,
+        chainId: 1,
         abi: raiseAbi,
-        functionName: "minDeposit",
+        functionName: "totalContributions",
       },
       {
-        address: raiseContract,
+        address: raiseContractETH,
+        chainId: 1,
+        abi: raiseAbi,
+        functionName: "min",
+      },
+      {
+        address: raiseContractETH,
+        chainId: 1,
+        abi: raiseAbi,
+        functionName: "max",
+      },
+      // PLS
+      {
+        address: raiseContractBNB,
         chainId: 56,
         abi: raiseAbi,
-        functionName: "maxDeposit",
+        functionName: "contributions",
+        args: [address ?? zeroAddress],
       },
+      {
+        address: raiseContractBNB,
+        chainId: 56,
+        abi: raiseAbi,
+        functionName: "totalContributions",
+      },
+      {
+        address: raiseContractBNB,
+        chainId: 56,
+        abi: raiseAbi,
+        functionName: "min",
+      },
+      {
+        address: raiseContractBNB,
+        chainId: 56,
+        abi: raiseAbi,
+        functionName: "max",
+      },
+      // PRICE FEEDS
+      {
+        address: ethPriceFeed,
+        chainId: 1,
+        abi: priceFeedAbi,
+        functionName: "latestRoundData",
+      },
+      {
+        address: bnbPriceFeed,
+        chainId: 56,
+        abi: priceFeedAbi,
+        functionName: "latestRoundData",
+      },
+      {
+        address: plsDaiLP,
+        chainId: 369,
+        abi: plsPairAbi,
+        functionName: "getReserves",
+      }
     ],
     enabled: true,
     staleTime: 15000,
   });
   const { writeAsync } = useContractWrite({
-    address: raiseContract,
+    address: (chain?.id || 0) == 56 && raiseContractBNB || (chain?.id || 0) == 1 && raiseContractETH || raiseContractBNB,
     abi: raiseAbi,
-    functionName: "pledge",
+    functionName: "contribute",
     chainId: 56,
     value: parseEther(`${pledgeAmount}`),
   });
 
 
-  const inputError = useMemo(() => {
-    const userPledgeAmount = data?.[0]?.result?.pledge || 0n;
+  const raiseInfoAndErrorStatus = useMemo(() => {
+    const selectedChain = {
+      56: {
+        contributed: data?.[0]?.result as bigint || 0n,
+        min: data?.[2]?.result as bigint || 0n,
+        max: data?.[3]?.result as bigint || 0n,
+      },
+      1: {
+        contributed: data?.[4]?.result as bigint || 0n,
+        min: data?.[6]?.result as bigint || 0n,
+        max: data?.[7]?.result as bigint || 0n,
+      },
+      369: {
+        contributed: data?.[8]?.result as bigint || 0n,
+        min: data?.[10]?.result as bigint || 0n,
+        max: data?.[11]?.result as bigint || 0n,
+      },
+    };
+    if([1,56,369].indexOf(chain?.id || 0) === -1) 
+      return { status: true, reason: "Invalid chain", contributed: 0n, min: 0n, max: 0n };
+    const raiseData = selectedChain[chain?.id as 1 | 56 | 369 || 56];
+    const {contributed, min, max} = raiseData;
+    
     const convertedAmount = parseEther(`${pledgeAmount}`);
-
+    const endAmount = contributed + convertedAmount
     const reason =
       (convertedAmount >
         (userBalance?.value ?? parseEther("100000000000000")) &&
         1) ||
-      (pledgeAmount >= (data?.[4]?.result || 0n) && 2) ||
-      (userPledgeAmount + convertedAmount > (data?.[5]?.result || 0n) && 3) ||
+      (endAmount <= (min) && 2) ||
+      (endAmount > (max) && 3) ||
       0;
     switch (reason) {
       case 1:
         return {
           status: true,
           reason: "You cannot pledge more than your balance",
+          ...raiseData
         };
       case 2:
-        return { status: true, reason: "Invalid pledge amount" };
+        return { status: true, reason: "Invalid pledge amount", ...raiseData };
       case 3:
-        return { status: true, reason: "Amount over Max" };
+        return { status: true, reason: "Amount over Max", ...raiseData };
       default:
-        return { status: false, reason: "" };
+        return { status: false, reason: "", ...raiseData };
     }
-  }, [pledgeAmount, data, userBalance]);
+  }, [pledgeAmount, data, userBalance, chain]);
 
   const pledgeStuff = useCallback(async () => {
-    if (inputError.status) {
+    if (raiseInfoAndErrorStatus.status) {
       setLoading(false);
       return;
     }
@@ -140,8 +228,8 @@ const PrivateCard = (props: PrivateCardProps) => {
     setTxQueue((draft) => {
       draft[hash] = {
         status: "pending",
-        description: `Pledging ${pledgeAmount} BNB`,
-        chainId: 56,
+        description: `Contributing ${pledgeAmount} ${chain?.name}`,
+        chainId: chain?.id || 56,
       };
     });
     const data = await waitForTransaction({ hash });
@@ -155,7 +243,7 @@ const PrivateCard = (props: PrivateCardProps) => {
     }
     setLoading(false);
     refetch();
-  }, [pledgeAmount, writeAsync, refetch, inputError]);
+  }, [pledgeAmount, writeAsync, refetch, raiseInfoAndErrorStatus, chain, setTxQueue]);
 
   useEffect(() => {
     if (!address) return;
@@ -163,7 +251,33 @@ const PrivateCard = (props: PrivateCardProps) => {
       refetch();
     }, 10000);
     return () => clearInterval(interval);
-  }, [data, refetch]);
+  }, [data, refetch, address]);
+
+  const raisedInfo = useMemo(() => {
+    const ethPrice = Number(data?.[12]?.result?.[1] as bigint || 0n) / 1e8;
+    const bnbPrice = Number(data?.[13]?.result?.[1] as bigint || 0n) / 1e8;
+    const plsDai = data?.[14]?.result?.[1] as bigint || 0n
+    const pldRes = data?.[14]?.result?.[0] as bigint || 1n;
+    const plsPrice = Number(plsDai * 100000000n / pldRes) / 1e8;
+
+    const bnbRaised = Number((data?.[0]?.result as bigint || 0n) / 10000000000n) * ethPrice / 1e8;
+    const ethRaised = Number((data?.[4]?.result as bigint || 0n) / 10000000000n) * bnbPrice / 1e8;
+    const plsRaised = Number((data?.[8]?.result as bigint || 0n) / 10000000000n) * plsPrice / 1e8;
+    const totalRaised = bnbRaised + ethRaised + plsRaised;
+
+    return { 
+      eth: ethPrice, 
+      bnb: bnbPrice, 
+      pls: plsPrice,
+      bnbRaised,
+      ethRaised,
+      plsRaised,
+      totalRaised
+    };
+  },[data])
+
+  console.log({raisedInfo, chain})
+
 
   return (
     <div className="w-full rounded-3xl bg-bg_f_light px-9 py-8 text-readable">
@@ -201,7 +315,7 @@ const PrivateCard = (props: PrivateCardProps) => {
               Sale Status
             </span>
             <span className="flex-none text-left uppercase md:flex-grow">
-              {"Starting Soon"}
+              {"Started"}
             </span>
           </div>
           <div className="mt-4 flex flex-row justify-between">
@@ -209,7 +323,7 @@ const PrivateCard = (props: PrivateCardProps) => {
               Raised
             </span>
             <span className="flex-none text-left md:flex-grow">
-              {data?.[1]?.result ? "-_-" : "--"} {"USD"}
+              {raisedInfo.totalRaised || "--"} {"USD"}
             </span>
           </div>
         </div>
@@ -223,10 +337,7 @@ const PrivateCard = (props: PrivateCardProps) => {
             <div className="main-progress">
               <progress
                 value={
-                  // Number(
-                  //   ((data?.[1]?.result || 0n) * 10000n) / (data?.[3]?.result || 1n)
-                  // ) / 100
-                  100
+                  raisedInfo.ethRaised * 100/(raisedInfo.totalRaised || 1)
                 }
                 max={100}
                 className="mt-6 w-full"
@@ -236,10 +347,7 @@ const PrivateCard = (props: PrivateCardProps) => {
             <div className="second-progress absolute top-0 w-full z-10">
               <progress
                 value={
-                  // Number(
-                  //   ((data?.[1]?.result || 0n) * 10000n) / (data?.[3]?.result || 1n)
-                  // ) / 100
-                  60
+                  raisedInfo.bnbRaised * 100/(raisedInfo.totalRaised || 1)
                 }
                 max={100}
                 className="raise-progress mt-6 w-full"
@@ -248,10 +356,7 @@ const PrivateCard = (props: PrivateCardProps) => {
             <div className="third-progress absolute top-0 w-full z-20">
               <progress
                 value={
-                  // Number(
-                  //   ((data?.[1]?.result || 0n) * 10000n) / (data?.[3]?.result || 1n)
-                  // ) / 100
-                  25
+                  raisedInfo.plsRaised * 100/(raisedInfo.totalRaised || 1)
                 }
                 max={100}
                 className="raise-progress mt-6 w-full"
@@ -269,20 +374,19 @@ const PrivateCard = (props: PrivateCardProps) => {
             htmlFor="pledge"
             className="pb-3 pl-2 font-semibold"
           >
-            {/* TODO get ETH token name based on chain ID of raise */}
-            Pledge {chain?.nativeCurrency.symbol || ""}
+            Contribute {chain?.nativeCurrency.symbol || ""}
           </label>
           <div className="flex h-[96px] flex-col gap-1">
             <input
               className={classNames(
                 "input-bordered input w-72 border-2 bg-bg_darkest px-3 py-1 text-right",
-                inputError.status ? "input-error" : "input-primary"
+                raiseInfoAndErrorStatus.status ? "input-error" : "input-primary"
               )}
               value={pledgeAmount}
               name="pledge"
               type="number"
-              min={parseFloat(formatEther(data?.[4]?.result || 0n))}
-              max={parseFloat(formatEther(data?.[5]?.result || 0n))}
+              min={parseFloat(formatEther(data?.[2]?.result as bigint || 0n))}
+              max={parseFloat(formatEther(data?.[3]?.result as bigint || 0n))}
               step={0.1}
               onChange={(e) => {
                 const newNumber = e.target.valueAsNumber;
@@ -292,24 +396,23 @@ const PrivateCard = (props: PrivateCardProps) => {
               onFocus={(e) => e.target.select()}
             />
             <span className=" ml-3 whitespace-pre-wrap text-sm font-normal text-t_dark">
-              Min: 0.5 BNB, Max: 10 BNB{"\n"}Wallet:{" "}
+              Min: {formatEther(raiseInfoAndErrorStatus.min)} {chain?.nativeCurrency.symbol}, Max: {formatEther(raiseInfoAndErrorStatus.max)} {chain?.nativeCurrency.symbol}{"\n"}Wallet:{" "}
               {formatEther(userBalance?.value || 0n)
                 .split(".")
                 .map((x, i) => (i == 1 ? x.slice(0, 3) : x))
                 .join(".")}
-              &nbsp;BNB
+              &nbsp;{chain?.nativeCurrency.symbol}
             </span>
             <span className=" ml-3 text-sm font-normal text-rose-500">
-              {inputError.status ? inputError.reason : ""}
+              {raiseInfoAndErrorStatus.status ? raiseInfoAndErrorStatus.reason : ""}
             </span>
           </div>
         </div>
         <div className="mt-6 md:mt-0">
           <button
-            disabled
             className={classNames(
-              "btn w-32 btn-disabled",
-              loading || inputError.status ? "btn-disabled" : "btn-primary"
+              "btn w-32",
+              (loading || raiseInfoAndErrorStatus.status) ? "btn-disabled" : "btn-primary"
             )}
             onClick={() => {
               setLoading(true);
@@ -335,19 +438,19 @@ const PrivateCard = (props: PrivateCardProps) => {
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-40 font-semibold">Pledged</div>
           <div className="w-40 text-right text-primary">
-            {formatEther(data?.[0]?.result?.pledge || 0n)}&nbsp;BNB
+            {formatEther(data?.[0]?.result as bigint || 0n)}&nbsp;BNB
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-40 font-semibold"></div>
           <div className="w-40 text-right text-primary">
-            {formatEther(data?.[0]?.result?.pledge || 0n)}&nbsp;ETH
+            {formatEther(data?.[4]?.result as bigint || 0n)}&nbsp;ETH
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-40 font-semibold"></div>
           <div className="w-40 text-right text-primary">
-            {formatEther(data?.[0]?.result?.pledge || 0n)}&nbsp;PLS
+            {formatEther(data?.[8]?.result as bigint || 0n)}&nbsp;PLS
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
