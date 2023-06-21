@@ -43,7 +43,6 @@ const PrivateCard = (props: PrivateCardProps) => {
   const { data: userBalance } = useBalance({ address });
   const { open } = useWeb3Modal();
   const setTxQueue = useSetAtom(txQueue);
-  console.log(chain?.name || "Not connected")
   const [pledgeAmount, setPledgeAmount] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -277,7 +276,6 @@ const PrivateCard = (props: PrivateCardProps) => {
     };
   },[data])
 
-  console.log({raisedInfo, chain})
 
 
   return (
