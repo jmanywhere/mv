@@ -20,6 +20,7 @@ import { waitForTransaction } from "@wagmi/core";
 
 const raiseContractBNB = "0x683aA822D3c30a60f93286d3BE4E52722e7091b2";
 const raiseContractETH = "0xbEb3d8da739e903fe507bd1c5575CFd010bf651B";
+const raiseContractPLS = "0xbEb3d8da739e903fe507bd1c5575CFd010bf651B";
 const ethPriceFeed = "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419";
 const bnbPriceFeed = "0x0567f2323251f0aab15c8dfb1967e4e8a7d42aee";
 const plsDaiLP = "0xE56043671df55dE5CDf8459710433C10324DE0aE"
@@ -109,27 +110,27 @@ const PrivateCard = (props: PrivateCardProps) => {
       },
       // PLS
       {
-        address: raiseContractBNB,
-        chainId: 56,
+        address: raiseContractPLS,
+        chainId: 369,
         abi: raiseAbi,
         functionName: "contributions",
         args: [address ?? zeroAddress],
       },
       {
-        address: raiseContractBNB,
-        chainId: 56,
+        address: raiseContractPLS,
+        chainId: 369,
         abi: raiseAbi,
         functionName: "totalContributions",
       },
       {
-        address: raiseContractBNB,
-        chainId: 56,
+        address: raiseContractPLS,
+        chainId: 369,
         abi: raiseAbi,
         functionName: "min",
       },
       {
-        address: raiseContractBNB,
-        chainId: 56,
+        address: raiseContractPLS,
+        chainId: 369,
         abi: raiseAbi,
         functionName: "max",
       },
@@ -157,10 +158,10 @@ const PrivateCard = (props: PrivateCardProps) => {
     staleTime: 15000,
   });
   const { writeAsync } = useContractWrite({
-    address: (chain?.id || 0) == 56 && raiseContractBNB || (chain?.id || 0) == 1 && raiseContractETH || raiseContractBNB,
+    address: (chain?.id || 0) == 56 && raiseContractBNB || (chain?.id || 0) == 1 && raiseContractETH ||  (chain?.id || 0) == 369 && raiseContractPLS || raiseContractBNB,
     abi: raiseAbi,
     functionName: "contribute",
-    chainId: 56,
+    chainId: chain?.id || 56,
     value: parseEther(`${pledgeAmount}`),
   });
 
