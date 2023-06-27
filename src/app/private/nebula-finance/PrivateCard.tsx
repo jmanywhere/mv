@@ -178,7 +178,7 @@ const PrivateCardNebFinance = () => {
               Sale Status
             </span>
             <span className="flex-none text-left uppercase md:flex-grow">
-              {"Started"}
+              {"Ended"}
             </span>
           </div>
           <div className="mt-4 flex flex-row justify-between">
@@ -190,7 +190,7 @@ const PrivateCardNebFinance = () => {
             </span>
           </div>
         </div>
-        <div className="flex-1 main-progress">
+        <div className="main-progress flex-1">
           <div className="flex justify-between font-semibold text-t_dark">
             <span>
               {data?.[1]?.result ? formatEther(data[1].result) : "--"} /{" "}
