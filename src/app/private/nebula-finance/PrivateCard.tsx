@@ -174,7 +174,7 @@ const PrivateCardNebFinance = () => {
       refetch();
     }, 10000);
     return () => clearInterval(interval);
-  }, [data, refetch]);
+  }, [data, refetch, address]);
 
   console.log(data?.[0]?.result);
 
