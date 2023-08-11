@@ -74,6 +74,12 @@ const PrivateCardNebFinance = () => {
     value: parseEther(`${pledgeAmount}`),
   });
 
+  const { writeAsync: claimAsync } = useContractWrite({
+    address: raiseContract,
+    abi: raiseAbi,
+    functionName: "claim",
+  });
+
   const totalPrivateSale = parseEther(`${375_000_000}`);
 
   const inputError = useMemo(() => {
@@ -134,6 +140,34 @@ const PrivateCardNebFinance = () => {
     refetch();
   }, [pledgeAmount, writeAsync, refetch, inputError]);
 
+  const claim = useCallback(async () => {
+    const { hash } = await claimAsync().catch((e) => {
+      return { hash: false as false };
+    });
+    if (!hash) {
+      setLoading(false);
+      return;
+    }
+    setTxQueue((draft) => {
+      draft[hash] = {
+        status: "pending",
+        description: `Claiming pNSH`,
+        chainId: 56,
+      };
+    });
+    const data = await waitForTransaction({ hash });
+    if (data.status === "success") {
+      setTxQueue((draft) => {
+        const txnData = draft[hash];
+        if (!txnData) return;
+        txnData.status = data.status === "success" ? "complete" : "error";
+        draft[hash] = txnData;
+      });
+    }
+    setLoading(false);
+    refetch();
+  }, [pledgeAmount, writeAsync, refetch, inputError]);
+
   useEffect(() => {
     if (!address) return;
     const interval = setInterval(() => {
@@ -141,6 +175,8 @@ const PrivateCardNebFinance = () => {
     }, 10000);
     return () => clearInterval(interval);
   }, [data, refetch]);
+
+  console.log(data?.[0]?.result);
 
   return (
     <div className="w-full rounded-3xl bg-bg_f_light px-9 py-8 text-readable">
@@ -212,12 +248,11 @@ const PrivateCardNebFinance = () => {
         {/* INPUT AND TOKENS IN WALLET */}
         {/* LABEL AND INPUT */}
         <div className="flex flex-grow flex-col">
-          <label
+          {/* <label
             id="pledge-id"
             htmlFor="pledge"
             className="pb-3 pl-2 font-semibold"
           >
-            {/* TODO get ETH token name based on chain ID of raise */}
             Pledge {`BNB`}
           </label>
           <div className="flex h-[96px] flex-col gap-1">
@@ -250,17 +285,22 @@ const PrivateCardNebFinance = () => {
             <span className=" ml-3 text-sm font-normal text-rose-500">
               {inputError.status ? inputError.reason : ""}
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="mt-6 md:mt-0">
           <button
             className={classNames(
               "btn w-32",
-              loading || inputError.status ? "btn-disabled" : "btn-primary"
+              loading ||
+                inputError.status ||
+                (data?.[0]?.result?.pledge || 0n) == 0n ||
+                data?.[0]?.result?.claimed
+                ? "btn-disabled"
+                : "btn-primary"
             )}
             onClick={() => {
               setLoading(true);
-              pledgeStuff();
+              claim();
             }}
           >
             {loading ? (
@@ -272,7 +312,7 @@ const PrivateCardNebFinance = () => {
                 alt="loader"
               />
             ) : (
-              "Pledge"
+              "Claim"
             )}
             {/* {whitelisted ? (approved ? "Pledge" : "Approve") : "Whitelist"} */}
           </button>
@@ -301,7 +341,7 @@ const PrivateCardNebFinance = () => {
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-6 pt-6 text-readable/50">
-          <div className="text-sm">Claim available before launch</div>
+          <div className="text-sm">Claim available now</div>
         </div>
       </div>
     </div>
