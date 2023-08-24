@@ -91,8 +91,10 @@ const PrivateCardHadesCash = () => {
     functionName: "claim",
   });
 
-  const userPledgeAmount =
-    (data?.[0]?.result as undefined | { pledge: bigint })?.pledge || 0n;
+  const userPledgeAmount = useMemo(
+    () => (data?.[0]?.result as undefined | [bigint, boolean])?.[0] || 0n,
+    [data]
+  );
 
   const inputError = useMemo(() => {
     const convertedAmount = parseEther(`${pledgeAmount}`);
@@ -189,7 +191,7 @@ const PrivateCardHadesCash = () => {
     return () => clearInterval(interval);
   }, [data, refetch, address]);
 
-  console.log(data?.[0]?.result);
+  console.log({ info: data?.[0]?.result, userPledgeAmount });
 
   const status = useMemo(() => {
     if (!data) return "...";
