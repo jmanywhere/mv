@@ -82,16 +82,23 @@ const PrivateCardNebFinance = () => {
 
   const totalPrivateSale = parseEther(`${375_000_000}`);
 
+  const pledgeInfo = data?.[0]?.result as
+    | undefined
+    | { pledge: bigint; claimed: boolean };
+
+  const userPledgeAmount = pledgeInfo?.pledge || 0n;
+
   const inputError = useMemo(() => {
-    const userPledgeAmount = data?.[0]?.result?.pledge || 0n;
     const convertedAmount = parseEther(`${pledgeAmount}`);
 
     const reason =
       (convertedAmount >
         (userBalance?.value ?? parseEther("100000000000000")) &&
         1) ||
-      (pledgeAmount >= (data?.[4]?.result || 0n) && 2) ||
-      (userPledgeAmount + convertedAmount > (data?.[5]?.result || 0n) && 3) ||
+      (pledgeAmount >= ((data?.[4]?.result as bigint) || 0n) && 2) ||
+      (userPledgeAmount + convertedAmount >
+        ((data?.[5]?.result as bigint) || 0n) &&
+        3) ||
       0;
     switch (reason) {
       case 1:
@@ -222,21 +229,24 @@ const PrivateCardNebFinance = () => {
               Raised
             </span>
             <span className="flex-none text-left md:flex-grow">
-              {data?.[1]?.result ? formatEther(data[1].result) : "--"} {"BNB"}
+              {data?.[1]?.result ? formatEther(data[1].result as bigint) : "--"}{" "}
+              {"BNB"}
             </span>
           </div>
         </div>
         <div className="main-progress flex-1">
           <div className="flex justify-between font-semibold text-t_dark">
             <span>
-              {data?.[1]?.result ? formatEther(data[1].result) : "--"} /{" "}
-              {data?.[3]?.result ? formatEther(data[3].result) : "--"}
+              {data?.[1]?.result ? formatEther(data[1].result as bigint) : "--"}{" "}
+              /{" "}
+              {data?.[3]?.result ? formatEther(data[3].result as bigint) : "--"}
             </span>
           </div>
           <progress
             value={
               Number(
-                ((data?.[1]?.result || 0n) * 10000n) / (data?.[3]?.result || 1n)
+                (((data?.[1]?.result as bigint) || 0n) * 10000n) /
+                  ((data?.[3]?.result as bigint) || 1n)
               ) / 100
             }
             max={100}
@@ -293,8 +303,8 @@ const PrivateCardNebFinance = () => {
               "btn w-32",
               loading ||
                 inputError.status ||
-                (data?.[0]?.result?.pledge || 0n) == 0n ||
-                data?.[0]?.result?.claimed
+                (pledgeInfo?.pledge || 0n) == 0n ||
+                pledgeInfo?.claimed
                 ? "btn-disabled"
                 : "btn-primary"
             )}
@@ -322,7 +332,7 @@ const PrivateCardNebFinance = () => {
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-48 font-semibold">Pledged</div>
           <div className="w-28 text-right text-primary">
-            {formatEther(data?.[0]?.result?.pledge || 0n)}&nbsp;BNB
+            {formatEther(pledgeInfo?.pledge || 0n)}&nbsp;BNB
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
@@ -334,7 +344,7 @@ const PrivateCardNebFinance = () => {
           <div className="w-28 text-right text-primary">
             {commifyJs(
               formatEther(
-                (totalPrivateSale * (data?.[0]?.result?.pledge || 0n)) /
+                (totalPrivateSale * (pledgeInfo?.pledge || 0n)) /
                   parseEther(`${80}`)
               )
             )}
