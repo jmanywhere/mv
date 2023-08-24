@@ -20,7 +20,7 @@ import { waitForTransaction } from "@wagmi/core";
 const raiseContract = "0x72631f8d8905bA15574dDCE12c898f0436c7159a";
 const zeroAddress = "0x0000000000000000000000000000000000000000";
 
-const PrivateCardNebFinance = () => {
+const PrivateCardHadesCash = () => {
   const { address } = useAccount();
   const { data: userBalance } = useBalance({ address });
   const { open } = useWeb3Modal();
@@ -91,10 +91,10 @@ const PrivateCardNebFinance = () => {
     functionName: "claim",
   });
 
-  const totalPrivateSale = parseEther(`${375_000_000}`);
+  const userPledgeAmount =
+    (data?.[0]?.result as undefined | { pledge: bigint })?.pledge || 0n;
 
   const inputError = useMemo(() => {
-    const userPledgeAmount = data?.[0]?.result?.pledge || 0n;
     const convertedAmount = parseEther(`${pledgeAmount}`);
 
     const reason =
@@ -102,7 +102,9 @@ const PrivateCardNebFinance = () => {
         (userBalance?.value ?? parseEther("100000000000000")) &&
         1) ||
       (pledgeAmount >= ((data?.[4]?.result as bigint) || 0n) && 2) ||
-      (userPledgeAmount + convertedAmount > (data?.[5]?.result || 0n) && 3) ||
+      (userPledgeAmount + convertedAmount >
+        ((data?.[5]?.result as bigint) || 0n) &&
+        3) ||
       0;
     switch (reason) {
       case 1:
@@ -242,22 +244,24 @@ const PrivateCardNebFinance = () => {
               Raised
             </span>
             <span className="flex-none text-left md:flex-grow">
-              {data?.[1]?.result ? formatEther(data?.[1]?.result || 0n) : "--"}{" "}
-              {"BNB"}
+              {data?.[1]?.result ? totalPledged : "--"} {"BNB"}
             </span>
           </div>
         </div>
         <div className="main-progress flex-1">
           <div className="flex justify-between font-semibold text-t_dark">
             <span>
-              {data?.[1]?.result ? formatEther(data[1].result) : "--"} /{" "}
-              {data?.[3]?.result ? formatEther(data[3].result) : "--"}
+              {data?.[1]?.result ? totalPledged : "--"} /{" "}
+              {data?.[3]?.result
+                ? formatEther((data[3].result as bigint) || 0n)
+                : "--"}
             </span>
           </div>
           <progress
             value={
               Number(
-                ((data?.[1]?.result || 0n) * 10000n) / (data?.[3]?.result || 1n)
+                (((data?.[1]?.result as bigint) || 0n) * 10000n) /
+                  ((data?.[3]?.result as bigint) || 1n)
               ) / 100
             }
             max={100}
@@ -285,8 +289,8 @@ const PrivateCardNebFinance = () => {
               value={pledgeAmount}
               name="pledge"
               type="number"
-              min={parseFloat(formatEther(data?.[4]?.result || 0n))}
-              max={parseFloat(formatEther(data?.[5]?.result || 0n))}
+              min={parseFloat(formatEther((data?.[4]?.result as bigint) || 0n))}
+              max={parseFloat(formatEther((data?.[5]?.result as bigint) || 0n))}
               step={0.1}
               onChange={(e) => {
                 const newNumber = e.target.valueAsNumber;
@@ -312,7 +316,9 @@ const PrivateCardNebFinance = () => {
           <button
             className={classNames(
               "btn mb-2 w-32",
-              loading || inputError.status || data?.[0]?.result?.claimed
+              loading ||
+                inputError.status ||
+                (data?.[0]?.result as undefined | { claimed: bigint })?.claimed
                 ? "btn-disabled"
                 : "btn-primary",
               pledgeError ? "btn-disabled" : ""
@@ -346,7 +352,7 @@ const PrivateCardNebFinance = () => {
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-48 font-semibold">Pledged</div>
           <div className="w-28 text-right text-primary">
-            {formatEther(data?.[0]?.result?.pledge || 0n)}&nbsp;BNB
+            {formatEther(userPledgeAmount)}&nbsp;BNB
           </div>
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
@@ -375,4 +381,4 @@ const PrivateCardNebFinance = () => {
   );
 };
 
-export default PrivateCardNebFinance;
+export default PrivateCardHadesCash;
