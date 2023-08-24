@@ -121,7 +121,7 @@ const PrivateCardHadesCash = () => {
       default:
         return { status: false, reason: "" };
     }
-  }, [pledgeAmount, data, userBalance]);
+  }, [pledgeAmount, data, userBalance, userPledgeAmount]);
 
   const pledgeStuff = useCallback(async () => {
     if (inputError.status || pledgeError || !writeAsync) {
@@ -191,8 +191,6 @@ const PrivateCardHadesCash = () => {
     return () => clearInterval(interval);
   }, [data, refetch, address]);
 
-  console.log({ info: data?.[0]?.result, userPledgeAmount });
-
   const status = useMemo(() => {
     if (!data) return "...";
     if ((data[7]?.result as bigint) == 0n) return "Not Started";
@@ -200,7 +198,6 @@ const PrivateCardHadesCash = () => {
   }, [data]);
 
   const totalPledged = formatEther((data?.[1]?.result as bigint) || 0n);
-  console.log({ errr: pledgeError });
 
   return (
     <div className="w-full rounded-3xl bg-bg_f_light px-9 py-8 text-readable">
