@@ -357,7 +357,7 @@ const PrivateCardHadesCash = () => {
         </div>
         <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-48 font-semibold">Token To Receive</div>
-          <div className="w-28 text-right text-primary">$CPT</div>
+          <div className="w-28 text-right text-primary">$HADES</div>
         </div>
         {/* <div className="flex w-full flex-row items-center gap-x-6">
           <div className="w-48 font-semibold">Amount to Receive</div>
